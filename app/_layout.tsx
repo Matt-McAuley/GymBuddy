@@ -5,7 +5,7 @@ import "@/global.css";
 export default function RootLayout() {
   return (
       <Stack>
-        <Stack.Screen name="index" options={{ header: () => <Header /> }} />
+        <Stack.Screen name="(tabs)" options={{ header: () => <Header /> }} />
       </Stack>
   )
 }
