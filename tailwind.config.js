@@ -4,7 +4,22 @@ module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
-  },
-  plugins: [],
+    extend: {
+      height: () => {
+        let heights = {};
+        for (let i = 1; i <= 96; i++) {
+          heights[i] = `${i * 0.25}rem`;
+        }
+        return heights;
+      },
+      width: () => {
+        let widths = {};
+        for (let i = 1; i <= 96; i++) {
+          widths[i] = `${i * 0.25}rem`;
+        }
+        return widths;
+      },
+    },
+    plugins: [],
+  }
 }
