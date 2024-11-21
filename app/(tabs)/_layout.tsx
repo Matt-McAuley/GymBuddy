@@ -17,7 +17,7 @@ export default function TabLayout() {
       }}>
       <Tabs.Screen name="index" options={{
           title: 'Home',
-          tabBarIcon: () => <Image className={"h-10 w-10"} source={require("@/assets/images/HomeIcon.png")} />,
+          tabBarIcon: () => <Image className={"h-10 w-10"} source={require("@/assets/images/tabs/HomeIcon.png")} />,
         }}
       />
     </Tabs>

@@ -1,9 +1,10 @@
 import { Text, View } from "react-native";
+import Timer from "@/components/Timer";
 
 export default function Index() {
   return (
-    <View className={'flex-auto justify-center items-center'}>
-      <Text className={'text-2xl font-bold color-blue-600'}>Hello World!</Text>
+    <View className={'flex-1 flex-col justify-center items-center'}>
+        <Timer />
     </View>
   );
 }
