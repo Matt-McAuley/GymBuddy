@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import Timer from "@/components/Timer";
 
 export default function Index() {
