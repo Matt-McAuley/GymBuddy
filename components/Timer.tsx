@@ -1,15 +1,27 @@
-import {Image, Text, TouchableOpacity, View} from "react-native";
+import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
 import {useEffect, useState} from "react";
 
-export default function Timer() {
-    const startTime = 200;
+export default function Timer(props: timerPropsType) {
+    const startTime = props.startTime;
     const [time, setTime] = useState(startTime);
     const [paused, setPaused] = useState(true);
+
+    const timerEnd = () => {
+        Vibration.vibrate([700, 700, 700]);
+        setPaused(true);
+    }
 
     useEffect(() => {
         if (!paused) {
             const intervalId = setInterval(() => {
-                setTime(prevTime => prevTime - 1);
+                setTime(prevTime => {
+                    if (prevTime == 0) {
+                        timerEnd();
+                        return startTime;
+                    }
+                    else
+                        return prevTime - 1;
+                });
             }, 1000); // Update every second
 
             return () => clearInterval(intervalId);
@@ -41,4 +53,8 @@ export default function Timer() {
             </View>
         </View>
     );
+}
+
+type timerPropsType = {
+    startTime: number
 }
