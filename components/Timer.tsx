@@ -1,5 +1,6 @@
 import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
 import {useEffect, useState} from "react";
+import BackgroundTimer from 'react-native-background-timer';
 
 export default function Timer(props: timerPropsType) {
     const startTime = props.startTime;
@@ -13,7 +14,7 @@ export default function Timer(props: timerPropsType) {
 
     useEffect(() => {
         if (!paused) {
-            const intervalId = setInterval(() => {
+            const intervalId = BackgroundTimer.setInterval(() => {
                 setTime(prevTime => {
                     if (prevTime == 0) {
                         timerEnd();
@@ -24,14 +25,14 @@ export default function Timer(props: timerPropsType) {
                 });
             }, 1000); // Update every second
 
-            return () => clearInterval(intervalId);
+            return () => BackgroundTimer.clearInterval(intervalId);
         }
     }, [paused]);
 
 
     return (
         <View className={'flex-row justify-between items-center h-40 w-full bg-gray-500 rounded-2xl pl-3 pr-3 border-black border-4'}>
-            <Text className={"text-black-500 font-extrabold text-6xl border-4 border-black p-4 bg-yellow-50"}>
+            <Text className={"text-black-500 font-extrabold text-6xl border-4 border-black p-2 bg-yellow-50"}>
                 {(String)(Math.floor(time / 3600)).padStart(2, "0")}:
                 {(String)(Math.floor((time / 60) % 60)).padStart(2, "0")}:
                 {(String)(Math.floor(time % 60)).padStart(2, "0")}
