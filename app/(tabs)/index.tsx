@@ -17,9 +17,9 @@ export default function Index() {
         currentExercise: 'Bench',
         currentWeight: 185,
         nextExercise: 'Ham Curl',
-        nextWeight: 45,
+        nextWeight: '45',
         prevExercise: 'Squat',
-        prevWeight: 225,
+        prevWeight: '225',
         scheme: '5x5',
         nextExerciseHandler: nextExerciseHandler,
         prevExerciseHandler: prevExerciseHandler,
@@ -28,7 +28,21 @@ export default function Index() {
 
     useEffect(() => {
         dbSetup(db);
-        setProgram(getProgram(db))
+        // setProgram(getProgram(db))
+        if (program == null) {
+            return;
+        }
+        setExerciseInfo({
+            currentExercise: program.days[0].primaryExercise.name,
+            currentWeight: program.days[0].primaryExercise.weight1,
+            nextExercise: program.days[0].accessoryExercises[0].name,
+            nextWeight: program.days[0].accessoryExercises[0].weight,
+            prevExercise: 'None',
+            prevWeight: '--',
+            scheme: '5x5',
+            nextExerciseHandler: nextExerciseHandler,
+            prevExerciseHandler: prevExerciseHandler,
+        })
     }, []);
 
     const nextExerciseHandler = () => {
@@ -40,7 +54,7 @@ export default function Index() {
     }
 
   return program == null ? (
-        <Text className={"text-9xl"}>Loading...</Text>
+        <Text className={"text-7xl"}>No Programs!</Text>
       )
       : (
     <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>

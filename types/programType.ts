@@ -21,7 +21,7 @@ type dayType = {
     name: string,
     color: string,
     primaryExercise: primaryExerciseType,
-    exercises: accessoryExerciseType[]
+    accessoryExercises: accessoryExerciseType[]
 }
 
 type programType = {
