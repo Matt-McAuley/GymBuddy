@@ -12,6 +12,11 @@ export default function Timer(props: timerPropsType) {
     }
 
     useEffect(() => {
+        setPaused(true);
+        setTime(props.startTime);
+    }, [props]);
+
+    useEffect(() => {
         if (!paused) {
             const intervalId = BackgroundTimer.setInterval(() => {
                 setTime(prevTime => {
