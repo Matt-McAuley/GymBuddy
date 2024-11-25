@@ -1,4 +1,4 @@
-type programInfoType = {
+type exerciseInfoType = {
     currentExercise: string,
     currentWeight: number,
     nextExercise: string,
@@ -10,4 +10,4 @@ type programInfoType = {
     prevExerciseHandler: () => void
 }
 
-export default programInfoType;
+export default exerciseInfoType;

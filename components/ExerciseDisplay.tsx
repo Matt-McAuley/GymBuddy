@@ -1,8 +1,8 @@
 import {View, Text, Image, TouchableOpacity} from "react-native";
-import programInfoType from "@/types/programInfoType";
+import exerciseInfoType from "@/types/exerciseInfoType";
 
 export default function ExerciseDisplay(props: ExerciseDisplayProps) {
-    const info = props.programInfo;
+    const info = props.exerciseInfo;
 
     return (
         <View className={'flex-col justify-center items-center h-60 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
@@ -31,5 +31,5 @@ export default function ExerciseDisplay(props: ExerciseDisplayProps) {
 }
 
 type ExerciseDisplayProps = {
-    programInfo: programInfoType
+    exerciseInfo: exerciseInfoType
 }
