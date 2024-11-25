@@ -1,8 +1,12 @@
 import {Image, Text, TouchableOpacity, View} from "react-native";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function Counter(props: counterPropsType) {
     const [set, setSet] = useState(1);
+
+    useEffect(() => {
+        setSet(1);
+    }, [props])
 
     return (
         <View className={'flex-row justify-center items-center h-35 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
