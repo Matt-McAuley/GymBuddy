@@ -1,10 +1,9 @@
-import {Image, Text, TouchableOpacity, View, Vibration, StyleSheet} from "react-native";
+import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
 import {useEffect, useState} from "react";
 import BackgroundTimer from 'react-native-background-timer';
 
 export default function Timer(props: timerPropsType) {
-    const startTime = props.startTime;
-    const [time, setTime] = useState(startTime);
+    const [time, setTime] = useState(props.startTime);
     const [paused, setPaused] = useState(true);
 
     const timerEnd = () => {
@@ -18,7 +17,7 @@ export default function Timer(props: timerPropsType) {
                 setTime(prevTime => {
                     if (prevTime == 0) {
                         timerEnd();
-                        return startTime;
+                        return props.startTime;
                     }
                     else
                         return prevTime - 1;
@@ -32,7 +31,7 @@ export default function Timer(props: timerPropsType) {
 
     return (
         <View className={'flex-row justify-between items-center h-40 w-full bg-gray-500 rounded-2xl pl-3 pr-3 border-black border-4'}>
-            <View className={"flex justify-center items-center border-4 border-black p-2 bg-yellow-50 h-28"}>
+            <View className={"flex justify-center items-center border-4 border-black p-2 bg-amber-50 h-28"}>
                 <Text className={"text-black-500 font-extrabold text-6xl"}>
                     {(String)(Math.floor(time / 3600)).padStart(2, "0")}:
                     {(String)(Math.floor((time / 60) % 60)).padStart(2, "0")}:
@@ -47,7 +46,7 @@ export default function Timer(props: timerPropsType) {
                                require("@/assets/images/timer/pause.png")}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
-                    setTime(startTime);
+                    setTime(props.startTime);
                     setPaused(true);
                 }}>
                     <Image className={"h-18 w-18"}
