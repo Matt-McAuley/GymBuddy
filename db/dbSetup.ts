@@ -5,7 +5,8 @@ const dbSetup = async (db) => {
                 name TEXT NOT NULL,
                 weight INTEGER NOT NULL,
                 sets INTEGER NOT NULL,
-                reps INTEGER NOT NULL
+                reps INTEGER NOT NULL,
+                order INTEGER NOT NULL
             );
            
             CREATE TABLE IF NOT EXISTS primary_exercises (
@@ -21,6 +22,7 @@ const dbSetup = async (db) => {
            
             CREATE TABLE IF NOT EXISTS supersets (
                 id INTEGER PRIMARY KEY NOT NULL,
+                order INTEGER NOT NULL,
                 exercise_1 INTEGER NOT NULL FOREIGN KEY REFERENCES accessory_exercises(id),
                 exercise_2 INTEGER NOT NULL FOREIGN KEY REFERENCES accessory_exercises(id),
             );
@@ -50,7 +52,9 @@ const dbSetup = async (db) => {
                 sunday INTEGER NULL FOREIGN KEY REFERENCES days(id),
             );
             
-            
+           CREATE TABLE IF NOT EXISTS current_program (
+               id INTEGER PRIMARY KEY NOT NULL,
+               program INTEGER NOT NULL FOREIGN KEY REFERENCES programs(id),
         `);
 }
 

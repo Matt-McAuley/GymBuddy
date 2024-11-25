@@ -6,6 +6,7 @@ import exerciseInfoType from "@/types/exerciseInfoType";
 import programType from "@/types/programType";
 import {useEffect, useState} from "react";
 import dbSetup from "@/db/dbSetup";
+import getProgram from "@/db/getProgram";
 import * as SQLite from 'expo-sqlite';
 
 export default function Index() {
@@ -27,6 +28,7 @@ export default function Index() {
 
     useEffect(() => {
         dbSetup(db);
+        setProgram(getProgram(db))
     }, []);
 
     const nextExerciseHandler = () => {
