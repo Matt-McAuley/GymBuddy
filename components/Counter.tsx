@@ -18,10 +18,10 @@ export default function Counter(props: counterPropsType) {
                 </View>
                 <View className={''}>
                     <TouchableOpacity onPress={() => {setSet(Math.min(props.sets, set+1))}}>
-                        <Image className={"h-16 w-16"} source={require("@/assets/images/counter/upArrow.png")}/>
+                        <Image className={"h-15 w-15"} source={require("@/assets/images/counter/upArrow.png")}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {setSet(Math.max(1, set-1))}}>
-                        <Image className={"h-16 w-16"} source={require("@/assets/images/counter/downArrow.png")}/>
+                        <Image className={"h-15 w-15"} source={require("@/assets/images/counter/downArrow.png")}/>
                     </TouchableOpacity>
                 </View>
             </View>

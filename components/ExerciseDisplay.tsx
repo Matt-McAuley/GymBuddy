@@ -10,7 +10,7 @@ export default function ExerciseDisplay(props: ExerciseDisplayProps) {
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center w-40'}>
                     <TouchableOpacity onPress={() => {info.prevExerciseHandler}}>
-                        <Image className={"h-16 w-16"}
+                        <Image className={"h-18 w-18"}
                                source={require("@/assets/images/exerciseDisplay/leftArrow.png")}/>
                     </TouchableOpacity>
                     <Text className={'text-2xl'}>{info.prevExercise}</Text>
@@ -19,7 +19,7 @@ export default function ExerciseDisplay(props: ExerciseDisplayProps) {
                 {/*<Text className={'border-4 p-3 text-4xl'}>5 x 5</Text>*/}
                 <View className={'flex-col justify-center items-center w-40'}>
                     <TouchableOpacity onPress={() => {info.nextExerciseHandler}}>
-                        <Image className={"h-16 w-16"}
+                        <Image className={"h-18 w-18"}
                                source={require("@/assets/images/exerciseDisplay/rightArrow.png")}/>
                     </TouchableOpacity>
                     <Text className={'text-2xl'}>{info.nextExercise}</Text>
