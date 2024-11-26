@@ -49,7 +49,7 @@ const useStore = create<storeType>((set) => ({
     prevExercise: () => (useStore.getState().currentExercise > 0) ?
         useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise - 1]
         : null,
-    nextExercise: () => (useStore.getState().currentExercise < useStore.getState().program!.days[useStore.getState().currentDay].exercises.length) ?
+    nextExercise: () => (useStore.getState().currentExercise < useStore.getState().program!.days[useStore.getState().currentDay].exercises.length-1) ?
         useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise + 1]
         : null,
 

@@ -32,7 +32,7 @@ export default function ExerciseDisplay() {
                     <Text className={'text-2xl'}>{(prevExercise == null) ? 'X' : (isPrimaryExercise(prevExercise)) ?
                         prevExercise.weight_1: (isAccessoryExercise(prevExercise)) ? prevExercise.weight : superSetWeightDisplay(prevExercise)}</Text>
                 </View>
-                {/*<Text className={'border-4 p-3 text-4xl'}>5 x 5</Text>*/}
+                <Text className={'border-4 p-3 text-4xl'}>5 x 5</Text>
                 <View className={'flex-col justify-center items-center w-40'}>
                     <TouchableOpacity onPress={nextExerciseHandler}>
                         <Image className={"h-18 w-18"}
