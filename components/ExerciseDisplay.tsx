@@ -1,12 +1,14 @@
 import {View, Text, Image, TouchableOpacity} from "react-native";
 import exerciseInfoType from "@/types/exerciseInfoType";
+import {useStore} from "@/store";
 
 export default function ExerciseDisplay(props: ExerciseDisplayProps) {
     const info = props.exerciseInfo;
+    const set = useStore((state) => state.set);
 
     return (
         <View className={'flex-col justify-center items-center h-60 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
-            <Text className={'font-bold text-5xl'}>{info.currentExercise} : {info.currentWeight}</Text>
+            <Text className={'font-bold text-5xl'}>{info.currentExercise} : {info.currentWeight[set-1]}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center w-40'}>
                     <TouchableOpacity onPress={() => {info.prevExerciseHandler}}>

@@ -1,8 +1,10 @@
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
+import { storeType, useStore } from "@/store";
 
 export default function Counter(props: counterPropsType) {
-    const [set, setSet] = useState(1);
+    const set = useStore((state) => state.set);
+    const setSet = useStore((state) => state.setSet);
 
     useEffect(() => {
         setSet(1);
