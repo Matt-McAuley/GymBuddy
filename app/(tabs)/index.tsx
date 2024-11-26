@@ -3,13 +3,11 @@ import Timer from "@/components/Timer";
 import Counter from "@/components/Counter";
 import ExerciseDisplay from "@/components/ExerciseDisplay";
 import exerciseInfoType from "@/types/exerciseInfoType";
-import {programType} from "@/types/programType";
+import { programType } from "@/types/programType";
 import {useEffect, useState} from "react";
-import dbSetup from "@/db/dbSetup";
-import getProgram from "@/db/getProgram";
+import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import * as SQLite from 'expo-sqlite';
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
-import addMockProgram from "@/db/addMockProgram";
 
 export default function Index() {
     const [day, setDay] = useState("Push");
@@ -31,6 +29,7 @@ export default function Index() {
 
     useEffect(() => {
         dbSetup(db);
+        addMockProgram(db);
         setProgram(getProgram(db))
         if (program == null) {
             return;
@@ -48,7 +47,6 @@ export default function Index() {
         })
         setColor(program.days[0]!.color);
         setDay(program.days[0]!.name);
-        console.log(color);
     }, []);
 
     const nextExerciseHandler = () => {
