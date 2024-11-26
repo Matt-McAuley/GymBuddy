@@ -2,6 +2,7 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from "react-native";
 import {useStore} from "@/store";
 import {superSetType} from "@/types/programType";
 import { Dropdown } from 'react-native-element-dropdown'
+import {useEffect, useState} from "react";
 
 export default function ExerciseDisplay() {
     const {set, nextExerciseHandler, prevExerciseHandler, isAccessoryExercise,
@@ -19,9 +20,32 @@ export default function ExerciseDisplay() {
         return superSet.exercise1.weight + ' | ' + superSet.exercise2.weight;
     }
 
+    const getWeight = () => {
+        if (isPrimaryExercise(exercise)) {
+            if (currentScheme === '5 x 5') {
+                return [exercise.weight_1, exercise.weight_1, exercise.weight_1, exercise.weight_1, exercise.weight_1];
+            }
+            else if (currentScheme === '5 x 3') {
+                return [exercise.weight_2, exercise.weight_2, exercise.weight_2, exercise.weight_2, exercise.weight_2];
+            }
+            else {
+                return [exercise.weight_1, exercise.weight_2, exercise.weight_3, exercise.weight_2, exercise.weight_1];
+            }
+        } else if (isAccessoryExercise(exercise)) {
+            return new Array(5).fill(exercise.weight);
+        } else {
+            return new Array(5).fill(exercise.exercise1.weight + '|' + exercise.exercise2.weight);
+        }
+    }
+    const [weight, setWeight] = useState(getWeight());
+
+    useEffect(() => {
+        setWeight(getWeight());
+    }, [exercise, currentScheme]);
+
     return (isPrimaryExercise(exercise)) ? (
         <View className={'flex-col justify-center items-center h-60 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
-            <Text className={'font-bold text-5xl'}>{exercise.name} : {[exercise.weight_1, exercise.weight_2, exercise.weight_3, exercise.weight_2, exercise.weight_1][set-1]}</Text>
+            <Text className={'font-bold text-5xl'}>{exercise.name} : {weight[set-1]}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center w-30'}>
                     <TouchableOpacity onPress={prevExerciseHandler}>
@@ -37,7 +61,7 @@ export default function ExerciseDisplay() {
                     label={'Scheme'}
                     data={[
                         {label: '5 x 5', value: '5 x 5'},
-                        {label: '3 x 5', value: '3 x 5'},
+                        {label: '5 x 3', value: '5 x 3'},
                         {label: '5 3 1', value: '5 3 1'},
                     ]}
                     labelField='label' valueField='value' placeholder={currentScheme}

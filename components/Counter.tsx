@@ -3,27 +3,42 @@ import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 
 export default function Counter() {
-    const {isAccessoryExercise, isPrimaryExercise, isSuperSet} = useStore();
+    const {isAccessoryExercise, isPrimaryExercise, currentScheme} = useStore();
     const exercise = useStore((state) => state.exercise());
     const [sets, setSets] = useState((isPrimaryExercise(exercise)) ? exercise.sets : (isAccessoryExercise(exercise))
         ? exercise.sets : exercise.exercise1.sets);
-    const [reps, setReps] = useState((isPrimaryExercise(exercise))
-        ? [exercise.reps_1, exercise.reps_2, exercise.reps_3, exercise.reps_2, exercise.reps_1]
-        : (isAccessoryExercise(exercise)) ? new Array(5).fill(exercise.reps)
-            : new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps));
     const set = useStore((state) => state.set);
     const setSet = useStore((state) => state.setSet);
 
+    const getReps = () => {
+        if (isPrimaryExercise(exercise)) {
+            if (currentScheme === '5 x 5') {
+                return [exercise.reps_1, exercise.reps_1, exercise.reps_1, exercise.reps_1, exercise.reps_1];
+            }
+            else if (currentScheme === '5 x 3') {
+                return [exercise.reps_2, exercise.reps_2, exercise.reps_2, exercise.reps_2, exercise.reps_2];
+            }
+            else {
+                return [exercise.reps_1, exercise.reps_2, exercise.reps_3, exercise.reps_2, exercise.reps_1];
+            }
+        } else if (isAccessoryExercise(exercise)) {
+            return new Array(5).fill(exercise.reps);
+        } else {
+            return new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps);
+        }
+    }
+    const [reps, setReps] = useState(getReps());
 
     useEffect(() => {
         setSets((isPrimaryExercise(exercise)) ? exercise.sets : (isAccessoryExercise(exercise))
             ? exercise.sets : exercise.exercise1.sets);
-        setReps((isPrimaryExercise(exercise))
-            ? [exercise.reps_1, exercise.reps_2, exercise.reps_3, exercise.reps_2, exercise.reps_1]
-            : (isAccessoryExercise(exercise)) ? new Array(5).fill(exercise.reps)
-                : new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps));
+        setReps(getReps());
         setSet(1);
     }, [exercise]);
+
+    useEffect(() => {
+        setReps(getReps());
+    }, [currentScheme]);
 
     return (
         <View className={'flex-row justify-center items-center h-35 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
