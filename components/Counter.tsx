@@ -3,9 +3,8 @@ import {useEffect} from "react";
 import { useStore } from "@/store";
 
 export default function Counter() {
-    const exerciseInfo = useStore((state) => state.exerciseInfo);
-    const sets = exerciseInfo.currentSets;
-    const reps = exerciseInfo.currentReps;
+    const {program, isAccessoryExercise, isPrimaryExercise, isSuperSet, currentExercise, currentDay} = useStore();
+    const exercise = program!.days[currentDay].exercises[currentExercise];
     const set = useStore((state) => state.set);
     const setSet = useStore((state) => state.setSet);
 

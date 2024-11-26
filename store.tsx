@@ -119,8 +119,9 @@ const useStore = create<storeType>((set) => ({
 
     isSuperSet : (exercise: primaryExerciseType | accessoryExerciseType | superSetType): exercise is superSetType => {
         return (exercise as superSetType).exercise1 !== undefined;
-    }
+    },
 
+    exercise: useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise],
 }));
 
 type storeType = {
@@ -138,7 +139,8 @@ type storeType = {
     setProgram: (newProgram: programType | null) => void,
     isPrimaryExercise: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is primaryExerciseType,
     isAccessoryExercise: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is accessoryExerciseType,
-    isSuperSet: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is superSetType
+    isSuperSet: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is superSetType,
+    exercise: primaryExerciseType | accessoryExerciseType | superSetType,
 }
 
 export { useStore, storeType };
