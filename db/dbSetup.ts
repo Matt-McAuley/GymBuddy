@@ -1,6 +1,6 @@
-const dbSetup = async (db) => {
+const dbSetup = (db) => {
     try {
-        await db.execAsync(`
+        db.execSync(`
             CREATE TABLE IF NOT EXISTS accessory_exercises (
                 id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
@@ -10,7 +10,7 @@ const dbSetup = async (db) => {
             );
         `);
 
-        await db.execAsync(`
+        db.execSync(`
             CREATE TABLE IF NOT EXISTS primary_exercises (
                 id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
@@ -23,7 +23,7 @@ const dbSetup = async (db) => {
             );
         `);
 
-        await db.execAsync(`
+        db.execSync(`
             CREATE TABLE IF NOT EXISTS supersets (
                 id INTEGER PRIMARY KEY NOT NULL,
                 exercise_1 INTEGER NOT NULL,
@@ -33,7 +33,7 @@ const dbSetup = async (db) => {
             );
         `);
 
-        await db.execAsync(`
+        db.execSync(`
             CREATE TABLE IF NOT EXISTS days (
                 id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
@@ -57,7 +57,7 @@ const dbSetup = async (db) => {
             );
         `);
 
-        await db.execAsync(`
+        db.execSync(`
             CREATE TABLE IF NOT EXISTS programs (
                 id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
@@ -78,15 +78,13 @@ const dbSetup = async (db) => {
             );
         `);
 
-        await db.execAsync(`
+        db.execSync(`
            CREATE TABLE IF NOT EXISTS current_program (
                id INTEGER PRIMARY KEY NOT NULL,
                program INTEGER NOT NULL,
                FOREIGN KEY (program) REFERENCES programs(id)
            );
         `);
-
-        console.log('Database setup complete');
     }
     catch (err) {
         console.log('Error setting up database');

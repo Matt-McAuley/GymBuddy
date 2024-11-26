@@ -3,11 +3,12 @@ import Timer from "@/components/Timer";
 import Counter from "@/components/Counter";
 import ExerciseDisplay from "@/components/ExerciseDisplay";
 import exerciseInfoType from "@/types/exerciseInfoType";
-import programType from "@/types/programType";
+import {programType} from "@/types/programType";
 import {useEffect, useState} from "react";
 import dbSetup from "@/db/dbSetup";
 import getProgram from "@/db/getProgram";
 import * as SQLite from 'expo-sqlite';
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 
 export default function Index() {
     const [day, setDay] = useState("Push");
@@ -17,28 +18,29 @@ export default function Index() {
         currentExercise: 'Bench',
         currentWeight: 185,
         nextExercise: 'Ham Curl',
-        nextWeight: '45',
+        nextWeight: 45,
         prevExercise: 'Squat',
-        prevWeight: '225',
+        prevWeight: 225,
         scheme: '5x5',
         nextExerciseHandler: nextExerciseHandler,
         prevExerciseHandler: prevExerciseHandler,
     });
     const db = SQLite.openDatabaseSync('programs.db');
+    useDrizzleStudio(db);
 
     useEffect(() => {
         dbSetup(db);
-        // setProgram(getProgram(db))
+        setProgram(getProgram(db))
         if (program == null) {
             return;
         }
         setExerciseInfo({
-            currentExercise: program.days[0].primaryExercise.name,
-            currentWeight: program.days[0].primaryExercise.weight1,
-            nextExercise: program.days[0].accessoryExercises[0].name,
-            nextWeight: program.days[0].accessoryExercises[0].weight,
+            currentExercise: program.days[0]!.primaryExercise.name,
+            currentWeight: program.days[0]!.primaryExercise.weight1,
+            nextExercise: program.days[0]!.accessoryExercises[0].name,
+            nextWeight: program.days[0]!.accessoryExercises[0].weight,
             prevExercise: 'None',
-            prevWeight: '--',
+            prevWeight: 0,
             scheme: '5x5',
             nextExerciseHandler: nextExerciseHandler,
             prevExerciseHandler: prevExerciseHandler,

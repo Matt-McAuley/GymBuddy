@@ -2,9 +2,9 @@ type exerciseInfoType = {
     currentExercise: string,
     currentWeight: number,
     nextExercise: string,
-    nextWeight: string,
+    nextWeight: number,
     prevExercise: string,
-    prevWeight: string,
+    prevWeight: number,
     scheme: string
     nextExerciseHandler: () => void,
     prevExerciseHandler: () => void
