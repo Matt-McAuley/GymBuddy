@@ -112,31 +112,50 @@ const dbTeardown = (db) => {
 }
 
 const addMockProgram = (db) => {
-    const result = db.getFirstSync(`SELECT * FROM primary_exercises`);
-    if (result != null) return;
+    try {
+        const result = db.getFirstSync(`SELECT *
+                                        FROM primary_exercises`);
+        if (result != null) return;
 
-    db.execSync(`
-        INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3) VALUES ('Bench', 210, 5, 190, 215, 245, 5, 3, 1);
-        INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('DB OHP', 90, 45, 12, 3);
-        INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('Dips', 90, 0, 12, 3);
-        INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('Incline Bench', 90, 50, 12, 3);
-        INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('Lateral Raise', 90, 20, 15, 3);
-        INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('Tricep Extension', 90, 35, 15, 3);
-        INSERT INTO supersets (exercise_1, exercise_2) VALUES ('Lateral Raise', 'Tricep Extension');
-    `);
+        db.execSync(`
+            INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
+            VALUES ('Bench', 210, 5, 190, 215, 245, 5, 3, 1);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('DB OHP', 90, 45, 12, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Dips', 90, 0, 12, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Incline Bench', 90, 50, 12, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Lateral Raise', 90, 20, 15, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Tricep Extension', 90, 35, 15, 3);
+            INSERT INTO supersets (exercise_1, exercise_2)
+            VALUES ('Lateral Raise', 'Tricep Extension');
+        `);
 
-    db.execSync(`
-        INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement) 
-        VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Incline Bench', 5, 'Lateral Raise', 'Tricep Extension', 4);
-    `);
+        db.execSync(`
+            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
+                              exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, superset_1_1,
+                              superset_1_2, superset_1_placement)
+            VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Incline Bench', 5, 'Lateral Raise',
+                    'Tricep Extension', 4);
+        `);
 
-    db.execSync(`
-        INSERT INTO programs (name, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('PPUL', 'Push', NULL, NULL, NULL, NULL, NULL, NULL);
-    `);
+        db.execSync(`
+            INSERT INTO programs (name, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+            VALUES ('PPUL', 'Push', NULL, NULL, NULL, NULL, NULL, NULL);
+        `);
 
-    db.execSync(`
-        INSERT INTO current_program (program) VALUES ('PPUL');
-    `);
+        db.execSync(`
+            INSERT INTO current_program (program)
+            VALUES ('PPUL');
+        `);
+    }
+    catch (err) {
+        console.log('Error adding mock program');
+        console.log(err);
+    }
 }
 
 const getProgram = (db) => {
@@ -153,13 +172,13 @@ const getProgram = (db) => {
     const currentProgram = db.getFirstSync(`SELECT program FROM current_program`);
     if (currentProgram == null) return null;
 
-    const program = db.getFirstSync(`SELECT * FROM programs WHERE name = ${currentProgram.program}`);
+    const program = db.getFirstSync(`SELECT * FROM programs WHERE name = '${currentProgram.program}'`);
     if (program == null) return null;
     res.name = program.name;
 
     // Get the days for the program
     for (const dayOfWeek of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']) {
-        const day = db.getFirstSync(`SELECT * FROM days WHERE name = ${program[dayOfWeek]}`);
+        const day = db.getFirstSync(`SELECT * FROM days WHERE name = '${program[dayOfWeek]}'`);
         if (day == null) continue;
         const dayRes: dayType = {
             name: day.name,
@@ -169,7 +188,7 @@ const getProgram = (db) => {
         const exerciseRes = Array(7).fill(null);
 
         // Get the primary exercise
-        const primaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = ${day.exercise_1}`);
+        const primaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = '${day.exercise_1}'`);
         const primaryExerciseRes: primaryExerciseType = {
             name: primaryExercise.name,
             rest: primaryExercise.rest,
@@ -186,23 +205,24 @@ const getProgram = (db) => {
         // Get the accessory exercises
         for (let i = 2; i < 6; i++) {
             if (day[`exercise_${i}`] != null) {
-                let accessoryExercise = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = ${day[`exercise_${i}`]}`);
-                let accessoryExerciseRes: accessoryExerciseType = {
+                const accessoryExercise = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = '${day[`exercise_${i}`]}'`);
+                const accessoryExerciseRes : accessoryExerciseType = {
                     name: accessoryExercise.name,
                     rest: accessoryExercise.rest,
                     sets: accessoryExercise.sets,
                     reps: accessoryExercise.reps,
                     weight: accessoryExercise.weight
-                }
-                exerciseRes[day[`exercise_${i}_placement`-1]] = accessoryExerciseRes;
+                };
+                const placementIndex = day[`exercise_${i}_placement`] - 1;
+                exerciseRes[placementIndex] = accessoryExerciseRes;
             }
         }
 
         // Get the superset exercises
         for (let i = 1; i < 3; i++) {
             if (day[`superset_${i}`] != null) {
-                let exercise1 = db.getFirstSync(`SELECT * FROM supersets WHERE name = ${day[`superset_${i}_1`]}`);
-                let exercise2 = db.getFirstSync(`SELECT * FROM supersets WHERE name = ${day[`superset_${i}_2`]}`);
+                let exercise1 = db.getFirstSync(`SELECT * FROM supersets WHERE name = '${day[`superset_${i}_1`]}'`);
+                let exercise2 = db.getFirstSync(`SELECT * FROM supersets WHERE name = '${day[`superset_${i}_2`]}'`);
                 if (exercise1 == null) continue;
                 let superSetRes = {
                     exercise1: {

@@ -4,9 +4,10 @@ import BackgroundTimer from 'react-native-background-timer';
 import { useStore } from "@/store";
 
 export default function Timer() {
-    const {isAccessoryExercise, isPrimaryExercise, isSuperSet, exercise } = useStore();
+    const {isAccessoryExercise, isPrimaryExercise, isSuperSet } = useStore();
+    const exercise = useStore((state) => state.exercise());
     const [startTime, setStartTime] = useState((isAccessoryExercise(exercise)) ? exercise.rest : (isPrimaryExercise(exercise))
-        ? exercise.rest : (isSuperSet(exercise)) ? Math.max(exercise.exercise1.rest, exercise.exercise2.rest) : 0);
+        ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
     const [time, setTime] = useState(startTime);
     const [paused, setPaused] = useState(true);
 
@@ -18,7 +19,7 @@ export default function Timer() {
     useEffect(() => {
         setPaused(true);
         setStartTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
-            ? exercise.rest : (isSuperSet(exercise)) ? Math.max(exercise.exercise1.rest, exercise.exercise2.rest) : 0);
+            ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
         setTime(startTime);
     }, [exercise]);
 

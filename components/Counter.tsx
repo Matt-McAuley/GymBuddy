@@ -3,24 +3,25 @@ import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 
 export default function Counter() {
-    const {isAccessoryExercise, isPrimaryExercise, isSuperSet, exercise} = useStore();
+    const {isAccessoryExercise, isPrimaryExercise, isSuperSet} = useStore();
+    const exercise = useStore((state) => state.exercise());
     const [sets, setSets] = useState((isPrimaryExercise(exercise)) ? exercise.sets : (isAccessoryExercise(exercise))
-        ? exercise.sets : (isSuperSet(exercise)) ? exercise.exercise1.sets : 0);
+        ? exercise.sets : exercise.exercise1.sets);
     const [reps, setReps] = useState((isPrimaryExercise(exercise))
         ? [exercise.reps_1, exercise.reps_2, exercise.reps_3, exercise.reps_2, exercise.reps_1]
         : (isAccessoryExercise(exercise)) ? new Array(5).fill(exercise.reps)
-            : (isSuperSet(exercise)) ? new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps) : []);
+            : new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps));
     const set = useStore((state) => state.set);
     const setSet = useStore((state) => state.setSet);
 
 
     useEffect(() => {
         setSets((isPrimaryExercise(exercise)) ? exercise.sets : (isAccessoryExercise(exercise))
-            ? exercise.sets : (isSuperSet(exercise)) ? exercise.exercise1.sets : 0);
+            ? exercise.sets : exercise.exercise1.sets);
         setReps((isPrimaryExercise(exercise))
             ? [exercise.reps_1, exercise.reps_2, exercise.reps_3, exercise.reps_2, exercise.reps_1]
             : (isAccessoryExercise(exercise)) ? new Array(5).fill(exercise.reps)
-                : (isSuperSet(exercise)) ? new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps) : []);
+                : new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps));
         setSet(1);
     }, [exercise]);
 
