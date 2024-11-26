@@ -27,9 +27,7 @@ type superSetType = {
 type dayType = {
     name: string,
     color: string,
-    primaryExercise: primaryExerciseType,
-    accessoryExercises: accessoryExerciseType[],
-    supersetExercises: superSetType[],
+    exercises: (primaryExerciseType | accessoryExerciseType | superSetType)[],
 }
 
 type programType = {

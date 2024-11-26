@@ -20,7 +20,7 @@ export default function Index() {
     useEffect(() => {
         dbSetup(db);
         addMockProgram(db);
-        setProgram(getProgram(db));
+        // setProgram(getProgram(db));
     }, []);
 
     useEffect(() => {
