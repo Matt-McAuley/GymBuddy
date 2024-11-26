@@ -241,12 +241,10 @@ const getProgram = (db) => {
                     }
                 }
                 const placementIndex = day[`superset_${i}_placement`] - 1;
-                console.log('placement', placementIndex);
                 exerciseRes[placementIndex] = superSetRes;
             }
         }
         dayRes.exercises = exerciseRes.filter((exercise) => exercise != null);
-        console.log(dayRes.exercises);
         res.days.push(dayRes);
     }
 

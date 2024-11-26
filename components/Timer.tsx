@@ -20,7 +20,8 @@ export default function Timer() {
         setPaused(true);
         setStartTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
             ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
-        setTime(startTime);
+        setTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
+            ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
     }, [exercise]);
 
     useEffect(() => {
