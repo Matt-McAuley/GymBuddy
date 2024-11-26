@@ -7,8 +7,8 @@ const dbSetup = (db) => {
                 id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
                 rest INTEGER NOT NULL,
-                weight INTEGER NOT NULL,
                 sets INTEGER NOT NULL,
+                weight INTEGER NOT NULL,
                 reps INTEGER NOT NULL
             );
         `);
@@ -18,6 +18,7 @@ const dbSetup = (db) => {
                 id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
                 rest INTEGER NOT NULL,
+                sets INTEGER NOT NULL,
                 weight_1 INTEGER NOT NULL,
                 weight_2 INTEGER NOT NULL,
                 weight_3 INTEGER NOT NULL,
@@ -112,7 +113,7 @@ const addMockProgram = (db) => {
     if (result != null) return;
 
     db.execSync(`
-        INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3) VALUES ('Bench', 210, 190, 215, 245, 5, 3, 1);
+        INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3) VALUES ('Bench', 210, 5, 190, 215, 245, 5, 3, 1);
         INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('DB OHP', 90, 45, 12, 3);
         INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('Dips', 90, 0, 12, 3);
         INSERT INTO accessory_exercises (name, rest, weight, reps, sets) VALUES ('Incline Bench', 90, 50, 12, 3);
@@ -162,12 +163,12 @@ const getProgram = (db) => {
                 name: '',
                 rest: 0,
                 sets: 0,
-                reps1: 0,
-                weight1: 0,
-                reps2: 0,
-                weight2: 0,
-                reps3: 0,
-                weight3: 0
+                weight_1: 0,
+                weight_2: 0,
+                weight_3: 0,
+                reps_1: 0,
+                reps_2: 0,
+                reps_3: 0
             },
             accessoryExercises: [],
             supersetExercises: []
@@ -178,13 +179,12 @@ const getProgram = (db) => {
         dayRes.primaryExercise.name = primaryExercise.name;
         dayRes.primaryExercise.rest = primaryExercise.rest;
         dayRes.primaryExercise.sets = primaryExercise.sets;
-        dayRes.primaryExercise.reps1 = primaryExercise.reps1;
-        dayRes.primaryExercise.weight1 = primaryExercise.weight1;
-        dayRes.primaryExercise.reps2 = primaryExercise.reps2;
-        dayRes.primaryExercise.weight2 = primaryExercise.weight2;
-        dayRes.primaryExercise.reps3 = primaryExercise.reps3;
-        dayRes.primaryExercise.weight3 = primaryExercise.weight3;
-
+        dayRes.primaryExercise.weight_1 = primaryExercise.weight_1;
+        dayRes.primaryExercise.weight_2 = primaryExercise.weight_2;
+        dayRes.primaryExercise.weight_3 = primaryExercise.weight_3;
+        dayRes.primaryExercise.reps_1 = primaryExercise.reps_1;
+        dayRes.primaryExercise.reps_2 = primaryExercise.reps_2;
+        dayRes.primaryExercise.reps_3 = primaryExercise.reps_3;
 
         // Get the accessory exercises
         for (let i = 2; i < 6; i++) {

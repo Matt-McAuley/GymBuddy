@@ -15,12 +15,16 @@ export default function Index() {
     const [program, setProgram] = useState<programType | null>(null);
     const [exerciseInfo, setExerciseInfo] = useState<exerciseInfoType>({
         currentExercise: '',
-        currentWeight: 0,
+        currentWeight: [],
+        currentRest: 0,
+        currentSets: 0,
+        currentReps: [],
         nextExercise: '',
         nextWeight: 0,
         prevExercise: '',
         prevWeight: 0,
         scheme: '',
+        exerciseNumber: 0,
         nextExerciseHandler: nextExerciseHandler,
         prevExerciseHandler: prevExerciseHandler,
     });
@@ -35,14 +39,21 @@ export default function Index() {
 
     useEffect(() => {
         if (program == null) return;
+        console.log(program.days[0]!.primaryExercise);
         setExerciseInfo({
             currentExercise: program.days[0]!.primaryExercise.name,
-            currentWeight: program.days[0]!.primaryExercise.weight1,
+            currentWeight: [program.days[0]!.primaryExercise.weight_1, program.days[0]!.primaryExercise.weight_2,
+                program.days[0]!.primaryExercise.weight_3, program.days[0]!.primaryExercise.weight_2, program.days[0]!.primaryExercise.weight_1],
+            currentRest: program.days[0]!.primaryExercise.rest,
+            currentSets: program.days[0]!.primaryExercise.sets,
+            currentReps: [program.days[0]!.primaryExercise.reps_1, program.days[0]!.primaryExercise.reps_2,
+                program.days[0]!.primaryExercise.reps_3, program.days[0]!.primaryExercise.reps_2, program.days[0]!.primaryExercise.reps_1],
             nextExercise: program.days[0]!.accessoryExercises[0].name,
             nextWeight: program.days[0]!.accessoryExercises[0].weight,
             prevExercise: 'None',
             prevWeight: 0,
             scheme: '5x5',
+            exerciseNumber: 1,
             nextExerciseHandler: nextExerciseHandler,
             prevExerciseHandler: prevExerciseHandler,
         })
@@ -64,8 +75,8 @@ export default function Index() {
       : (
     <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
         <Text className={`text-7xl font-bold color-${color}-500`}>{day}</Text>
-        <Timer startTime={60}/>
-        <Counter sets={5} reps={[5, 3, 1, 3, 5]}/>
+        <Timer startTime={exerciseInfo.currentRest}/>
+        <Counter sets={exerciseInfo.currentSets} reps={exerciseInfo.currentReps}/>
         <ExerciseDisplay exerciseInfo={exerciseInfo}/>
     </View>
   );

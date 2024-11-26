@@ -2,12 +2,12 @@ type primaryExerciseType = {
     name: string,
     rest: number,
     sets: number,
-    reps1: number,
-    weight1: number,
-    reps2: number,
-    weight2: number,
-    reps3: number,
-    weight3: number
+    weight_1: number,
+    weight_2: number,
+    weight_3: number,
+    reps_1: number,
+    reps_2: number,
+    reps_3: number
 }
 
 type accessoryExerciseType = {
