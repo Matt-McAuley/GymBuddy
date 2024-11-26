@@ -19,8 +19,6 @@ const useStore = create<storeType>((set) => ({
         const newExerciseNumber = exerciseInfo.exerciseNumber + 1;
         const newExercise = accessoryExercises[newExerciseNumber - 2];
 
-        console.log(newExercise);
-        console.log(newExerciseNumber);
         const prevExercise = (newExerciseNumber === 2) ?
             primaryExercise.name : accessoryExercises[newExerciseNumber - 3].name;
         const prevWeight = (newExerciseNumber === 2) ?
@@ -47,7 +45,46 @@ const useStore = create<storeType>((set) => ({
     },
 
     prevExerciseHandler: () => {
+        const setExerciseInfo = useStore.getState().setExerciseInfo;
+        const exerciseInfo = useStore.getState().exerciseInfo;
+        const program = useStore.getState().program;
+        const currentDay = program!.days[0];
+        const primaryExercise = currentDay!.primaryExercise;
+        const accessoryExercises = currentDay!.accessoryExercises;
 
+        if (exerciseInfo.exerciseNumber === 1) return;
+
+        const newExerciseNumber = exerciseInfo.exerciseNumber - 1;
+        const newExercise = (newExerciseNumber === 1) ?
+            primaryExercise : accessoryExercises[newExerciseNumber - 2];
+
+        const prevExercise = (newExerciseNumber === 1) ?
+            'None' : (newExerciseNumber === 2) ? primaryExercise.name :
+                accessoryExercises[newExerciseNumber - 3].name;
+        const prevWeight = (newExerciseNumber === 1) ?
+            0 : (newExerciseNumber === 2) ? primaryExercise.weight_1 :
+                accessoryExercises[newExerciseNumber - 3].weight;
+
+        const nextExercise = (newExerciseNumber === '1') ?
+            accessoryExercises[0].name : accessoryExercises[newExerciseNumber - 1].name;
+        const nextWeight = (newExerciseNumber === '1') ?
+            accessoryExercises[0].weight : accessoryExercises[newExerciseNumber - 1].weight;
+
+        setExerciseInfo({
+            currentExercise: newExercise.name,
+            currentWeight: (newExerciseNumber === 1) ? [primaryExercise.weight_1, primaryExercise.weight_2, primaryExercise.weight_3, primaryExercise.weight_2, primaryExercise.weight_1] :
+                new Array(5).fill(accessoryExercises[newExerciseNumber - 2].weight),
+            currentRest: newExercise.rest,
+            currentSets: newExercise.sets,
+            currentReps: (newExerciseNumber === 1) ? [primaryExercise.reps_1, primaryExercise.reps_2, primaryExercise.reps_3, primaryExercise.reps_2, primaryExercise.reps_1] :
+                new Array(5).fill(accessoryExercises[newExerciseNumber - 2].reps),
+            nextExercise: nextExercise,
+            nextWeight: nextWeight,
+            prevExercise: prevExercise,
+            prevWeight: prevWeight,
+            scheme: '5x5',
+            exerciseNumber: newExerciseNumber,
+        });
     },
 
     exerciseInfo: {
