@@ -10,17 +10,17 @@ import * as SQLite from 'expo-sqlite';
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 
 export default function Index() {
-    const [day, setDay] = useState("Push");
-    const [color, setColor] = useState("red");
+    const [day, setDay] = useState("");
+    const [color, setColor] = useState("");
     const [program, setProgram] = useState<programType | null>(null);
     const [exerciseInfo, setExerciseInfo] = useState<exerciseInfoType>({
-        currentExercise: 'Bench',
-        currentWeight: 185,
-        nextExercise: 'Ham Curl',
-        nextWeight: 45,
-        prevExercise: 'Squat',
-        prevWeight: 225,
-        scheme: '5x5',
+        currentExercise: '',
+        currentWeight: 0,
+        nextExercise: '',
+        nextWeight: 0,
+        prevExercise: '',
+        prevWeight: 0,
+        scheme: '',
         nextExerciseHandler: nextExerciseHandler,
         prevExerciseHandler: prevExerciseHandler,
     });
@@ -30,10 +30,11 @@ export default function Index() {
     useEffect(() => {
         dbSetup(db);
         addMockProgram(db);
-        setProgram(getProgram(db))
-        if (program == null) {
-            return;
-        }
+        setProgram(getProgram(db));
+    }, []);
+
+    useEffect(() => {
+        if (program == null) return;
         setExerciseInfo({
             currentExercise: program.days[0]!.primaryExercise.name,
             currentWeight: program.days[0]!.primaryExercise.weight1,
@@ -47,7 +48,7 @@ export default function Index() {
         })
         setColor(program.days[0]!.color);
         setDay(program.days[0]!.name);
-    }, []);
+    }, [program]);
 
     const nextExerciseHandler = () => {
         console.log('Next Exercise');
@@ -57,7 +58,7 @@ export default function Index() {
         console.log('Previous Exercise');
     }
 
-  return program == null ? (
+  return (program == null) ? (
         <Text className={"text-7xl"}>No Programs!</Text>
       )
       : (
