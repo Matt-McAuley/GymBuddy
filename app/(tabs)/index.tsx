@@ -9,6 +9,7 @@ import dbSetup from "@/db/dbSetup";
 import getProgram from "@/db/getProgram";
 import * as SQLite from 'expo-sqlite';
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
+import addMockProgram from "@/db/addMockProgram";
 
 export default function Index() {
     const [day, setDay] = useState("Push");
@@ -45,6 +46,9 @@ export default function Index() {
             nextExerciseHandler: nextExerciseHandler,
             prevExerciseHandler: prevExerciseHandler,
         })
+        setColor(program.days[0]!.color);
+        setDay(program.days[0]!.name);
+        console.log(color);
     }, []);
 
     const nextExerciseHandler = () => {
