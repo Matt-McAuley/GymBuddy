@@ -2,32 +2,19 @@ import { View, Text } from "react-native";
 import Timer from "@/components/Timer";
 import Counter from "@/components/Counter";
 import ExerciseDisplay from "@/components/ExerciseDisplay";
-import exerciseInfoType from "@/types/exerciseInfoType";
-import { programType } from "@/types/programType";
 import {useEffect, useState} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import * as SQLite from 'expo-sqlite';
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
+import {useStore} from "@/store";
 
 export default function Index() {
     const [day, setDay] = useState("");
     const [color, setColor] = useState("");
-    const [program, setProgram] = useState<programType | null>(null);
-    const [exerciseInfo, setExerciseInfo] = useState<exerciseInfoType>({
-        currentExercise: '',
-        currentWeight: [],
-        currentRest: 0,
-        currentSets: 0,
-        currentReps: [],
-        nextExercise: '',
-        nextWeight: 0,
-        prevExercise: '',
-        prevWeight: 0,
-        scheme: '',
-        exerciseNumber: 0,
-        nextExerciseHandler: nextExerciseHandler,
-        prevExerciseHandler: prevExerciseHandler,
-    });
+    const exerciseInfo = useStore((state) => state.exerciseInfo);
+    const setExerciseInfo = useStore((state) => state.setExerciseInfo);
+    const program = useStore((state) => state.program);
+    const setProgram = useStore((state) => state.setProgram);
     const db = SQLite.openDatabaseSync('programs.db');
     useDrizzleStudio(db);
 
@@ -54,20 +41,11 @@ export default function Index() {
             prevWeight: 0,
             scheme: '5x5',
             exerciseNumber: 1,
-            nextExerciseHandler: nextExerciseHandler,
-            prevExerciseHandler: prevExerciseHandler,
-        })
+        });
         setColor(firstDay!.color);
         setDay(firstDay!.name);
     }, [program]);
 
-    const nextExerciseHandler = () => {
-        console.log('Next Exercise');
-    }
-
-    const prevExerciseHandler = () => {
-        console.log('Previous Exercise');
-    }
 
   return (program == null) ? (
         <Text className={"text-7xl"}>No Programs!</Text>
