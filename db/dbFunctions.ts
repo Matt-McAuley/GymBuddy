@@ -1,4 +1,4 @@
-import {programType, dayType, primaryExerciseType, accessoryExerciseType} from "@/types/programType";
+import {programType, dayType, primaryExerciseType, accessoryExerciseType, superSetType} from "@/types/programType";
 
 const dbSetup = (db) => {
     try {
@@ -220,11 +220,11 @@ const getProgram = (db) => {
 
         // Get the superset exercises
         for (let i = 1; i < 3; i++) {
-            if (day[`superset_${i}`] != null) {
-                let exercise1 = db.getFirstSync(`SELECT * FROM supersets WHERE name = '${day[`superset_${i}_1`]}'`);
-                let exercise2 = db.getFirstSync(`SELECT * FROM supersets WHERE name = '${day[`superset_${i}_2`]}'`);
+            if (day[`superset_${i}_1`] != null) {
+                const exercise1 = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = '${day[`superset_${i}_1`]}'`);
+                const exercise2 = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = '${day[`superset_${i}_2`]}'`);
                 if (exercise1 == null) continue;
-                let superSetRes = {
+                const superSetRes : superSetType = {
                     exercise1: {
                         name: exercise1.name,
                         rest: exercise1.rest,
@@ -240,10 +240,13 @@ const getProgram = (db) => {
                         weight: exercise2.weight
                     }
                 }
-                exerciseRes[day[`superset_${i}_placement`-1]] = superSetRes;
+                const placementIndex = day[`superset_${i}_placement`] - 1;
+                console.log('placement', placementIndex);
+                exerciseRes[placementIndex] = superSetRes;
             }
         }
         dayRes.exercises = exerciseRes.filter((exercise) => exercise != null);
+        console.log(dayRes.exercises);
         res.days.push(dayRes);
     }
 

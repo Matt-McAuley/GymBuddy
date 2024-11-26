@@ -20,8 +20,7 @@ type accessoryExerciseType = {
 
 type superSetType = {
     exercise1: accessoryExerciseType,
-    exercise2: accessoryExerciseType,
-    placement: number
+    exercise2: accessoryExerciseType
 }
 
 type dayType = {
