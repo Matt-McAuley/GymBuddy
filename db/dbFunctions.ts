@@ -141,6 +141,10 @@ const getProgram = (db) => {
         days: []
     }
 
+    // Check if table exists
+    const result = db.getFirstSync(`SELECT name FROM sqlite_master WHERE type='table' AND name='current_program'`);
+    if (result == null) return null;
+
     // Get the current program
     const currentProgram = db.getFirstSync(`SELECT program FROM current_program`);
     if (currentProgram == null) return null;

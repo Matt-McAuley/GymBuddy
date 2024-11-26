@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import {View, Text, ActivityIndicator} from "react-native";
 import Timer from "@/components/Timer";
 import Counter from "@/components/Counter";
 import ExerciseDisplay from "@/components/ExerciseDisplay";
@@ -47,7 +47,9 @@ export default function Index() {
 
 
   return (program == null) ? (
-        <Text className={"text-7xl"}>No Programs!</Text>
+      <View className={'flex justify-center items-center h-full'}>
+        <ActivityIndicator className={'color-black'} size={'large'} />
+      </View>
       )
       : (
     <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
