@@ -5,8 +5,8 @@ import { useStore } from "@/store";
 
 export default function Timer() {
     const {isAccessoryExercise, isPrimaryExercise, isSuperSet, exercise } = useStore();
-    const startTime = (isAccessoryExercise(exercise)) ? exercise.rest : (isPrimaryExercise(exercise))
-        ? exercise.rest : (isSuperSet(exercise)) ? Math.max(exercise.exercise1.rest, exercise.exercise2.rest) : 0;
+    const [startTime, setStartTime] = useState((isAccessoryExercise(exercise)) ? exercise.rest : (isPrimaryExercise(exercise))
+        ? exercise.rest : (isSuperSet(exercise)) ? Math.max(exercise.exercise1.rest, exercise.exercise2.rest) : 0);
     const [time, setTime] = useState(startTime);
     const [paused, setPaused] = useState(true);
 
@@ -17,6 +17,8 @@ export default function Timer() {
 
     useEffect(() => {
         setPaused(true);
+        setStartTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
+            ? exercise.rest : (isSuperSet(exercise)) ? Math.max(exercise.exercise1.rest, exercise.exercise2.rest) : 0);
         setTime(startTime);
     }, [exercise]);
 
