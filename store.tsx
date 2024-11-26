@@ -1,10 +1,14 @@
 import { create } from 'zustand';
 import exerciseInfoType from "@/types/exerciseInfoType";
-import {programType} from "@/types/programType";
+import {accessoryExerciseType, superSetType, primaryExerciseType, programType} from "@/types/programType";
 
 const useStore = create<storeType>((set) => ({
     set: 1,
     setSet: (newSet: number) => set({ set: newSet }),
+    currentExercise: 0,
+    setCurrentExercise: (newExercise: number) => set({ currentExercise: newExercise }),
+    currentDay: 0,
+    setCurrentDay: (newDay: number) => set({ currentDay: newDay }),
 
     nextExerciseHandler: () => {
         const setExerciseInfo = useStore.getState().setExerciseInfo;
@@ -87,35 +91,54 @@ const useStore = create<storeType>((set) => ({
         });
     },
 
-    exerciseInfo: {
-        currentExercise: '',
-        currentWeight: [],
-        currentRest: 0,
-        currentSets: 0,
-        currentReps: [],
-        nextExercise: '',
-        nextWeight: 0,
-        prevExercise: '',
-        prevWeight: 0,
-        scheme: '',
-        exerciseNumber: 0,
-    },
-    setExerciseInfo: (newInfo: exerciseInfoType) => set({ exerciseInfo: newInfo }),
+    // exerciseInfo: {
+    //     currentExercise: '',
+    //     currentWeight: [],
+    //     currentRest: 0,
+    //     currentSets: 0,
+    //     currentReps: [],
+    //     nextExercise: '',
+    //     nextWeight: 0,
+    //     prevExercise: '',
+    //     prevWeight: 0,
+    //     scheme: '',
+    //     exerciseNumber: 0,
+    // },
+    // setExerciseInfo: (newInfo: exerciseInfoType) => set({ exerciseInfo: newInfo }),
 
     program: null,
-    setProgram: (newProgram) => {set({ program: newProgram });}
+    setProgram: (newProgram) => {set({ program: newProgram });},
+
+    isPrimaryExercise : (exercise: primaryExerciseType | accessoryExerciseType | superSetType): exercise is primaryExerciseType => {
+        return (exercise as primaryExerciseType).weight_1 !== undefined;
+    },
+
+    isAccessoryExercise : (exercise: primaryExerciseType | accessoryExerciseType | superSetType): exercise is accessoryExerciseType => {
+        return (exercise as accessoryExerciseType).weight !== undefined;
+    },
+
+    isSuperSet : (exercise: primaryExerciseType | accessoryExerciseType | superSetType): exercise is superSetType => {
+        return (exercise as superSetType).exercise1 !== undefined;
+    }
 
 }));
 
 type storeType = {
     set: number,
-    setSet: (newSet: number) => void
+    setSet: (newSet: number) => void,
+    currentExercise: number,
+    setCurrentExercise: (newExercise: number) => void,
+    currentDay: number,
+    setCurrentDay: (newDay: number) => void,
     nextExerciseHandler: () => void,
     prevExerciseHandler: () => void,
-    exerciseInfo: exerciseInfoType,
-    setExerciseInfo: (newInfo: exerciseInfoType) => void,
+    // exerciseInfo: exerciseInfoType,
+    // setExerciseInfo: (newInfo: exerciseInfoType) => void,
     program: programType | null,
-    setProgram: (newProgram: programType | null) => void
+    setProgram: (newProgram: programType | null) => void,
+    isPrimaryExercise: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is primaryExerciseType,
+    isAccessoryExercise: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is accessoryExerciseType,
+    isSuperSet: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is superSetType
 }
 
 export { useStore, storeType };

@@ -32,7 +32,7 @@ type dayType = {
 
 type programType = {
     name: string,
-    days: (dayType | null)[]
+    days: dayType[]
 }
 
-export {programType, dayType, accessoryExerciseType, primaryExerciseType};
+export {programType, dayType, accessoryExerciseType, primaryExerciseType, superSetType};

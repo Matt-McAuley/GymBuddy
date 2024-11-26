@@ -164,8 +164,9 @@ const getProgram = (db) => {
         const dayRes: dayType = {
             name: day.name,
             color: day.color,
-            exercises: new Array(7),
+            exercises: [],
         }
+        const exerciseRes = Array(7).fill(null);
 
         // Get the primary exercise
         const primaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = ${day.exercise_1}`);
@@ -180,7 +181,7 @@ const getProgram = (db) => {
             reps_2: primaryExercise.reps_2,
             reps_3: primaryExercise.reps_3
         }
-        dayRes.exercises[day.exercise_1_placement-1] = primaryExerciseRes;
+        exerciseRes[day.exercise_1_placement-1] = primaryExerciseRes;
 
         // Get the accessory exercises
         for (let i = 2; i < 6; i++) {
@@ -193,7 +194,7 @@ const getProgram = (db) => {
                     reps: accessoryExercise.reps,
                     weight: accessoryExercise.weight
                 }
-                dayRes.exercises[day[`exercise_${i}_placement`-1]] = accessoryExerciseRes;
+                exerciseRes[day[`exercise_${i}_placement`-1]] = accessoryExerciseRes;
             }
         }
 
@@ -219,9 +220,10 @@ const getProgram = (db) => {
                         weight: exercise2.weight
                     }
                 }
-                dayRes.exercises[day[`superset_${i}_placement`-1]] = superSetRes;
+                exerciseRes[day[`superset_${i}_placement`-1]] = superSetRes;
             }
         }
+        dayRes.exercises = exerciseRes.filter((exercise) => exercise != null);
         res.days.push(dayRes);
     }
 
