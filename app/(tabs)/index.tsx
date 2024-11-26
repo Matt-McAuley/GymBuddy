@@ -39,17 +39,17 @@ export default function Index() {
 
     useEffect(() => {
         if (program == null) return;
-        console.log(program.days[0]!.primaryExercise);
+        const firstDay = program.days[0];
+        const firstExercise = firstDay!.primaryExercise;
+        const firstAccessory = firstDay!.accessoryExercises[0];
         setExerciseInfo({
-            currentExercise: program.days[0]!.primaryExercise.name,
-            currentWeight: [program.days[0]!.primaryExercise.weight_1, program.days[0]!.primaryExercise.weight_2,
-                program.days[0]!.primaryExercise.weight_3, program.days[0]!.primaryExercise.weight_2, program.days[0]!.primaryExercise.weight_1],
-            currentRest: program.days[0]!.primaryExercise.rest,
-            currentSets: program.days[0]!.primaryExercise.sets,
-            currentReps: [program.days[0]!.primaryExercise.reps_1, program.days[0]!.primaryExercise.reps_2,
-                program.days[0]!.primaryExercise.reps_3, program.days[0]!.primaryExercise.reps_2, program.days[0]!.primaryExercise.reps_1],
-            nextExercise: program.days[0]!.accessoryExercises[0].name,
-            nextWeight: program.days[0]!.accessoryExercises[0].weight,
+            currentExercise: firstExercise.name,
+            currentWeight: [firstExercise.weight_1, firstExercise.weight_2, firstExercise.weight_3, firstExercise.weight_2, firstExercise.weight_1],
+            currentRest: firstExercise.rest,
+            currentSets: firstExercise.sets,
+            currentReps: [firstExercise.reps_1, firstExercise.reps_2, firstExercise.reps_3, firstExercise.reps_2, firstExercise.reps_1],
+            nextExercise: firstAccessory.name,
+            nextWeight: firstAccessory.weight,
             prevExercise: 'None',
             prevWeight: 0,
             scheme: '5x5',
@@ -57,8 +57,8 @@ export default function Index() {
             nextExerciseHandler: nextExerciseHandler,
             prevExerciseHandler: prevExerciseHandler,
         })
-        setColor(program.days[0]!.color);
-        setDay(program.days[0]!.name);
+        setColor(firstDay!.color);
+        setDay(firstDay!.name);
     }, [program]);
 
     const nextExerciseHandler = () => {
