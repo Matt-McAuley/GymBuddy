@@ -7,12 +7,11 @@ import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions"
 import * as SQLite from 'expo-sqlite';
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
-import {isA} from "@jest/expect-utils";
 
 export default function Index() {
     const [day, setDay] = useState("");
     const [color, setColor] = useState("");
-    const {program, setProgram, isPrimaryExercise, isAccessoryExercise, isSuperSet} = useStore();
+    const {program, setProgram} = useStore();
     const db = SQLite.openDatabaseSync('programs.db');
     useDrizzleStudio(db);
 

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import exerciseInfoType from "@/types/exerciseInfoType";
 import {accessoryExerciseType, superSetType, primaryExerciseType, programType} from "@/types/programType";
 
 const useStore = create<storeType>((set) => ({
@@ -9,6 +8,8 @@ const useStore = create<storeType>((set) => ({
     setCurrentExercise: (newExercise: number) => set({ currentExercise: newExercise }),
     currentDay: 0,
     setCurrentDay: (newDay: number) => set({ currentDay: newDay }),
+    currentScheme: '5 x 5',
+    setCurrentScheme: (newScheme: string) => set({ currentScheme: newScheme }),
 
     nextExerciseHandler: () => {
         const currentExercise = useStore.getState().currentExercise;
@@ -62,6 +63,8 @@ type storeType = {
     setCurrentExercise: (newExercise: number) => void,
     currentDay: number,
     setCurrentDay: (newDay: number) => void,
+    currentScheme: string,
+    setCurrentScheme: (newScheme: string) => void,
     nextExerciseHandler: () => void,
     prevExerciseHandler: () => void,
     program: programType | null,
