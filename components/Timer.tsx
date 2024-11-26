@@ -1,9 +1,12 @@
 import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
 import {useEffect, useState} from "react";
 import BackgroundTimer from 'react-native-background-timer';
+import { useStore } from "@/store";
+import {start} from "node:repl";
 
-export default function Timer(props: timerPropsType) {
-    const [time, setTime] = useState(props.startTime);
+export default function Timer() {
+    const startTime = useStore((state) => state.exerciseInfo.currentRest);
+    const [time, setTime] = useState(startTime);
     const [paused, setPaused] = useState(true);
 
     const timerEnd = () => {
@@ -13,8 +16,8 @@ export default function Timer(props: timerPropsType) {
 
     useEffect(() => {
         setPaused(true);
-        setTime(props.startTime);
-    }, [props]);
+        setTime(startTime);
+    }, [startTime]);
 
     useEffect(() => {
         if (!paused) {
@@ -22,7 +25,7 @@ export default function Timer(props: timerPropsType) {
                 setTime(prevTime => {
                     if (prevTime == 0) {
                         timerEnd();
-                        return props.startTime;
+                        return startTime;
                     }
                     else
                         return prevTime - 1;
@@ -51,7 +54,7 @@ export default function Timer(props: timerPropsType) {
                                require("@/assets/images/timer/pause.png")}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
-                    setTime(props.startTime);
+                    setTime(startTime);
                     setPaused(true);
                 }}>
                     <Image className={"h-18 w-18"}
@@ -60,8 +63,4 @@ export default function Timer(props: timerPropsType) {
             </View>
         </View>
     );
-}
-
-type timerPropsType = {
-    startTime: number
 }

@@ -75,9 +75,9 @@ export default function Index() {
       : (
     <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
         <Text className={`text-7xl font-bold color-${color}-500`}>{day}</Text>
-        <Timer startTime={exerciseInfo.currentRest}/>
-        <Counter sets={exerciseInfo.currentSets} reps={exerciseInfo.currentReps}/>
-        <ExerciseDisplay exerciseInfo={exerciseInfo}/>
+        <Timer/>
+        <Counter/>
+        <ExerciseDisplay/>
     </View>
   );
 }

@@ -9,9 +9,7 @@ type exerciseInfoType = {
     prevExercise: string,
     prevWeight: number,
     scheme: string
-    exerciseNumber: number,
-    nextExerciseHandler: () => void,
-    prevExerciseHandler: () => void
+    exerciseNumber: number
 }
 
 export default exerciseInfoType;
