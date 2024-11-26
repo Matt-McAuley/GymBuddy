@@ -1,16 +1,18 @@
 import {Image, Text, TouchableOpacity, View} from "react-native";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import { useStore } from "@/store";
 
 export default function Counter() {
-    const sets = useStore((state) => state.exerciseInfo.currentSets);
-    const reps = useStore((state) => state.exerciseInfo.currentReps);
+    const exerciseInfo = useStore((state) => state.exerciseInfo);
+    const sets = exerciseInfo.currentSets;
+    const reps = exerciseInfo.currentReps;
     const set = useStore((state) => state.set);
     const setSet = useStore((state) => state.setSet);
 
+
     useEffect(() => {
         setSet(1);
-    }, [sets])
+    }, [exerciseInfo]);
 
     return (
         <View className={'flex-row justify-center items-center h-35 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>

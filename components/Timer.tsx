@@ -2,10 +2,10 @@ import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
 import {useEffect, useState} from "react";
 import BackgroundTimer from 'react-native-background-timer';
 import { useStore } from "@/store";
-import {start} from "node:repl";
 
 export default function Timer() {
-    const startTime = useStore((state) => state.exerciseInfo.currentRest);
+    const exerciseInfo = useStore((state) => state.exerciseInfo);
+    const startTime = exerciseInfo.currentRest;
     const [time, setTime] = useState(startTime);
     const [paused, setPaused] = useState(true);
 
@@ -17,7 +17,7 @@ export default function Timer() {
     useEffect(() => {
         setPaused(true);
         setTime(startTime);
-    }, [startTime]);
+    }, [exerciseInfo]);
 
     useEffect(() => {
         if (!paused) {

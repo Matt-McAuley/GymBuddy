@@ -11,7 +11,6 @@ import {useStore} from "@/store";
 export default function Index() {
     const [day, setDay] = useState("");
     const [color, setColor] = useState("");
-    const exerciseInfo = useStore((state) => state.exerciseInfo);
     const setExerciseInfo = useStore((state) => state.setExerciseInfo);
     const program = useStore((state) => state.program);
     const setProgram = useStore((state) => state.setProgram);
