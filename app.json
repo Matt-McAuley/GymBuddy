@@ -1,6 +1,10 @@
 {
   "expo": {
     "name": "GymBuddy",
+    "splash": {
+        "image": "./assets/images/splash.png"
+    },
+    "icon": "./assets/images/icon.png",
     "slug": "GymBuddy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,7 +18,8 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mattmcauley.GymBuddy"
     },
     "web": {
       "bundler": "metro",
