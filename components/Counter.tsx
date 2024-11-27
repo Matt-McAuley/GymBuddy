@@ -24,7 +24,7 @@ export default function Counter() {
         } else if (isAccessoryExercise(exercise)) {
             return new Array(5).fill(exercise.reps);
         } else {
-            return new Array(5).fill(exercise.exercise1.reps + '|' + exercise.exercise2.reps);
+            return new Array(5).fill([exercise.exercise1.reps, exercise.exercise2.reps]);
         }
     }
     const [reps, setReps] = useState(getReps());
@@ -42,7 +42,7 @@ export default function Counter() {
 
     return (
         <View className={'flex-row justify-center items-center h-35 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
-            <View className={'border-r-4 flex-row justify-between items-center w-56 p-3 h-35'}>
+            <View className={'border-r-4 flex-row justify-between items-center w-53 p-2 h-35'}>
                 <Text className={'text-4xl font-bold mr-3'}>Set:</Text>
                 <View className={'flex-col justify-center items-center'}>
                     <Text className={'text-4xl font-bold m-0 p-0 border-b-4 w-9 text-center'}>{set}</Text>
@@ -57,10 +57,20 @@ export default function Counter() {
                     </TouchableOpacity>
                 </View>
             </View>
+            {(isAccessoryExercise(exercise) || isPrimaryExercise(exercise)) ?
             <View className={'flex-row justify-between items-center w-42 p-3'}>
                 <Text className={'text-4xl font-bold'}>Reps:</Text>
                 <Text className={'text-4xl font-bold'}>{reps[set-1]}</Text>
             </View>
+                :
+            <View className={'flex-row justify-between items-center w-42 p-3'}>
+                <Text className={'text-4xl font-bold'}>Reps:</Text>
+                <View>
+                    <Text className={'text-4xl font-bold '}>{reps[set-1][0]}</Text>
+                    <Text className={'text-4xl font-bold'}>{reps[set-1][1]}</Text>
+                </View>
+            </View>
+            }
         </View>
     );
 }

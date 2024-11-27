@@ -180,7 +180,7 @@ const addMockProgram = (db) => {
 
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
                               exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'BTB Shrugs', 'Lateral Raise', 4);
+            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'BTB Shrug', 'Lateral Raise', 4);
 
             INSERT INTO days (name, color, exercise_2, exercise_2_placement, superset_1_1, superset_1_2, 
                               superset_1_placement, superset_2_1, superset_2_2, superset_2_placement)
