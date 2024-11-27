@@ -13,7 +13,7 @@ import {runOnJS} from "react-native-reanimated";
 export default function Index() {
     const [day, setDay] = useState("");
     const [color, setColor] = useState("");
-    const {program, setProgram, currentDay, setCurrentDay} = useStore();
+    const {program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
     const db = SQLite.openDatabaseSync('programs.db');
     useDrizzleStudio(db);
 
@@ -31,18 +31,20 @@ export default function Index() {
         setDay(firstDay!.name);
     }, [program]);
 
+    useEffect(() => {
+        if (program == null) return;
+        setDay(program.days[currentDay].name);
+        setColor(program.days[currentDay].color);
+    }, [currentDay]);
+
     const panRight = Gesture.Fling().onEnd(() => {
-        console.log('panRight');
+        runOnJS(setCurrentExercise)(0);
         runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.min(program!.days.length-1, currentDay + 1)));
-        runOnJS(setDay)(program!.days[currentDay].name);
-        runOnJS(setColor)(program!.days[currentDay].color);
     }).direction(Directions.LEFT);
 
     const panLeft = Gesture.Fling().onEnd(() => {
-        console.log('panLeft')
+        runOnJS(setCurrentExercise)(0);
         runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.max(0, currentDay - 1)));
-        runOnJS(setDay)(program!.days[currentDay].name);
-        runOnJS(setColor)(program!.days[currentDay].color);
     }).direction(Directions.RIGHT);
 
 
@@ -56,7 +58,7 @@ export default function Index() {
               <GestureDetector gesture={panLeft}>
               <GestureDetector gesture={panRight}>
                 <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
-                    <Text className={`text-7xl font-bold color-${color}-500`}>{day}</Text>
+                    <Text className={`text-6xl font-bold`} style={{color: color}}>{day}</Text>
                     <Timer/>
                     <Counter/>
                     <ExerciseDisplay/>

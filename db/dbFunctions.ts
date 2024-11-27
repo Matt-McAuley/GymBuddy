@@ -123,28 +123,73 @@ const addMockProgram = (db) => {
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB OHP', 90, 45, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Dips', 90, 0, 12, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Incline Bench', 90, 50, 12, 3);
+            VALUES ('Dips', 90, 0, 15, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('Lateral Raise', 90, 20, 15, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Tricep Extension', 90, 35, 15, 3);
+            VALUES ('Tricep Extension', 90, 30, 15, 3);
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Lateral Raise', 'Tricep Extension');
+
+            INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
+            VALUES ('Deadlift', 210, 5, 325, 355, 405, 5, 3, 1);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('BB Curl', 90, 45, 21, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Lat Pull', 90, 130, 12, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Hammer Curl', 90, 30, 12, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Face Pull', 90, 30, 15, 3);
+            INSERT INTO supersets (exercise_1, exercise_2)
+            VALUES ('Hammer Curl', 'Face Pull');
+
+            INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
+            VALUES ('OHP', 180, 5, 110, 125, 135, 5, 3, 1);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('BB Row', 180, 165, 5, 5);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('DB Bench', 120, 65, 12, 4);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('BTB Shrug', 90, 40, 12, 3);
+            INSERT INTO supersets (exercise_1, exercise_2)
+            VALUES ('Lateral Raise', 'BTB Shrug');
+
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Pause Squat', 180, 185, 5, 5);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Hamstring Curl', 90, 100, 12, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Leg Extension', 90, 120, 12, 3);
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('DB Curl', 90, 35, 12, 3);
+            INSERT INTO supersets (exercise_1, exercise_2)
+            VALUES ('Hamstring Curl', 'Dips');
+            INSERT INTO supersets (exercise_1, exercise_2)
+            VALUES ('Leg Extension', 'DB Curl');
         `);
 
         db.execSync(`
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
-                              exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, superset_1_1,
-                              superset_1_2, superset_1_placement)
-            VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Incline Bench', 5, 'Lateral Raise',
-                    'Tricep Extension', 4);
+                              exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
+            VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Lateral Raise', 'Tricep Extension', 4);
+
+            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
+                              exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
+            VALUES ('Pull', 'blue', 'Deadlift', 1, 'BB Curl', 2, 'Lat Pull', 3, 'Hammer Curl', 'Face Pull', 4);
+
+            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
+                              exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
+            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'BTB Shrugs', 'Lateral Raise', 4);
+
+            INSERT INTO days (name, color, exercise_1, exercise_1_placement, superset_1_1, superset_1_2, 
+                              superset_1_placement, superset_2_1, superset_2_2, superset_2_placement)
+            VALUES ('Lower & Arms', 'green', 'Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3);
         `);
 
         db.execSync(`
             INSERT INTO programs (name, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
-            VALUES ('PPUL', 'Push', NULL, NULL, NULL, NULL, NULL, NULL);
+            VALUES ('PPUL', 'Pull', NULL, 'Upper', 'Lower & Arms', NULL, NULL, 'Push');
         `);
 
         db.execSync(`
@@ -189,18 +234,20 @@ const getProgram = (db) => {
 
         // Get the primary exercise
         const primaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = '${day.exercise_1}'`);
-        const primaryExerciseRes: primaryExerciseType = {
-            name: primaryExercise.name,
-            rest: primaryExercise.rest,
-            sets: primaryExercise.sets,
-            weight_1: primaryExercise.weight_1,
-            weight_2: primaryExercise.weight_2,
-            weight_3: primaryExercise.weight_3,
-            reps_1: primaryExercise.reps_1,
-            reps_2: primaryExercise.reps_2,
-            reps_3: primaryExercise.reps_3
+        if (primaryExercise != null) {
+            const primaryExerciseRes: primaryExerciseType = {
+                name: primaryExercise.name,
+                rest: primaryExercise.rest,
+                sets: primaryExercise.sets,
+                weight_1: primaryExercise.weight_1,
+                weight_2: primaryExercise.weight_2,
+                weight_3: primaryExercise.weight_3,
+                reps_1: primaryExercise.reps_1,
+                reps_2: primaryExercise.reps_2,
+                reps_3: primaryExercise.reps_3
+            }
+            exerciseRes[day.exercise_1_placement - 1] = primaryExerciseRes;
         }
-        exerciseRes[day.exercise_1_placement-1] = primaryExerciseRes;
 
         // Get the accessory exercises
         for (let i = 2; i < 6; i++) {
