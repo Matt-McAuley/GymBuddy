@@ -222,7 +222,7 @@ const getProgram = (db) => {
     res.name = program.name;
 
     // Get the days for the program
-    for (const dayOfWeek of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']) {
+    for (const dayOfWeek of ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']) {
         const day = db.getFirstSync(`SELECT * FROM days WHERE name = '${program[dayOfWeek]}'`);
         if (day == null) continue;
         const dayRes: dayType = {
