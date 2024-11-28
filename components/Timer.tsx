@@ -1,4 +1,4 @@
-import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
+import {Image, Text, TouchableOpacity, View, Vibration, Platform} from "react-native";
 import {useEffect, useState} from "react";
 import BackgroundTimer from 'react-native-background-timer';
 import { useStore } from "@/store";
@@ -12,7 +12,7 @@ export default function Timer() {
     const [paused, setPaused] = useState(true);
 
     const timerEnd = () => {
-        Vibration.vibrate([700, 700, 700]);
+        Vibration.vibrate([700, 50, 700, 50, 700]);
         setPaused(true);
     }
 

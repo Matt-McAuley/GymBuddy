@@ -190,6 +190,22 @@ const addMockProgram = (db) => {
         db.execSync(`
             INSERT INTO programs (name, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
             VALUES ('PPUL', 'Pull', NULL, 'Upper', 'Lower & Arms', NULL, NULL, 'Push');
+            INSERT INTO programs (name)
+            VALUES ('Test0');
+            INSERT INTO programs (name)
+            VALUES ('Test1');
+            INSERT INTO programs (name)
+            VALUES ('Test2');
+            INSERT INTO programs (name)
+            VALUES ('Test3');
+            INSERT INTO programs (name)
+            VALUES ('Test4');
+            INSERT INTO programs (name)
+            VALUES ('Test5');
+            INSERT INTO programs (name)
+            VALUES ('Test6');
+            INSERT INTO programs (name)
+            VALUES ('Test7');
         `);
 
         db.execSync(`
