@@ -77,4 +77,13 @@ type storeType = {
     nextExercise: () => primaryExerciseType | accessoryExerciseType | superSetType | null,
 }
 
+const useProgramStore = create<programStoreType>((set) => ({
+    program: null,
+    setProgram: (newProgram) => {set({ program: newProgram });},
+}));
+
+type programStoreType = {
+
+}
+
 export { useStore, storeType };

@@ -8,7 +8,6 @@ import ProgramDisplayCard from "@/components/ProgramDisplayCard";
 
 export default function Programs() {
     const db = SQLite.openDatabaseSync('programs.db');
-    useDrizzleStudio(db);
     const programNames = getProgramNames(db);
 
     return (
