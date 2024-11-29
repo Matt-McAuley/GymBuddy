@@ -1,6 +1,6 @@
-import {Text, TouchableOpacity, Image, View} from "react-native";
+import {Text, TouchableOpacity, Image, View, TouchableWithoutFeedback} from "react-native";
 import * as SQLite from 'expo-sqlite';
-import {useStore} from "@/store";
+import {useProgramStore, useStore} from "@/store";
 import {setCurrentProgram} from "@/db/programDBFunctions";
 import {getProgram} from "@/db/dbFunctions";
 
@@ -8,6 +8,7 @@ export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
     const programName = props.programName;
     const db = SQLite.openDatabaseSync('programs.db');
     const {program, setProgram} = useStore();
+    const {setEditProgram} = useProgramStore();
 
     return (
         <TouchableOpacity onPress={() => {
@@ -19,7 +20,7 @@ export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
                 {(program?.name === programName) ?
                     <Image className={'w-12 h-12 bg-green-500 rounded-2xl'} source={require('@/assets/images/programs/selected.png')}/>
                     : null}
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => {setEditProgram(programName)}}>
                     <Image className={'w-20 h-20 p-5'} source={require('@/assets/images/programs/edit.png')}/>
                 </TouchableOpacity>
             </View>

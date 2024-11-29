@@ -4,25 +4,32 @@ import {getProgramNames} from "@/db/programDBFunctions";
 import ProgramDisplayCard from "@/components/Programs/ProgramDisplayCard";
 import AddProgram from "@/components/Programs/Forms/AddProgram";
 import {useEffect} from "react";
+import EditProgram from "@/components/Programs/Forms/EditProgram";
 
 export default function Programs() {
     const {db} = useStore();
-    const {programForm, setProgramForm, setDayForm, setExerciseForm} = useProgramStore();
+    const {addProgramForm, editProgram, setAddProgramForm, setAddExerciseForm, setAddDayForm, setEditProgram, setEditExercise, setEditDay} = useProgramStore();
     const programNames = getProgramNames(db);
 
     useEffect(() => {
-        setProgramForm(false);
-        setDayForm(false);
-        setExerciseForm(false);
+        setAddProgramForm(false);
+        setEditProgram(null);
+        setAddExerciseForm(false);
+        setEditExercise(null);
+        setAddDayForm(false);
+        setEditDay(null);
     }, []);
 
     return (
-        (programForm) ?
+        (addProgramForm) ?
             <AddProgram/>
             :
+            (editProgram != null) ?
+                <EditProgram />
+                :
         <ScrollView className={'p-4'}>
             {programNames.map((programName) => <ProgramDisplayCard key={programName} programName={programName}/>)}
-            <TouchableOpacity onPress={() => setProgramForm(true)}
+            <TouchableOpacity onPress={() => setAddProgramForm(true)}
                 className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
                 <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Program</Text>
             </TouchableOpacity>

@@ -7,12 +7,15 @@ import {useEffect} from "react";
 export default function Exercises() {
     const {db} = useStore();
     const exerciseNames = getExerciseNames(db);
-    const {setProgramForm, setDayForm, setExerciseForm} = useProgramStore();
+    const {setAddProgramForm, setAddExerciseForm, setAddDayForm, setEditProgramForm, setEditExerciseForm, setEditDayForm} = useProgramStore();
 
     useEffect(() => {
-        setProgramForm(false);
-        setDayForm(false);
-        setExerciseForm(false);
+        setAddProgramForm(false);
+        setEditProgramForm(false);
+        setAddExerciseForm(false);
+        setEditExerciseForm(false);
+        setAddDayForm(false);
+        setEditDayForm(false);
     }, []);
 
     return (

@@ -59,12 +59,19 @@ const useStore = create<storeType>((set) => ({
 }));
 
 const useProgramStore = create<programStoreType>((set) => ({
-    programForm: false,
-    dayForm: false,
-    exerciseForm: false,
-    setProgramForm: (newForm: boolean) => set({ programForm: newForm }),
-    setDayForm: (newForm: boolean) => set({ dayForm: newForm }),
-    setExerciseForm: (newForm: boolean) => set({ exerciseForm: newForm }),
+    addProgramForm: false,
+    addDayForm: false,
+    addExerciseForm: false,
+    setAddProgramForm: (newForm: boolean) => set({ addProgramForm: newForm }),
+    setAddDayForm: (newForm: boolean) => set({ addDayForm: newForm }),
+    setAddExerciseForm: (newForm: boolean) => set({ addExerciseForm: newForm }),
+
+    editProgram: null,
+    editDay: null,
+    editExercise: null,
+    setEditProgram: (newProgram) => set({ editProgram: newProgram }),
+    setEditDay: (newDay) => set({ editDay: newDay }),
+    setEditExercise: (newExercise) => set({ editExercise: newExercise }),
 }));
 
 type storeType = {
@@ -90,12 +97,19 @@ type storeType = {
 }
 
 type programStoreType = {
-    programForm: boolean,
-    dayForm: boolean,
-    exerciseForm: boolean,
-    setProgramForm: (newForm: boolean) => void,
-    setDayForm: (newForm: boolean) => void,
-    setExerciseForm: (newForm: boolean) => void,
+    addProgramForm: boolean,
+    addDayForm: boolean,
+    addExerciseForm: boolean,
+    setAddProgramForm: (newForm: boolean) => void,
+    setAddDayForm: (newForm: boolean) => void,
+    setAddExerciseForm: (newForm: boolean) => void,
+
+    editProgram: string | null,
+    editDay: string | null,
+    editExercise: string | null,
+    setEditProgram: (newProgram: string | null) => void,
+    setEditDay: (newDay: string | null) => void,
+    setEditExercise: (newExercise: string | null) => void,
 }
 
 export { useStore, storeType, useProgramStore };
