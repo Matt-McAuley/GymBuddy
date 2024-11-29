@@ -2,12 +2,20 @@ import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput} from "r
 import {Dropdown} from "react-native-element-dropdown";
 import {useProgramStore, useStore} from "@/store";
 import {useState} from "react";
-import {deleteProgram, getDayNames, getProgramByName, replaceProgram, setCurrentProgram} from "@/db/programDBFunctions";
+import {
+    deleteProgram,
+    getDayNames,
+    getProgramByName,
+    replaceProgram,
+    setCurrentProgram,
+    setNullIfCurrentProgram
+} from "@/db/programDBFunctions";
 import Toast from 'react-native-toast-message';
+import {getProgram} from "@/db/dbFunctions";
 
 export default function EditProgram() {
     const {setEditProgram, editProgram} = useProgramStore();
-    const {db} = useStore();
+    const {db, setProgram} = useStore();
     const [programData, setProgramData] = useState<programDataType>(getProgramByName(db, editProgram!));
     const originalName = getProgramByName(db, editProgram!).name;
     const dayNames = getDayNames(db);
@@ -50,6 +58,10 @@ export default function EditProgram() {
                                           text1Style: {fontSize: 30},
                                           text2Style: {fontSize: 30},
                                       });
+                                      const currentProgram = getProgram(db);
+                                      if (currentProgram?.name == originalName)
+                                        setCurrentProgram(db, programData.name);
+                                      setProgram(getProgram(db));
                                   }
                                   else {
                                       Toast.show({
@@ -57,6 +69,8 @@ export default function EditProgram() {
                                           text1: 'Error',
                                           text2: result,
                                       });
+                                      setNullIfCurrentProgram(db, originalName);
+                                      setProgram(getProgram(db));
                                   }
                                   setEditProgram(null);
                               }}>
@@ -70,6 +84,8 @@ export default function EditProgram() {
                                       text1: "Success",
                                       text2: "Program Deleted",
                                   });
+                                  setNullIfCurrentProgram(db, originalName);
+                                  setProgram(getProgram(db));
                                   setEditProgram(null);
                               }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Delete</Text>

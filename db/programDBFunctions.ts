@@ -19,8 +19,15 @@ export function getExerciseNames(db) : string[] {
         : accessory_exercises.concat(primary_exercises).map((accessory_exercises) => (accessory_exercises.name));
 }
 
-export function setCurrentProgram(db, programName: string) {
+export function setCurrentProgram(db, programName: string | null) {
     db.runSync("UPDATE current_program SET program = ?", [programName]);
+}
+
+export function setNullIfCurrentProgram(db, programName: string) {
+    const currentProgram = db.getFirstSync("SELECT * FROM current_program");
+    if (currentProgram.program == programName) {
+        db.runSync("UPDATE current_program SET program = ?", [null]);
+    }
 }
 
 export function createNewProgram(db, programName: string, Sunday: string, Monday: string, Tuesday: string, Wednesday: string, Thursday: string, Friday: string, Saturday: string) {

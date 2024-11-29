@@ -48,7 +48,7 @@ export default function Index() {
 
   return (program == null) ? (
       <View className={'flex justify-center items-center h-full'}>
-        <ActivityIndicator className={'color-black'} size={'large'} />
+          <Text className={'text-3xl'}>No Program Selected</Text>
       </View>
       )
       : (

@@ -60,7 +60,7 @@ export default function AddProgram() {
                                           text2: result,
                                       });
                                   }
-                                  setProgramForm(false);
+                                  setAddProgramForm(false);
                               }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
             </TouchableOpacity>

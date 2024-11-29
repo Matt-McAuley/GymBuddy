@@ -89,7 +89,7 @@ const dbSetup = (db) => {
         db.execSync(`
            CREATE TABLE IF NOT EXISTS current_program (
                id INTEGER PRIMARY KEY NOT NULL,
-               program TEXT NOT NULL,
+               program NULL,
                FOREIGN KEY (program) REFERENCES programs(name)
            );
         `);
