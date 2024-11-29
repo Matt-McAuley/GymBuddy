@@ -20,7 +20,7 @@ export default function TabLayout() {
           tabBarIcon: () => <Image className={"h-10 w-10"} source={require("@/assets/images/tabs/HomeIcon.png")} />,
         }}
       />
-        <Tabs.Screen name="programs" options={{
+        <Tabs.Screen name="(programTabs)" options={{
             title: 'Programs',
             tabBarIcon: () => <Image className={"h-10 w-10"} source={require("@/assets/images/tabs/ProgrammingIcon.png")} />,
             }}
