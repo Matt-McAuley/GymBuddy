@@ -1,4 +1,4 @@
-import {Text, ScrollView, TouchableOpacity, View} from "react-native";
+import {Text, ScrollView, TouchableOpacity} from "react-native";
 import {useProgramStore, useStore} from "@/store";
 import {getProgramNames} from "@/db/programDBFunctions";
 import ProgramDisplayCard from "@/components/Programs/ProgramDisplayCard";

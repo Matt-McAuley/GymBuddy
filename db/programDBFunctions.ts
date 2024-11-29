@@ -59,7 +59,6 @@ export function replaceProgram(db, oldProgramName :string, newProgramName: strin
     if (Sunday == '' && Monday == '' && Tuesday == '' && Wednesday == '' && Thursday == '' && Friday == '' && Saturday == '') return 'Must have at least one day!';
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', newProgramName);
     if (program != null && oldProgramName != newProgramName) return 'Program with that name already exists!';
-    console.log(oldProgramName);
     db.runSync('DELETE FROM programs WHERE name = ?', oldProgramName);
     db.runSync("INSERT INTO programs (name, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday) VALUES " +
         "(?, ?, ?, ?, ?, ?, ?, ?)", newProgramName, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday);
@@ -68,4 +67,25 @@ export function replaceProgram(db, oldProgramName :string, newProgramName: strin
 
 export function deleteProgram(db, programName: string) {
     db.runSync('DELETE FROM programs WHERE name = ?', programName);
+}
+
+export function getPrimaryExercises(db) {
+    const primary_exercises = db.getAllSync("SELECT * FROM primary_exercises");
+    return (primary_exercises == null) ? null : primary_exercises.map((primary_exercise) => (primary_exercise.name));
+}
+
+export function getAccessoryExercises(db) {
+    const accessory_exercises = db.getAllSync("SELECT * FROM accessory_exercises");
+    return (accessory_exercises == null) ? null : accessory_exercises.map((accessory_exercise) => (accessory_exercise.name));
+}
+
+export function createNewDay(db, dayName: string, dayColor: string, primaryExercise: string, accessoryExercise1: string, accessoryExercise2: string, accessoryExercise3: string, accessoryExercise4: string, superSet1: string[], superSet2: string[]) {
+    const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', dayName);
+    if (dayName == '') return 'Must include a day name!';
+    if (dayColor == '') return 'Must include a color!';
+    if (primaryExercise == '' && accessoryExercise1 == '' && accessoryExercise2 == '' && accessoryExercise3 == '' && accessoryExercise4 == '' && superSet1[0] == '' && superSet1[1] == '' && superSet2[0] == '' && superSet2[1] == '') return 'Must have at least one exercise!';
+    if (day != null) return 'Program with that name already exists!';
+    db.runSync("INSERT INTO days (name, color, exercise_1, exercise_2, exercise_3, exercise_4, exercise_5, superset_1_1, superset_1_2, superset_2_1, superset_2_2) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", dayName, dayColor, primaryExercise, accessoryExercise1, accessoryExercise2, accessoryExercise3, accessoryExercise4, superSet1[0], superSet1[1], superSet2[0], superSet2[1]);
+    return 'success';
 }
