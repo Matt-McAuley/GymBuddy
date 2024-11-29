@@ -19,8 +19,9 @@ export default function AddProgram() {
             </TouchableOpacity>
             <TextInput
                 className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                onChangeText={(text) => setProgramData({...programData, name: text})}>
-                Enter Name
+                onChangeText={(text) => setProgramData({...programData, name: text})}
+                placeholder={'Enter Name'}
+                placeholderTextColor={'black'}>
             </TextInput>
 
             {

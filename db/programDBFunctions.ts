@@ -26,7 +26,7 @@ export function setCurrentProgram(db, programName: string) {
 export function createNewProgram(db, programName: string, Sunday: string, Monday: string, Tuesday: string, Wednesday: string, Thursday: string, Friday: string, Saturday: string) {
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', programName);
     if (program != null) return;
-    if (programName == '' || Sunday == '' || Monday == '' || Tuesday == '' || Wednesday == '' || Thursday == '' || Friday == '' || Saturday == '') return;
+    if (programName == '' || (Sunday == '' && Monday == '' && Tuesday == '' && Wednesday == '' && Thursday == '' && Friday == '' && Saturday == '')) return;
     db.runSync("INSERT INTO programs (name, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday) VALUES " +
         "(?, ?, ?, ?, ?, ?, ?, ?)", programName, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday);
 }
