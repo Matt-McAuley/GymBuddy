@@ -1,7 +1,10 @@
-import {Text, TouchableOpacity, Image} from "react-native";
+import {View, Text, ScrollView, TouchableOpacity, Image} from "react-native";
+import {useEffect, useState} from "react";
 import * as SQLite from 'expo-sqlite';
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import {setCurrentProgram} from "@/db/programDBFunctions";
+import {getAllPBXProjectPaths} from "@expo/config-plugins/build/ios/Paths";
 import {getProgram} from "@/db/dbFunctions";
 
 export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
