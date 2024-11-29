@@ -1,13 +1,11 @@
 import {View, Text, ScrollView, TouchableOpacity} from "react-native";
 import {useEffect, useState} from "react";
-import * as SQLite from 'expo-sqlite';
-import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import {getProgramNames} from "@/db/programDBFunctions";
 import ProgramDisplayCard from "@/components/ProgramDisplayCard";
 
 export default function Programs() {
-    const db = SQLite.openDatabaseSync('programs.db');
+    const {db} = useStore();
     const programNames = getProgramNames(db);
 
     return (

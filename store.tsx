@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import {accessoryExerciseType, superSetType, primaryExerciseType, programType} from "@/types/programType";
+import * as SQLite from "expo-sqlite";
 
 const useStore = create<storeType>((set) => ({
     set: 1,
@@ -54,6 +55,7 @@ const useStore = create<storeType>((set) => ({
         useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise + 1]
         : null,
 
+    db: SQLite.openDatabaseSync('programs.db')
 }));
 
 type storeType = {

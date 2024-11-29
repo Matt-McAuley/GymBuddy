@@ -4,7 +4,6 @@ import Counter from "@/components/Counter";
 import ExerciseDisplay from "@/components/ExerciseDisplay";
 import {useEffect, useState} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
-import * as SQLite from 'expo-sqlite';
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import {GestureDetector, Gesture, GestureHandlerRootView, Directions} from "react-native-gesture-handler";
@@ -13,8 +12,7 @@ import {runOnJS} from "react-native-reanimated";
 export default function Index() {
     const [day, setDay] = useState("");
     const [color, setColor] = useState("");
-    const {program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
-    const db = SQLite.openDatabaseSync('programs.db');
+    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
     useDrizzleStudio(db);
 
     useEffect(() => {
