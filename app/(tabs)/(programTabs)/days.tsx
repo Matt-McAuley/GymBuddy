@@ -1,7 +1,7 @@
 import {Text, ScrollView, TouchableOpacity} from "react-native";
 import {useStore} from "@/store";
 import {getDayNames} from "@/db/programDBFunctions";
-import DayDisplayCard from "@/components/DayDisplayCard";
+import DayDisplayCard from "@/components/Programs/DayDisplayCard";
 
 export default function Days() {
     const {db} = useStore();

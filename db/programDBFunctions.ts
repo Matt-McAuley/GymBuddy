@@ -22,3 +22,8 @@ export function getExerciseNames(db) : string[] {
 export function setCurrentProgram(db, programName: string) {
     db.runSync("UPDATE current_program SET program = ?", [programName]);
 }
+
+export function createNewProgram(db, programName: string, days: string[]) {
+    db.runSync("INSERT INTO programs (name, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?, ?)", programName, days[0], days[1], days[2], days[3], days[4], days[5], days[6]);
+}

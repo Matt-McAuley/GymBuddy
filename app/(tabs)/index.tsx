@@ -1,7 +1,7 @@
 import {View, Text, ActivityIndicator} from "react-native";
-import Timer from "@/components/Timer";
-import Counter from "@/components/Counter";
-import ExerciseDisplay from "@/components/ExerciseDisplay";
+import Timer from "@/components/Home/Timer";
+import Counter from "@/components/Home/Counter";
+import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
 import {useEffect, useState} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";

@@ -1,7 +1,7 @@
 import {Text, ScrollView, TouchableOpacity} from "react-native";
 import {useStore} from "@/store";
 import {getExerciseNames} from "@/db/programDBFunctions";
-import ExerciseDisplayCard from "@/components/ExerciseDisplayCard";
+import ExerciseDisplayCard from "@/components/Programs/ExerciseDisplayCard";
 
 export default function Exercises() {
     const {db} = useStore();
