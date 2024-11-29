@@ -1,11 +1,19 @@
 import {Text, ScrollView, TouchableOpacity} from "react-native";
-import {useStore} from "@/store";
+import {useProgramStore, useStore} from "@/store";
 import {getExerciseNames} from "@/db/programDBFunctions";
 import ExerciseDisplayCard from "@/components/Programs/ExerciseDisplayCard";
+import {useEffect} from "react";
 
 export default function Exercises() {
     const {db} = useStore();
     const exerciseNames = getExerciseNames(db);
+    const {setProgramForm, setDayForm, setExerciseForm} = useProgramStore();
+
+    useEffect(() => {
+        setProgramForm(false);
+        setDayForm(false);
+        setExerciseForm(false);
+    }, []);
 
     return (
         <ScrollView className={'p-4'}>

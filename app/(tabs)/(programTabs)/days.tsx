@@ -1,11 +1,19 @@
 import {Text, ScrollView, TouchableOpacity} from "react-native";
-import {useStore} from "@/store";
+import {useProgramStore, useStore} from "@/store";
 import {getDayNames} from "@/db/programDBFunctions";
 import DayDisplayCard from "@/components/Programs/DayDisplayCard";
+import {useEffect} from "react";
 
 export default function Days() {
     const {db} = useStore();
     const dayNames = getDayNames(db);
+    const {setProgramForm, setDayForm, setExerciseForm} = useProgramStore();
+
+    useEffect(() => {
+        setProgramForm(false);
+        setDayForm(false);
+        setExerciseForm(false);
+    }, []);
 
     return (
         <ScrollView className={'p-4'}>

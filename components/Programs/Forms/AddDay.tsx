@@ -1,9 +1,9 @@
 import {View, Text} from "react-native";
 
-export default function addDay() {
+export default function AddExercise() {
     return (
         <View>
-            <Text>Add Program</Text>
+            <Text>Add Exercise</Text>
         </View>
     );
 }

@@ -55,7 +55,16 @@ const useStore = create<storeType>((set) => ({
         useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise + 1]
         : null,
 
-    db: SQLite.openDatabaseSync('programs.db')
+    db: SQLite.openDatabaseSync('programs.db'),
+}));
+
+const useProgramStore = create<programStoreType>((set) => ({
+    programForm: false,
+    dayForm: false,
+    exerciseForm: false,
+    setProgramForm: (newForm: boolean) => set({ programForm: newForm }),
+    setDayForm: (newForm: boolean) => set({ dayForm: newForm }),
+    setExerciseForm: (newForm: boolean) => set({ exerciseForm: newForm }),
 }));
 
 type storeType = {
@@ -77,15 +86,16 @@ type storeType = {
     exercise: () => primaryExerciseType | accessoryExerciseType | superSetType,
     prevExercise: () => primaryExerciseType | accessoryExerciseType | superSetType | null,
     nextExercise: () => primaryExerciseType | accessoryExerciseType | superSetType | null,
+    db: SQLite.SQLiteDatabase,
 }
-
-const useProgramStore = create<programStoreType>((set) => ({
-    program: null,
-    setProgram: (newProgram) => {set({ program: newProgram });},
-}));
 
 type programStoreType = {
-
+    programForm: boolean,
+    dayForm: boolean,
+    exerciseForm: boolean,
+    setProgramForm: (newForm: boolean) => void,
+    setDayForm: (newForm: boolean) => void,
+    setExerciseForm: (newForm: boolean) => void,
 }
 
-export { useStore, storeType };
+export { useStore, storeType, useProgramStore };

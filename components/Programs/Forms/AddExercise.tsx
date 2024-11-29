@@ -1,6 +1,6 @@
 import {View, Text} from "react-native";
 
-export default function addProgram() {
+export default function AddDay() {
     return (
         <View>
             <Text>Add Program</Text>

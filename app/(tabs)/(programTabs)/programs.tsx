@@ -1,25 +1,28 @@
 import {Text, ScrollView, TouchableOpacity, View} from "react-native";
-import {useStore} from "@/store";
+import {useProgramStore, useStore} from "@/store";
 import {getProgramNames} from "@/db/programDBFunctions";
 import ProgramDisplayCard from "@/components/Programs/ProgramDisplayCard";
-import {Link} from 'expo-router';
-import {useState} from "react";
+import AddProgram from "@/components/Programs/Forms/AddProgram";
+import {useEffect} from "react";
 
 export default function Programs() {
     const {db} = useStore();
-    const [form, setForm] = useState(false);
+    const {programForm, setProgramForm, dayForm, setDayForm, exerciseForm, setExerciseForm} = useProgramStore();
     const programNames = getProgramNames(db);
 
-    return (
-        (form) ? 
-            <View>
-                <Text>Hi</Text>
-            </View>
+    useEffect(() => {
+        setProgramForm(false);
+        setDayForm(false);
+        setExerciseForm(false);
+    }, []);
 
+    return (
+        (programForm) ?
+            <AddProgram/>
             :
         <ScrollView className={'p-4'}>
             {programNames.map((programName) => <ProgramDisplayCard key={programName} programName={programName}/>)}
-            <TouchableOpacity onPress={() => setForm(true)}
+            <TouchableOpacity onPress={() => setProgramForm(true)}
                 className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
                 <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Program</Text>
             </TouchableOpacity>
