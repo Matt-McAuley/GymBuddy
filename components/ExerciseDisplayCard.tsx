@@ -1,28 +1,12 @@
-import {View, Text, ScrollView, TouchableOpacity, Image} from "react-native";
-import {useEffect, useState} from "react";
-import * as SQLite from 'expo-sqlite';
-import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
-import {useStore} from "@/store";
-import {setCurrentProgram} from "@/db/programDBFunctions";
-import {getAllPBXProjectPaths} from "@expo/config-plugins/build/ios/Paths";
-import {getProgram} from "@/db/dbFunctions";
+import {Text, TouchableOpacity, Image} from "react-native";
 
-export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
-    const programName = props.programName;
-    const db = SQLite.openDatabaseSync('programs.db');
-    const {program, setProgram} = useStore();
+export default function ExerciseDisplayCard(props: ExerciseDisplayCardPropsType) {
+    const exerciseName = props.exerciseName;
 
     return (
-        <TouchableOpacity onPress={() => {
-            setCurrentProgram(db, programName);
-            setProgram(getProgram(db));
-        }}
+        <TouchableOpacity onPress={() => {}}
                           className={'w-full h-25 border-4 rounded-2xl mb-5 flex-row justify-around items-center'}>
-            <Text className={'text-center text-6xl p-5 font-bold'}>
-                {programName}</Text>
-            {(program?.name === programName) ?
-                <Image className={'w-12 h-12 bg-green-500 rounded-2xl'} source={require('@/assets/images/programs/selected.png')}/>
-                : null}
+            <Text className={'text-center text-6xl p-5 font-bold'}>{exerciseName}</Text>
             <TouchableOpacity>
                 <Image className={'w-20 h-20 p-5'} source={require('@/assets/images/programs/edit.png')}/>
             </TouchableOpacity>
@@ -30,6 +14,6 @@ export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
     );
 }
 
-type ProgramDisplayCardPropsType = {
-    programName: string;
+type ExerciseDisplayCardPropsType = {
+    exerciseName: string;
 }

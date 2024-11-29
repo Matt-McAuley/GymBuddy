@@ -1,18 +1,17 @@
-import {View, Text, ScrollView, TouchableOpacity} from "react-native";
-import {useEffect, useState} from "react";
+import {Text, ScrollView, TouchableOpacity} from "react-native";
 import {useStore} from "@/store";
-import {getProgramNames} from "@/db/programDBFunctions";
-import ProgramDisplayCard from "@/components/ProgramDisplayCard";
+import {getExerciseNames} from "@/db/programDBFunctions";
+import ExerciseDisplayCard from "@/components/ExerciseDisplayCard";
 
-export default function Programs() {
+export default function Exercises() {
     const {db} = useStore();
-    const programNames = getProgramNames(db);
+    const exerciseNames = getExerciseNames(db);
 
     return (
         <ScrollView className={'p-4'}>
-            {programNames.map((programName) => <ProgramDisplayCard key={programName} programName={programName}/>)}
+            {exerciseNames.map((exerciseName) => <ExerciseDisplayCard key={exerciseName} exerciseName={exerciseName}/>)}
             <TouchableOpacity className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
-                <Text className={'text-4xl text-center font-bold color-gray-500'}>Add new program</Text>
+                <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Day</Text>
             </TouchableOpacity>
         </ScrollView>
     );
