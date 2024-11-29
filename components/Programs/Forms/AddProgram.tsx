@@ -3,6 +3,7 @@ import {Dropdown} from "react-native-element-dropdown";
 import {useProgramStore, useStore} from "@/store";
 import {useState} from "react";
 import {createNewProgram, getDayNames} from "@/db/programDBFunctions";
+import Toast from 'react-native-toast-message';
 
 export default function AddProgram() {
     const {setProgramForm} = useProgramStore();
@@ -40,9 +41,25 @@ export default function AddProgram() {
             }
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
                               onPress={() => {
-                                  createNewProgram(db, programData.name, programData.Sunday, programData.Monday,
+                                  const result = createNewProgram(db, programData.name, programData.Sunday, programData.Monday,
                                       programData.Tuesday, programData.Wednesday, programData.Thursday,
                                       programData.Friday, programData.Saturday);
+                                  if (result == 'success') {
+                                      Toast.show({
+                                          type: 'success',
+                                          text1: 'Success',
+                                          text2: 'Program Created',
+                                          text1Style: {fontSize: 30},
+                                          text2Style: {fontSize: 30},
+                                      });
+                                  }
+                                  else {
+                                      Toast.show({
+                                          type: 'error',
+                                          text1: 'Error',
+                                          text2: result,
+                                      });
+                                  }
                                   setProgramForm(false);
                               }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>

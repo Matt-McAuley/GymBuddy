@@ -7,7 +7,7 @@ import {useEffect} from "react";
 
 export default function Programs() {
     const {db} = useStore();
-    const {programForm, setProgramForm, dayForm, setDayForm, exerciseForm, setExerciseForm} = useProgramStore();
+    const {programForm, setProgramForm, setDayForm, setExerciseForm} = useProgramStore();
     const programNames = getProgramNames(db);
 
     useEffect(() => {
