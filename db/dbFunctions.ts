@@ -69,20 +69,20 @@ const dbSetup = (db) => {
         db.execSync(`
             CREATE TABLE IF NOT EXISTS programs (
                 name TEXT PRIMARY KEY NOT NULL,
-                monday TEXT NULL,
-                tuesday TEXT NULL,
-                wednesday TEXT NULL,
-                thursday TEXT NULL,
-                friday TEXT NULL,
-                saturday TEXT NULL,
-                sunday TEXT NULL,
-                FOREIGN KEY (monday) REFERENCES days(name),
-                FOREIGN KEY (tuesday) REFERENCES days(name),
-                FOREIGN KEY (wednesday) REFERENCES days(name),
-                FOREIGN KEY (thursday) REFERENCES days(name),
-                FOREIGN KEY (friday) REFERENCES days(name),
-                FOREIGN KEY (saturday) REFERENCES days(name),
-                FOREIGN KEY (sunday) REFERENCES days(name)
+                Monday TEXT NULL,
+                Tuesday TEXT NULL,
+                Wednesday TEXT NULL,
+                Thursday TEXT NULL,
+                Friday TEXT NULL,
+                Saturday TEXT NULL,
+                Sunday TEXT NULL,
+                FOREIGN KEY (Monday) REFERENCES days(name),
+                FOREIGN KEY (Tuesday) REFERENCES days(name),
+                FOREIGN KEY (Wednesday) REFERENCES days(name),
+                FOREIGN KEY (Thursday) REFERENCES days(name),
+                FOREIGN KEY (Friday) REFERENCES days(name),
+                FOREIGN KEY (Saturday) REFERENCES days(name),
+                FOREIGN KEY (Sunday) REFERENCES days(name)
             );
         `);
 
@@ -188,25 +188,25 @@ const addMockProgram = (db) => {
         `);
 
         db.execSync(`
-            INSERT INTO programs (name, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+            INSERT INTO programs (name, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
             VALUES ('PPUL', 'Pull', NULL, 'Upper', 'Lower & Arms', NULL, NULL, 'Push');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test0', 'Pull');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test1', 'Upper');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test2', 'Lower & Arms');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test3', 'Pull');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test4', 'Upper');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test5', 'Lower & Arms');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test6', 'Pull');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test7', 'Upper');
-            INSERT INTO programs (name, monday)
+            INSERT INTO programs (name, Monday)
             VALUES ('Test8', 'Lower & Arms');
         `);
 
@@ -240,7 +240,7 @@ const getProgram = (db) => {
     res.name = program.name;
 
     // Get the days for the program
-    for (const dayOfWeek of ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']) {
+    for (const dayOfWeek of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']) {
         const day = db.getFirstSync(`SELECT * FROM days WHERE name = '${program[dayOfWeek]}'`);
         if (day == null) continue;
         const dayRes: dayType = {
