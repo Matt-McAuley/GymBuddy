@@ -9,8 +9,8 @@ export default function AddDay() {
     const {setAddDayForm} = useProgramStore();
     const {db} = useStore();
     const [dayData, setDayData] = useState<dayDataType>({
-        name: '', color: '', primary_exercise: '', accessory_exercise_1: '', accessory_exercise_2: '', accessory_exercise_3: '',
-        accessory_exercise_4: '', superset_1: ['', ''], superset_2: ['', '']});
+        name: null, color: null, primary_exercise: null, accessory_exercise_1: null, accessory_exercise_2: null, accessory_exercise_3: null,
+        accessory_exercise_4: null, superset_1: [null, null], superset_2: [null, null]});
     const primaryExercises = getPrimaryExercises(db);
     const accessoryExercises = getAccessoryExercises(db);
 
@@ -26,7 +26,7 @@ export default function AddDay() {
                 placeholder={'Name'}
                 placeholderTextColor={'black'}>
             </TextInput>
-            <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:dayData.color.toLowerCase()}} placeholderStyle={styles.placeholder}
+            <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:dayData.color?.toLowerCase()}} placeholderStyle={styles.placeholder}
                      label={'colors'}
                      data={['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Brown']
                          .map((c) => ({label: c, value: c.toLowerCase()}))}
@@ -64,7 +64,7 @@ export default function AddDay() {
             {
                 [1, 2].map((num) => {
                     return (
-                        <View className={''}>
+                        <View key={num + 'ss'} className={''}>
                             <Dropdown key={num + 'ss1'} style={styles.dropdown} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                          label={`Superset ${num} Exercise 1`}
                                          data={accessoryExercises.map((se) => ({label: se, value: se}))}
@@ -119,15 +119,15 @@ export default function AddDay() {
 }
 
 type dayDataType = {
-    name: string,
-    color: string,
-    primary_exercise: string,
-    accessory_exercise_1: string,
-    accessory_exercise_2: string,
-    accessory_exercise_3: string,
-    accessory_exercise_4: string,
-    superset_1: string[],
-    superset_2: string[],
+    name: string | null,
+    color: string | null,
+    primary_exercise: string | null,
+    accessory_exercise_1: string | null,
+    accessory_exercise_2: string | null,
+    accessory_exercise_3: string | null,
+    accessory_exercise_4: string | null,
+    superset_1: (string | null)[],
+    superset_2: (string | null)[],
 }
 
 const styles = StyleSheet.create({

@@ -9,7 +9,7 @@ export default function AddProgram() {
     const {setAddProgramForm} = useProgramStore();
     const {db} = useStore();
     const [programData, setProgramData] = useState<programDataType>({
-        name: '', Sunday: '', Monday: '', Tuesday: '', Wednesday: '', Thursday: '', Friday: '', Saturday: ''});
+        name: null, Sunday: null, Monday: null, Tuesday: null, Wednesday: null, Thursday: null, Friday: null, Saturday: null});
     const dayNames = getDayNames(db);
 
     return (
@@ -69,14 +69,14 @@ export default function AddProgram() {
 }
 
 type programDataType = {
-    name: string,
-    Sunday: string,
-    Monday: string,
-    Tuesday: string,
-    Wednesday: string,
-    Thursday: string,
-    Friday: string,
-    Saturday: string,
+    name: string | null,
+    Sunday: string | null,
+    Monday: string | null,
+    Tuesday: string | null,
+    Wednesday: string | null,
+    Thursday: string | null,
+    Friday: string | null,
+    Saturday: string | null,
 }
 
 const styles = StyleSheet.create({

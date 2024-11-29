@@ -95,14 +95,14 @@ export default function EditProgram() {
 }
 
 type programDataType = {
-    name: string,
-    Sunday: string,
-    Monday: string,
-    Tuesday: string,
-    Wednesday: string,
-    Thursday: string,
-    Friday: string,
-    Saturday: string,
+    name: string | null,
+    Sunday: string | null,
+    Monday: string | null,
+    Tuesday: string | null,
+    Wednesday: string | null,
+    Thursday: string | null,
+    Friday: string | null,
+    Saturday: string | null,
 }
 
 const styles = StyleSheet.create({
