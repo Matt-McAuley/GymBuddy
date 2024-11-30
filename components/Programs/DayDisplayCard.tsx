@@ -1,11 +1,8 @@
-import {Text, TouchableOpacity, Image, View, TouchableWithoutFeedback} from "react-native";
-import * as SQLite from 'expo-sqlite';
-import {useProgramStore, useStore} from "@/store";
+import {Text, TouchableOpacity, Image, View} from "react-native";
+import {useProgramStore} from "@/store";
 
 export default function DayDisplayCard(props: DayDisplayCardPropsType) {
     const dayName = props.dayName;
-    const db = SQLite.openDatabaseSync('programs.db');
-    const {program, setProgram} = useStore();
     const {setEditDay} = useProgramStore();
 
     return (

@@ -1,4 +1,4 @@
-import {Text, TouchableOpacity, Image, View, TouchableWithoutFeedback} from "react-native";
+import {Text, TouchableOpacity, Image, View} from "react-native";
 import * as SQLite from 'expo-sqlite';
 import {useProgramStore, useStore} from "@/store";
 import {setCurrentProgram} from "@/db/programDBFunctions";
