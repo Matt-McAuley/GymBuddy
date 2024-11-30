@@ -92,6 +92,10 @@ const dbSetup = (db) => {
                FOREIGN KEY (program) REFERENCES programs(name) ON DELETE SET NULL
            );
         `);
+
+        db.execSync(`
+            PRAGMA foreign_keys=on;
+        `);
     }
     catch (err) {
         console.log('Error setting up database');
@@ -107,6 +111,13 @@ const dbTeardown = (db) => {
         DROP TABLE IF EXISTS days;
         DROP TABLE IF EXISTS programs;
         DROP TABLE IF EXISTS current_program;
+        DROP TRIGGER IF EXISTS clear_exercise_1_placement;
+        DROP TRIGGER IF EXISTS clear_exercise_2_placement;
+        DROP TRIGGER IF EXISTS clear_exercise_3_placement;
+        DROP TRIGGER IF EXISTS clear_exercise_4_placement;
+        DROP TRIGGER IF EXISTS clear_exercise_5_placement;
+        DROP TRIGGER IF EXISTS clear_superset_1_placement;
+        DROP TRIGGER IF EXISTS clear_superset_2_placement;
     `);
 }
 

@@ -206,7 +206,17 @@ export function createNewAccessoryExercise(db, name: string | null, rest: number
     return 'success';
 }
 
+function deletePlacements(db, name: string) {
+    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', name, name, name, name, name, name, name, name, name);
+    daysWithExercise.forEach((day) => {
+        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'superset_1_1', 'superset_1_2', 'superset_2_1', 'superset_2_2'].forEach((exercise) => {
+            if (day[exercise] == name) db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
+        });
+    });
+}
+
 export function deleteExercise(db, name: string) {
+    deletePlacements(db, name);
     db.runSync('DELETE FROM primary_exercises WHERE name = ?', name);
     db.runSync('DELETE FROM accessory_exercises WHERE name = ?', name);
 }
