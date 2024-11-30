@@ -53,7 +53,7 @@ export default function EditDay() {
                                   <Text style={styles.itemText}>{item.label}</Text>
                               </View>)}
                           onChange={(item) => {setDayData({...dayData, primary_exercise: item.value})}}/>
-                <Dropdown style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
+                <Dropdown style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.orderPlaceholder}
                           label={'Order'}
                           data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
                           labelField='label' valueField='value' placeholder={dayData.primary_exercise_order?.toString()}
@@ -78,7 +78,7 @@ export default function EditDay() {
                                               <Text style={styles.itemText}>{item.label}</Text>
                                           </View>)}
                                       onChange={(item) => {setDayData({...dayData, [`accessory_exercise_${num}`]: item.value})}}/>
-                            <Dropdown key={num + 'aeOrder'} style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
+                            <Dropdown key={num + 'aeOrder'} style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.orderPlaceholder}
                                       label={'Order'}
                                       data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
                                       labelField='label' valueField='value' placeholder={dayData[`accessory_exercise_${num}_order`]?.toString()}
@@ -118,7 +118,7 @@ export default function EditDay() {
                                               </View>)}
                                           onChange={(item) => {setDayData({...dayData, [`superset_${num}_2`]: item.value})}}/>
                             </View>
-                            <Dropdown key={num + 'ssOrder'} style={styles.ssDropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
+                            <Dropdown key={num + 'ssOrder'} style={styles.ssDropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.orderPlaceholder}
                                       label={'Order'}
                                       data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
                                       labelField='label' valueField='value' placeholder={dayData[`superset_${num}_order`]?.toString()}
@@ -272,6 +272,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     placeholder: {
+        color: 'gray',
+        textAlign: 'center',
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
+    orderPlaceholder: {
         color: 'black',
         textAlign: 'center',
         fontSize: 30,

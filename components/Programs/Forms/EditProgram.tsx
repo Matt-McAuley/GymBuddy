@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     placeholder: {
-        color: 'black',
+        color: 'gray',
         textAlign: 'center',
         fontSize: 30,
         fontWeight: 'bold',
