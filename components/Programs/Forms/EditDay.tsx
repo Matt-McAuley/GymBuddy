@@ -14,7 +14,7 @@ import {getProgram} from "@/db/dbFunctions";
 
 export default function EditDay() {
     const {setEditDay, editDay} = useProgramStore();
-    const {db, setProgram} = useStore();
+    const {db, setProgram, setCurrentDay, setCurrentExercise} = useStore();
     const [dayData, setDayData] = useState<dayDataType>(getDayByName(db, editDay!));
     const originalName = getDayByName(db, editDay!).name;
     const primaryExercises = getPrimaryExercises(db);
@@ -150,6 +150,9 @@ export default function EditDay() {
                                           text1Style: {fontSize: 30},
                                           text2Style: {fontSize: 30},
                                       });
+                                      setCurrentDay(0);
+                                      setCurrentExercise(0);
+                                      setProgram(getProgram(db));
                                   }
                                   else {
                                       Toast.show({
@@ -158,7 +161,6 @@ export default function EditDay() {
                                           text2: result,
                                       });
                                   }
-                                  setProgram(getProgram(db));
                                   setEditDay(null);
                               }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
@@ -171,6 +173,9 @@ export default function EditDay() {
                                       text1: "Success",
                                       text2: "Program Deleted",
                                   });
+                                  setCurrentDay(0);
+                                  setCurrentExercise(0);
+                                  setProgram(getProgram(db));
                                   setEditDay(null);
                               }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Delete</Text>

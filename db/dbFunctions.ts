@@ -30,8 +30,8 @@ const dbSetup = (db) => {
                 exercise_1 TEXT NOT NULL,
                 exercise_2 TEXT NOT NULL,
                 PRIMARY KEY (exercise_1, exercise_2),
-                FOREIGN KEY (exercise_1) REFERENCES accessory_exercises(name),
-                FOREIGN KEY (exercise_2) REFERENCES accessory_exercises(name)
+                FOREIGN KEY (exercise_1) REFERENCES accessory_exercises(name) ON DELETE CASCADE,
+                FOREIGN KEY (exercise_2) REFERENCES accessory_exercises(name) ON DELETE CASCADE
             );
         `);
 
@@ -55,13 +55,13 @@ const dbSetup = (db) => {
                 superset_2_1 TEXT NULL,
                 superset_2_2 TEXT NULL,
                 superset_2_placement INTEGER NULL,
-                FOREIGN KEY (exercise_1) REFERENCES primary_exercises(name),
-                FOREIGN KEY (exercise_2) REFERENCES accessory_exercises(name),
-                FOREIGN KEY (exercise_3) REFERENCES accessory_exercises(name),
-                FOREIGN KEY (exercise_4) REFERENCES accessory_exercises(name),
-                FOREIGN KEY (exercise_5) REFERENCES accessory_exercises(name),
-                FOREIGN KEY (superset_1_1, superset_1_2) REFERENCES supersets(exercise_1, exercise_2),
-                FOREIGN KEY (superset_2_1, superset_2_2) REFERENCES supersets(exercise_1, exercise_2)
+                FOREIGN KEY (exercise_1) REFERENCES primary_exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (exercise_2) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (exercise_3) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (exercise_4) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (exercise_5) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (superset_1_1, superset_1_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL,
+                FOREIGN KEY (superset_2_1, superset_2_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL
             );
         `);
 
@@ -75,13 +75,13 @@ const dbSetup = (db) => {
                 Friday TEXT NULL,
                 Saturday TEXT NULL,
                 Sunday TEXT NULL,
-                FOREIGN KEY (Monday) REFERENCES days(name),
-                FOREIGN KEY (Tuesday) REFERENCES days(name),
-                FOREIGN KEY (Wednesday) REFERENCES days(name),
-                FOREIGN KEY (Thursday) REFERENCES days(name),
-                FOREIGN KEY (Friday) REFERENCES days(name),
-                FOREIGN KEY (Saturday) REFERENCES days(name),
-                FOREIGN KEY (Sunday) REFERENCES days(name)
+                FOREIGN KEY (Monday) REFERENCES days(name) ON DELETE SET NULL,
+                FOREIGN KEY (Tuesday) REFERENCES days(name) ON DELETE SET NULL,
+                FOREIGN KEY (Wednesday) REFERENCES days(name) ON DELETE SET NULL,
+                FOREIGN KEY (Thursday) REFERENCES days(name) ON DELETE SET NULL,
+                FOREIGN KEY (Friday) REFERENCES days(name) ON DELETE SET NULL,
+                FOREIGN KEY (Saturday) REFERENCES days(name) ON DELETE SET NULL,
+                FOREIGN KEY (Sunday) REFERENCES days(name) ON DELETE SET NULL
             );
         `);
 
@@ -89,7 +89,7 @@ const dbSetup = (db) => {
            CREATE TABLE IF NOT EXISTS current_program (
                id INTEGER PRIMARY KEY NOT NULL,
                program NULL,
-               FOREIGN KEY (program) REFERENCES programs(name)
+               FOREIGN KEY (program) REFERENCES programs(name) ON DELETE SET NULL
            );
         `);
     }
@@ -179,9 +179,9 @@ const addMockProgram = (db) => {
 
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
                               exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'BTB Shrug', 'Lateral Raise', 4);
+            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'Lateral Raise', 'BTB Shrug', 4);
 
-            INSERT INTO days (name, color, exercise_2, exercise_2_placement, superset_1_1, superset_1_2, 
+            INSERT INTO days (name, color, exercise_2, exercise_2_placement, superset_1_1, superset_1_2,
                               superset_1_placement, superset_2_1, superset_2_2, superset_2_placement)
             VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3);
         `);

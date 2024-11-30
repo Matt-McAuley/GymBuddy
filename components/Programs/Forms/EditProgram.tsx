@@ -15,7 +15,7 @@ import {getProgram} from "@/db/dbFunctions";
 
 export default function EditProgram() {
     const {setEditProgram, editProgram} = useProgramStore();
-    const {db, setProgram} = useStore();
+    const {db, setProgram, setCurrentExercise, setCurrentDay} = useStore();
     const [programData, setProgramData] = useState<programDataType>(getProgramByName(db, editProgram!));
     const originalName = getProgramByName(db, editProgram!).name;
     const dayNames = getDayNames(db);
@@ -61,6 +61,8 @@ export default function EditProgram() {
                                       });
                                       if (currentProgram?.name == originalName)
                                           setCurrentProgram(db, programData.name);
+                                      setCurrentDay(0);
+                                      setCurrentExercise(0);
                                       setProgram(getProgram(db));
                                   }
                                   else {
@@ -85,6 +87,8 @@ export default function EditProgram() {
                                       text2: "Program Deleted",
                                   });
                                   setNullIfCurrentProgram(db, originalName);
+                                  setCurrentDay(0);
+                                  setCurrentExercise(0);
                                   setProgram(getProgram(db));
                                   setEditProgram(null);
                               }}>

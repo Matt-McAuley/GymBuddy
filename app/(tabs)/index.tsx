@@ -17,6 +17,7 @@ export default function Index() {
 
     useEffect(() => {
         // dbTeardown(db);
+        db.runSync('PRAGMA foreign_keys=on');
         dbSetup(db);
         addMockProgram(db);
         setProgram(getProgram(db));
