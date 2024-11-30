@@ -247,12 +247,26 @@ export function replaceAccessoryExercise(db, originalName: string, newName: stri
     const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', newName);
     if (originalName != newName && (accessory_exercise != null || primary_exercise != null)) return 'Exercise with that name already exists!';
     const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
+    const superSetsWithExerciseAsFirst = db.getAllSync('SELECT * FROM supersets WHERE exercise_1 = ?', originalName);
+    const superSetsWithExerciseAsSecond = db.getAllSync('SELECT * FROM supersets WHERE exercise_2 = ?', originalName);
     db.runSync('DELETE FROM accessory_exercises WHERE name = ?', originalName);
     db.runSync("INSERT INTO accessory_exercises (name, rest, sets, weight, reps) VALUES " +
         "(?, ?, ?, ?, ?)", newName, rest, sets, weight, reps);
     daysWithExercise.forEach((day) => {
-        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'superset_1_1', 'superset_1_2', 'superset_2_1', 'superset_2_2'].forEach((exercise) => {
+        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5'].forEach((exercise) => {
             if (day[exercise] == originalName) db.runSync(`UPDATE days SET ${exercise} = ? WHERE name = ?`, newName, day.name);
+        });
+    });
+    superSetsWithExerciseAsFirst.forEach((superset) => {
+        db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', newName, superset.exercise_2);
+    });
+    superSetsWithExerciseAsSecond.forEach((superset) => {
+        db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', superset.exercise_1, newName);
+    });
+    daysWithExercise.forEach((day) => {
+        ['superset_1', 'superset_2'].forEach((exercise) => {
+            if (day[`${exercise}_1`] == originalName) db.runSync(`UPDATE days SET ${exercise}_1 = ?, ${exercise}_2 = ? WHERE name = ?`, newName, day[`${exercise}_2`], day.name);
+            if (day[`${exercise}_2`] == originalName) db.runSync(`UPDATE days SET ${exercise}_2 = ?, ${exercise}_1 = ? WHERE name = ?`, newName, day[`${exercise}_1`], day.name);
         });
     });
     return 'success';
