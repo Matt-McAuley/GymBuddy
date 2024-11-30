@@ -11,9 +11,8 @@ export default function TabLayout() {
       screenOptions={{
       headerShown: false,
       tabBarButton: HapticTab,
-      tabBarLabelStyle: {
-        color: 'black',
-      },
+      tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'gray',
       }}>
       <Tabs.Screen name="index" options={{
           title: 'Home',
