@@ -1,14 +1,9 @@
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput} from "react-native";
-import {Dropdown} from "react-native-element-dropdown";
 import {useProgramStore, useStore} from "@/store";
 import {useState} from "react";
 import {
     createNewAccessoryExercise,
-    createNewDay,
     createNewPrimaryExercise,
-    createNewProgram,
-    getAccessoryExercises,
-    getPrimaryExercises
 } from "@/db/programDBFunctions";
 import Toast from 'react-native-toast-message';
 

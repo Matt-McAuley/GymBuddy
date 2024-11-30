@@ -146,7 +146,7 @@ export default function EditDay() {
                                       Toast.show({
                                           type: 'success',
                                           text1: 'Success',
-                                          text2: 'Day Created',
+                                          text2: 'Day Edited',
                                           text1Style: {fontSize: 30},
                                           text2Style: {fontSize: 30},
                                       });

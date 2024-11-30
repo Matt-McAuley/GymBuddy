@@ -55,7 +55,7 @@ export default function EditProgram() {
                                       Toast.show({
                                           type: 'success',
                                           text1: 'Success',
-                                          text2: 'Program Created',
+                                          text2: 'Program Edited',
                                           text1Style: {fontSize: 30},
                                           text2Style: {fontSize: 30},
                                       });

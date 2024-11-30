@@ -178,13 +178,14 @@ export function replaceDay(db, originalName: string, newName: string | null, col
 
 export function createNewPrimaryExercise(db, name: string | null, rest: number | null, weight_1: number | null, reps_1: number | null, weight_2: number | null, reps_2: number | null, weight_3: number | null, reps_3: number | null) {
     const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', name);
+    const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', name);
     if (name == null) return 'Must include a primary exercise name!';
     if (rest == null) return 'Must include a rest time!';
     if (weight_1 == null || reps_1 == null) return 'Must include weight and reps for first set!';
     if (weight_2 == null || reps_2 == null) return 'Must include weight and reps for second set!';
     if (weight_3 == null || reps_3 == null) return 'Must include weight and reps for third set!';
     if (rest < 0 || weight_1 < 0 || reps_1 < 0 || weight_2 < 0 || reps_2 < 0 || weight_3 < 0 || reps_3 < 0) return 'Values must be positive!';
-    if (primary_exercise != null) return 'Primary exercise with that name already exists!';
+    if (primary_exercise != null || accessory_exercise != null) return 'Exercise with that name already exists!';
     db.runSync("INSERT INTO primary_exercises (name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3) VALUES " +
         "(?, ?, ?, ?, ?, ?, ?, ?)", name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3);
     return 'success';
@@ -192,14 +193,89 @@ export function createNewPrimaryExercise(db, name: string | null, rest: number |
 
 export function createNewAccessoryExercise(db, name: string | null, rest: number | null, sets: number | null, weight: number | null, reps: number | null) {
     const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', name);
+    const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', name);
     if (name == null) return 'Must include an accessory exercise name!';
     if (rest == null) return 'Must include a rest time!';
     if (sets == null) return 'Must include a number of sets!';
     if (weight == null) return 'Must include weight!';
     if (reps == null) return 'Must include reps!';
     if (rest < 0 || sets < 0 || weight < 0 || reps < 0) return 'Values must be positive!';
-    if (accessory_exercise != null) return 'Accessory exercise with that name already exists!';
+    if (accessory_exercise != null || primary_exercise != null) return 'Exercise with that name already exists!';
     db.runSync("INSERT INTO accessory_exercises (name, rest, sets, weight, reps) VALUES " +
         "(?, ?, ?, ?, ?)", name, rest, sets, weight, reps);
+    return 'success';
+}
+
+export function deleteExercise(db, name: string) {
+    db.runSync('DELETE FROM primary_exercises WHERE name = ?', name);
+    db.runSync('DELETE FROM accessory_exercises WHERE name = ?', name);
+}
+
+export function getPrimaryExerciseByName(db, exerciseName: string) {
+    const exercise = db.getFirstSync("SELECT * FROM primary_exercises WHERE name = ?", exerciseName);
+    return (exercise == null) ? null : {
+        name: exercise.name,
+        rest: exercise.rest,
+        weight_1: exercise.weight_1,
+        reps_1: exercise.reps_1,
+        weight_2: exercise.weight_2,
+        reps_2: exercise.reps_2,
+        weight_3: exercise.weight_3,
+        reps_3: exercise.reps_3,
+    }
+}
+
+export function getAccessoryExerciseByName(db, exerciseName: string) {
+    const exercise = db.getFirstSync("SELECT * FROM accessory_exercises WHERE name = ?", exerciseName);
+    return (exercise == null) ? null : {
+        name: exercise.name,
+        rest: exercise.rest,
+        sets: exercise.sets,
+        weight: exercise.weight,
+        reps: exercise.reps,
+    }
+}
+
+export function replaceAccessoryExercise(db, originalName: string, newName: string | null, rest: number | null, sets: number | null, weight: number | null, reps: number | null) {
+    if (newName == null) return 'Must include an accessory exercise name!';
+    if (rest == null) return 'Must include a rest time!';
+    if (sets == null) return 'Must include a number of sets!';
+    if (weight == null) return 'Must include weight!';
+    if (reps == null) return 'Must include reps!';
+    if (rest < 0 || sets < 0 || weight < 0 || reps < 0) return 'Values must be positive!';
+    const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', newName);
+    const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', newName);
+    if (accessory_exercise != null || primary_exercise != null) return 'Exercise with that name already exists!';
+    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
+    db.runSync('DELETE FROM accessory_exercises WHERE name = ?', originalName);
+    db.runSync("INSERT INTO accessory_exercises (name, rest, sets, weight, reps) VALUES " +
+        "(?, ?, ?, ?, ?)", newName, rest, sets, weight, reps);
+    daysWithExercise.forEach((day) => {
+        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'superset_1_1', 'superset_1_2', 'superset_2_1', 'superset_2_2'].forEach((exercise) => {
+            if (day[exercise] == originalName) db.runSync(`UPDATE days SET ${exercise} = ? WHERE name = ?`, newName, day.name);
+        });
+    });
+    return 'success';
+}
+
+export function replacePrimaryExercise(db, originalName: string, newName: string | null, rest: number | null, weight_1: number | null, reps_1: number | null, weight_2: number | null, reps_2: number | null, weight_3: number | null, reps_3: number | null) {
+    if (newName == null) return 'Must include an accessory exercise name!';
+    if (rest == null) return 'Must include a rest time!';
+    if (weight_1 == null || reps_1 == null) return 'Must include weight and reps for first set!';
+    if (weight_2 == null || reps_2 == null) return 'Must include weight and reps for second set!';
+    if (weight_3 == null || reps_3 == null) return 'Must include weight and reps for third set!';
+    if (rest < 0 || weight_1 < 0 || reps_1 < 0 || weight_2 < 0 || reps_2 < 0 || weight_3 < 0 || reps_3 < 0) return 'Values must be positive!';
+    const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', newName);
+    const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', newName);
+    if (accessory_exercise != null || primary_exercise != null) return 'Exercise with that name already exists!';
+    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
+    db.runSync('DELETE FROM primary_exercises WHERE name = ?', originalName);
+    db.runSync("INSERT INTO primary_exercises (name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?, ?)", newName, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3);
+    daysWithExercise.forEach((day) => {
+        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'superset_1_1', 'superset_1_2', 'superset_2_1', 'superset_2_2'].forEach((exercise) => {
+            if (day[exercise] == originalName) db.runSync(`UPDATE days SET ${exercise} = ? WHERE name = ?`, newName, day.name);
+        });
+    });
     return 'success';
 }
