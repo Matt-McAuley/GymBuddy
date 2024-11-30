@@ -79,13 +79,15 @@ export function getAccessoryExercises(db) {
     return (accessory_exercises == null) ? null : accessory_exercises.map((accessory_exercise) => (accessory_exercise.name));
 }
 
-export function createNewDay(db, dayName: string | null, dayColor: string | null, primaryExercise: string | null, accessoryExercise1: string | null, accessoryExercise2: string | null, accessoryExercise3: string | null, accessoryExercise4: string | null, superSet1: (string | null)[], superSet2: (string | null)[]) {
-    const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', dayName);
-    if (dayName == null) return 'Must include a day name!';
-    if (dayColor == null) return 'Must include a color!';
-    if (primaryExercise == null && accessoryExercise1 == null && accessoryExercise2 == null && accessoryExercise3 == null && accessoryExercise4 == null && superSet1[0] == null && superSet1[1] == null && superSet2[0] == null && superSet2[1] == null) return 'Must have at least one exercise!';
+export function createNewDay(db, name: string | null, color: string | null, exercise_1: string | null, exercise_1_placement: number, exercise_2: string | null, exercise_2_placement: number, exercise_3: string | null, exercise_3_placement: number, exercise_4: string | null, exercise_4_placement: number, exercise_5: string | null, exercise_5_placement: number, superset_1_1: string | null, superset_1_2: string | null, superset_1_placement: number, superset_2_1: string | null, superset_2_2: string | null, superset_2_placement: number) {
+    const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', name);
+    if (name == null) return 'Must include a day name!';
+    if (color == null) return 'Must include a color!';
+    if (exercise_1 == null && exercise_2 == null && exercise_3 == null && exercise_4 == null && exercise_5 == null && superset_1_1 == null && superset_1_2 == null && superset_2_1 == null && superset_2_2 == null) return 'Must have at least one exercise!';
+    if (new Set([exercise_1_placement, exercise_2_placement, exercise_3_placement, exercise_4_placement, exercise_5_placement, superset_1_placement, superset_2_placement]).size != 7) return 'Exercise order must be unique!';
+    if ((superset_1_1 == null && superset_1_2 != null) || (superset_1_1 != null && superset_1_2 == null) || (superset_2_1 == null && superset_2_2 != null) || (superset_2_1 != null && superset_2_2 == null)) return 'Superset must have two exercises!';
     if (day != null) return 'Program with that name already exists!';
-    db.runSync("INSERT INTO days (name, color, exercise_1, exercise_2, exercise_3, exercise_4, exercise_5, superset_1_1, superset_1_2, superset_2_1, superset_2_2) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", dayName, dayColor, primaryExercise, accessoryExercise1, accessoryExercise2, accessoryExercise3, accessoryExercise4, superSet1[0], superSet1[1], superSet2[0], superSet2[1]);
+    db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
     return 'success';
 }
