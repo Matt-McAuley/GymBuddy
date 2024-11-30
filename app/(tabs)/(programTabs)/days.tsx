@@ -8,7 +8,7 @@ import EditDay from "@/components/Programs/Forms/EditDay";
 
 export default function Days() {
     const {db} = useStore();
-    const {addDayForm, editDay, setAddProgramForm, setAddExerciseForm, setAddDayForm, setEditProgram, setEditExercise, setEditDay} = useProgramStore();
+    const {addDayForm, editDay, setAddDayForm} = useProgramStore();
     const dayNames = getDayNamesColors(db);
 
     return (

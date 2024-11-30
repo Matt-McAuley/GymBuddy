@@ -8,7 +8,7 @@ import EditProgram from "@/components/Programs/Forms/EditProgram";
 
 export default function Programs() {
     const {db} = useStore();
-    const {addProgramForm, editProgram, setAddProgramForm, setAddExerciseForm, setAddDayForm, setEditProgram, setEditExercise, setEditDay} = useProgramStore();
+    const {addProgramForm, editProgram, setAddProgramForm} = useProgramStore();
     const programNames = getProgramNames(db);
 
     return (
