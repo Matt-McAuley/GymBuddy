@@ -236,7 +236,7 @@ export function getAccessoryExerciseByName(db, exerciseName: string) {
     }
 }
 
-export function replaceAccessoryExercise(db, originalName: string, newName: string | null, rest: number | null, sets: number | null, weight: number | null, reps: number | null) {
+export function replaceAccessoryExercise(db, originalName: string, newName: string | null, rest: string | null, sets: string | null, weight: string | null, reps: string | null) {
     if (newName == null) return 'Must include an accessory exercise name!';
     if (rest == null) return 'Must include a rest time!';
     if (sets == null) return 'Must include a number of sets!';
@@ -258,7 +258,7 @@ export function replaceAccessoryExercise(db, originalName: string, newName: stri
     return 'success';
 }
 
-export function replacePrimaryExercise(db, originalName: string, newName: string | null, rest: number | null, weight_1: number | null, reps_1: number | null, weight_2: number | null, reps_2: number | null, weight_3: number | null, reps_3: number | null) {
+export function replacePrimaryExercise(db, originalName: string, newName: string | null, rest: string | null, weight_1: string | null, reps_1: string | null, weight_2: string | null, reps_2: string | null, weight_3: string | null, reps_3: string | null) {
     if (newName == null) return 'Must include an accessory exercise name!';
     if (rest == null) return 'Must include a rest time!';
     if (weight_1 == null || reps_1 == null) return 'Must include weight and reps for first set!';

@@ -16,7 +16,7 @@ export default function Index() {
     useDrizzleStudio(db);
 
     useEffect(() => {
-        dbTeardown(db);
+        // dbTeardown(db);
         db.runSync('PRAGMA foreign_keys=on');
         dbSetup(db);
         addMockProgram(db);

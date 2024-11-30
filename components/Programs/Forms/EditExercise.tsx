@@ -34,7 +34,7 @@ export default function EditExercise() {
                     </TextInput>
                     <TextInput
                         className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                        onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, rest: parseInt(text)})}
+                        onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, rest: text})}
                         placeholder={'Rest (s)'}
                         keyboardType={'numeric'}
                         placeholderTextColor={'gray'}>
@@ -44,7 +44,7 @@ export default function EditExercise() {
                     <View className={'flex-row gap-4'}>
                         <TextInput
                             className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, weight_1: parseInt(text)})}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, weight_1: text})}
                             placeholder={'Set 1'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -52,7 +52,7 @@ export default function EditExercise() {
                         </TextInput>
                         <TextInput
                             className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, weight_2: parseInt(text)})}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, weight_2: text})}
                             placeholder={'Set 2'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -60,7 +60,7 @@ export default function EditExercise() {
                         </TextInput>
                         <TextInput
                             className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, weight_3: parseInt(text)})}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, weight_3: text})}
                             placeholder={'Set 3'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -71,7 +71,7 @@ export default function EditExercise() {
                     <View className={'flex-row gap-4'}>
                         <TextInput
                             className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, reps_1: parseInt(text)})}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, reps_1: text})}
                             placeholder={'Set 1'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -79,7 +79,7 @@ export default function EditExercise() {
                         </TextInput>
                         <TextInput
                             className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, reps_2: parseInt(text)})}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, reps_2: text})}
                             placeholder={'Set 2'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -87,7 +87,7 @@ export default function EditExercise() {
                         </TextInput>
                         <TextInput
                             className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, reps_3: parseInt(text)})}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData!, reps_3: text})}
                             placeholder={'Set 3'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -107,7 +107,7 @@ export default function EditExercise() {
                     <View className={'flex-row gap-4'}>
                         <TextInput
                             className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, rest: parseInt(text)})}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, rest: text})}
                             placeholder={'Rest'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -115,7 +115,7 @@ export default function EditExercise() {
                         </TextInput>
                         <TextInput
                             className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, sets: parseInt(text)})}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, sets: text})}
                             placeholder={'Sets'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -125,7 +125,7 @@ export default function EditExercise() {
                     <View className={'flex-row gap-4'}>
                         <TextInput
                             className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, weight: parseInt(text)})}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, weight: text})}
                             placeholder={'Weight'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -133,7 +133,7 @@ export default function EditExercise() {
                         </TextInput>
                         <TextInput
                             className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, reps: parseInt(text)})}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData!, reps: text})}
                             placeholder={'Reps'}
                             keyboardType={'numeric'}
                             placeholderTextColor={'gray'}>
@@ -204,7 +204,7 @@ export default function EditExercise() {
                                   Toast.show({
                                       type: "success",
                                       text1: "Success",
-                                      text2: "Program Deleted",
+                                      text2: "Exercise Deleted",
                                   });
                                   setCurrentDay(0);
                                   setCurrentExercise(0);
@@ -219,21 +219,21 @@ export default function EditExercise() {
 
 type primaryExerciseDataType = {
     name: string | null,
-    rest:number | null,
-    weight_1: number | null,
-    reps_1: number | null,
-    weight_2: number | null,
-    reps_2: number | null,
-    weight_3: number | null,
-    reps_3: number | null,
+    rest: string | null,
+    weight_1: string | null,
+    reps_1: string | null,
+    weight_2: string | null,
+    reps_2: string | null,
+    weight_3: string | null,
+    reps_3: string | null,
 }
 
 type accessoryExerciseDataType = {
     name: string | null,
-    rest: number | null,
-    sets: number | null,
-    weight: number | null,
-    reps: number | null,
+    rest: string | null,
+    sets: string | null,
+    weight: string | null,
+    reps: string | null,
 }
 
 const styles = StyleSheet.create({
