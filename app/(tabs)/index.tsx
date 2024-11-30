@@ -24,6 +24,7 @@ export default function Index() {
 
     useEffect(() => {
         if (program == null) return;
+        if (program.days.length == 0) return;
         const firstDay = program.days[0];
         setColor(firstDay!.color);
         setDay(firstDay!.name);
@@ -31,6 +32,7 @@ export default function Index() {
 
     useEffect(() => {
         if (program == null) return;
+        if (program.days.length == 0) return;
         setDay(program.days[currentDay].name);
         setColor(program.days[currentDay].color);
     }, [currentDay]);
@@ -51,7 +53,12 @@ export default function Index() {
           <Text className={'text-3xl'}>No Program Selected</Text>
       </View>
       )
-      : (
+      : (program.days.length == 0) ? (
+            <View className={'flex justify-center items-center h-full'}>
+                <Text className={'text-3xl'}>No Days in Program</Text>
+            </View>
+        ) :
+      (
           <GestureHandlerRootView>
               <GestureDetector gesture={panLeft}>
               <GestureDetector gesture={panRight}>
