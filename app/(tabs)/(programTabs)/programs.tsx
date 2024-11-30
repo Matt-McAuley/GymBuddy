@@ -11,15 +11,6 @@ export default function Programs() {
     const {addProgramForm, editProgram, setAddProgramForm, setAddExerciseForm, setAddDayForm, setEditProgram, setEditExercise, setEditDay} = useProgramStore();
     const programNames = getProgramNames(db);
 
-    useEffect(() => {
-        setAddProgramForm(false);
-        setEditProgram(null);
-        setAddExerciseForm(false);
-        setEditExercise(null);
-        setAddDayForm(false);
-        setEditDay(null);
-    }, []);
-
     return (
         (addProgramForm) ?
             <AddProgram/>

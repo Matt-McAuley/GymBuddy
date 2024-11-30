@@ -11,15 +11,6 @@ export default function Days() {
     const {addDayForm, editDay, setAddProgramForm, setAddExerciseForm, setAddDayForm, setEditProgram, setEditExercise, setEditDay} = useProgramStore();
     const dayNames = getDayNamesColors(db);
 
-    useEffect(() => {
-        setAddProgramForm(false);
-        setEditProgram(null);
-        setAddExerciseForm(false);
-        setEditExercise(null);
-        setAddDayForm(false);
-        setEditDay(null);
-    }, []);
-
     return (
         (addDayForm) ?
             <AddDay/>

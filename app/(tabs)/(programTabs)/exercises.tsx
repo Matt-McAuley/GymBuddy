@@ -9,15 +9,6 @@ export default function Exercises() {
     const exerciseNames = getExerciseNames(db);
     const {setAddProgramForm, setAddExerciseForm, setAddDayForm, setEditProgramForm, setEditExerciseForm, setEditDayForm} = useProgramStore();
 
-    useEffect(() => {
-        setAddProgramForm(false);
-        setEditProgramForm(false);
-        setAddExerciseForm(false);
-        setEditExerciseForm(false);
-        setAddDayForm(false);
-        setEditDayForm(false);
-    }, []);
-
     return (
         <ScrollView className={'p-4'}>
             {exerciseNames.map((exerciseName) =>
