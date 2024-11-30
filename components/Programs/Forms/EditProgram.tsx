@@ -60,7 +60,7 @@ export default function EditProgram() {
                                       });
                                       const currentProgram = getProgram(db);
                                       if (currentProgram?.name == originalName)
-                                        setCurrentProgram(db, programData.name);
+                                          setCurrentProgram(db, programData.name);
                                       setProgram(getProgram(db));
                                   }
                                   else {

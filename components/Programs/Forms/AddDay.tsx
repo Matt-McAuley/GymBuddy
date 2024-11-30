@@ -67,8 +67,8 @@ export default function AddDay() {
                 {
                 [1, 2, 3, 4].map((num) => {
                     return (
-                        <View className={'flex-row'}>
-                            <Dropdown key={num + 'ae'} style={styles.dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
+                        <View key={num + 'aeView'} className={'flex-row'}>
+                            <Dropdown key={num + 'aeDrop'} style={styles.dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                          label={`Accessory Exercise ${num}`}
                                          data={accessoryExercises.map((ae) => ({label: ae, value: ae}))}
                                          labelField='label' valueField='value' placeholder={`Accessory ${num}`}
@@ -78,7 +78,7 @@ export default function AddDay() {
                                                  <Text style={styles.itemText}>{item.label}</Text>
                                              </View>)}
                                          onChange={(item) => {setDayData({...dayData, [`accessory_exercise_${num}`]: item.value})}}/>
-                            <Dropdown key={num + 'order' + 'ae'} style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
+                            <Dropdown key={num + 'aeOrder'} style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                       label={'Order'}
                                       data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
                                       labelField='label' valueField='value' placeholder={dayData[`accessory_exercise_${num}_order`]?.toString()}
@@ -95,8 +95,8 @@ export default function AddDay() {
             {
                 [1, 2].map((num) => {
                     return (
-                        <View className={'flex-row'}>
-                            <View key={num + 'ss'} className={'w-80 border-black border-4 rounded-2xl bg-white mb-3'}>
+                        <View key={num + 'ssView'} className={'flex-row'}>
+                            <View key={num + 'ssView2'} className={'w-80 border-black border-4 rounded-2xl bg-white mb-3'}>
                                 <Dropdown key={num + 'ss1'} style={styles.ss1DropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                              label={`SS ${num} Exercise 1`}
                                              data={accessoryExercises.map((se) => ({label: se, value: se}))}
@@ -118,7 +118,7 @@ export default function AddDay() {
                                               </View>)}
                                           onChange={(item) => {setDayData({...dayData, [`superset_${num}_2`]: item.value})}}/>
                             </View>
-                            <Dropdown key={num + 'order' + 'ss'} style={styles.ssDropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
+                            <Dropdown key={num + 'ssOrder'} style={styles.ssDropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                       label={'Order'}
                                       data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
                                       labelField='label' valueField='value' placeholder={dayData[`superset_${num}_order`]?.toString()}
