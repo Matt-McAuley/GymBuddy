@@ -245,7 +245,7 @@ export function replaceAccessoryExercise(db, originalName: string, newName: stri
     if (rest < 0 || sets < 0 || weight < 0 || reps < 0) return 'Values must be positive!';
     const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', newName);
     const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', newName);
-    if (accessory_exercise != null || primary_exercise != null) return 'Exercise with that name already exists!';
+    if (originalName != newName && (accessory_exercise != null || primary_exercise != null)) return 'Exercise with that name already exists!';
     const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
     db.runSync('DELETE FROM accessory_exercises WHERE name = ?', originalName);
     db.runSync("INSERT INTO accessory_exercises (name, rest, sets, weight, reps) VALUES " +
@@ -267,7 +267,7 @@ export function replacePrimaryExercise(db, originalName: string, newName: string
     if (rest < 0 || weight_1 < 0 || reps_1 < 0 || weight_2 < 0 || reps_2 < 0 || weight_3 < 0 || reps_3 < 0) return 'Values must be positive!';
     const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', newName);
     const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', newName);
-    if (accessory_exercise != null || primary_exercise != null) return 'Exercise with that name already exists!';
+    if (originalName != newName && (accessory_exercise != null || primary_exercise != null)) return 'Exercise with that name already exists!';
     const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
     db.runSync('DELETE FROM primary_exercises WHERE name = ?', originalName);
     db.runSync("INSERT INTO primary_exercises (name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3) VALUES " +
