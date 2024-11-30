@@ -33,7 +33,7 @@ export function setNullIfCurrentProgram(db, programName: string) {
     }
 }
 
-export function createNewProgram(db, programName: string, Sunday: string, Monday: string, Tuesday: string, Wednesday: string, Thursday: string, Friday: string, Saturday: string) {
+export function createNewProgram(db, programName: string | null, Sunday: string | null, Monday: string | null, Tuesday: string | null, Wednesday: string | null, Thursday: string | null, Friday: string | null, Saturday: string | null) {
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', programName);
     if (programName == null) return 'Must include a program name!';
     if (Sunday == null && Monday == null && Tuesday == null && Wednesday == null && Thursday == null && Friday == null && Saturday == null) return 'Must have at least one day!';

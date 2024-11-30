@@ -29,7 +29,7 @@ export default function Days() {
                 :
                 <ScrollView className={'p-4'}>
                     {dayNames.map((day) =>
-                        <View key={day}>
+                        <View key={day.name}>
                             <DayDisplayCard dayName={day.name} dayColor={day.color}/>
                         </View>
                     )}

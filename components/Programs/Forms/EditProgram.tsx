@@ -29,7 +29,7 @@ export default function EditProgram() {
             <TextInput
                 className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
                 onChangeText={(text) => setProgramData({...programData, name: text})}
-                value={programData.name}>
+                value={programData.name!}>
             </TextInput>
             {
                 ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => {

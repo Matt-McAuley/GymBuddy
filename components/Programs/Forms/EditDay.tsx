@@ -29,8 +29,7 @@ export default function EditDay() {
             <TextInput
                 className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
                 onChangeText={(text) => setDayData({...dayData, name: text})}
-                placeholder={dayData.name!}
-                placeholderTextColor={'black'}>
+                value={dayData.name!}>
             </TextInput>
             <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:dayData.color?.toLowerCase()}} placeholderStyle={styles.placeholder}
                       label={'colors'}
