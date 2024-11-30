@@ -3,7 +3,7 @@ import Timer from "@/components/Home/Timer";
 import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
 import {useEffect, useState} from "react";
-import {addMockProgram, dbSetup, getProgram} from "@/db/dbFunctions";
+import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import {GestureDetector, Gesture, GestureHandlerRootView, Directions} from "react-native-gesture-handler";

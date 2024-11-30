@@ -22,7 +22,7 @@ export default function AddProgram() {
                 className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
                 onChangeText={(text) => setProgramData({...programData, name: text})}
                 placeholder={'Enter Name'}
-                placeholderTextColor={'black'}>
+                placeholderTextColor={'gray'}>
             </TextInput>
 
             {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     placeholder: {
-        color: 'black',
+        color: 'gray',
         textAlign: 'center',
         fontSize: 30,
         fontWeight: 'bold',
