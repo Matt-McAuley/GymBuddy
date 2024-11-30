@@ -4,6 +4,7 @@ import {getExerciseNames} from "@/db/programDBFunctions";
 import DayDisplayCard from "@/components/Programs/DayDisplayCard";
 import AddExercise from "@/components/Programs/Forms/AddExercise";
 import EditExercise from "@/components/Programs/Forms/EditExercise";
+import ExerciseDisplayCard from "@/components/Programs/ExerciseDisplayCard";
 
 export default function Exercises() {
     const {db} = useStore();
@@ -20,7 +21,7 @@ export default function Exercises() {
                 <ScrollView className={'p-4'}>
                     {exerciseNames.map((exercise) =>
                         <View key={exercise}>
-                            <DayDisplayCard exerciseName={exercise} />
+                            <ExerciseDisplayCard exerciseName={exercise} />
                         </View>
                     )}
                     <TouchableOpacity onPress={() => setAddExerciseForm(true)}
