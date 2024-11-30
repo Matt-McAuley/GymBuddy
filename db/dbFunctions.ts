@@ -117,7 +117,7 @@ const addMockProgram = (db) => {
         if (result != null) return;
 
         db.execSync(`
-            INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
+            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
             VALUES ('Bench', 210, 190, 215, 245, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB OHP', 90, 45, 12, 3);
@@ -130,7 +130,7 @@ const addMockProgram = (db) => {
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Lateral Raise', 'Tricep Extension');
 
-            INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
+            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
             VALUES ('Deadlift', 210, 325, 355, 405, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('BB Curl', 90, 45, 21, 3);
@@ -143,7 +143,7 @@ const addMockProgram = (db) => {
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Hammer Curl', 'Face Pull');
 
-            INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
+            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
             VALUES ('OHP', 180, 110, 125, 135, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('BB Row', 180, 165, 5, 5);

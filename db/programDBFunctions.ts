@@ -180,7 +180,7 @@ export function createNewPrimaryExercise(db, name: string | null, rest: number |
     if (rest < 0 || weight_1 < 0 || reps_1 < 0 || weight_2 < 0 || reps_2 < 0 || weight_3 < 0 || reps_3 < 0) return 'Values must be positive!';
     if (primary_exercise != null) return 'Primary exercise with that name already exists!';
     db.runSync("INSERT INTO primary_exercises (name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?, ?, ?)", name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3);
+        "(?, ?, ?, ?, ?, ?, ?, ?)", name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3);
     return 'success';
 }
 

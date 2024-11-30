@@ -5,7 +5,7 @@ import { useStore } from "@/store";
 export default function Counter() {
     const {isAccessoryExercise, isPrimaryExercise, currentScheme} = useStore();
     const exercise = useStore((state) => state.exercise());
-    const [sets, setSets] = useState((isPrimaryExercise(exercise)) ? exercise.sets : (isAccessoryExercise(exercise))
+    const [sets, setSets] = useState((isPrimaryExercise(exercise)) ? 5 : (isAccessoryExercise(exercise))
         ? exercise.sets : exercise.exercise1.sets);
     const set = useStore((state) => state.set);
     const setSet = useStore((state) => state.setSet);
@@ -30,7 +30,7 @@ export default function Counter() {
     const [reps, setReps] = useState(getReps());
 
     useEffect(() => {
-        setSets((isPrimaryExercise(exercise)) ? exercise.sets : (isAccessoryExercise(exercise))
+        setSets((isPrimaryExercise(exercise)) ? 5 : (isAccessoryExercise(exercise))
             ? exercise.sets : exercise.exercise1.sets);
         setReps(getReps());
         setSet(1);
