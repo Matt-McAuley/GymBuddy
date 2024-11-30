@@ -40,19 +40,119 @@ export default function AddExercise() {
                 </TouchableOpacity>
             </View>
             {(isPrimary) ?
-                <TextInput
-                    className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                    onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, name: text})}
-                    placeholder={'Name'}
-                    placeholderTextColor={'gray'}>
-                </TextInput>
+                <>
+                    <TextInput
+                        className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                        onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, name: text})}
+                        placeholder={'Name'}
+                        placeholderTextColor={'gray'}>
+                    </TextInput>
+                    <View className={'flex-row gap-4'}>
+                        <TextInput
+                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, rest: parseInt(text)})}
+                            placeholder={'Rest'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                        <TextInput
+                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, sets: parseInt(text)})}
+                            placeholder={'Sets'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                    </View>
+                    <Text className={'text-5xl font-bold text-center m-4'}>Weight:</Text>
+                    <View className={'flex-row gap-4'}>
+                        <TextInput
+                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, weight_1: parseInt(text)})}
+                            placeholder={'Set 1'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                        <TextInput
+                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, weight_2: parseInt(text)})}
+                            placeholder={'Set 2'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                        <TextInput
+                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, weight_3: parseInt(text)})}
+                            placeholder={'Set 3'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                    </View>
+                    <Text className={'text-5xl font-bold text-center m-4'}>Reps:</Text>
+                    <View className={'flex-row gap-4'}>
+                        <TextInput
+                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, reps_1: parseInt(text)})}
+                            placeholder={'Set 1'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                        <TextInput
+                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, reps_2: parseInt(text)})}
+                            placeholder={'Set 2'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                        <TextInput
+                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, reps_3: parseInt(text)})}
+                            placeholder={'Set 3'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                    </View>
+                </>
                 :
-                <TextInput
-                    className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                    onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, name: text})}
-                    placeholder={'Name'}
-                    placeholderTextColor={'gray'}>
-                </TextInput>
+                <>
+                    <TextInput
+                        className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                        onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, name: text})}
+                        placeholder={'Name'}
+                        placeholderTextColor={'gray'}>
+                    </TextInput>
+                    <View className={'flex-row gap-4'}>
+                        <TextInput
+                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, rest: parseInt(text)})}
+                            placeholder={'Rest'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                        <TextInput
+                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, sets: parseInt(text)})}
+                            placeholder={'Sets'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                    </View>
+                    <View className={'flex-row gap-4'}>
+                        <TextInput
+                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, weight: parseInt(text)})}
+                            placeholder={'Weight'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                        <TextInput
+                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, reps: parseInt(text)})}
+                            placeholder={'Reps'}
+                            keyboardType={'numeric'}
+                            placeholderTextColor={'gray'}>
+                        </TextInput>
+                    </View>
+                </>
             }
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
                               onPress={() => {

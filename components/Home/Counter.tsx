@@ -22,9 +22,9 @@ export default function Counter() {
                 return [exercise.reps_1, exercise.reps_2, exercise.reps_3, exercise.reps_2, exercise.reps_1];
             }
         } else if (isAccessoryExercise(exercise)) {
-            return new Array(5).fill(exercise.reps);
+            return new Array(exercise.sets).fill(exercise.reps);
         } else {
-            return new Array(5).fill([exercise.exercise1.reps, exercise.exercise2.reps]);
+            return new Array(Math.max(exercise.exercise1.sets, exercise.exercise2.sets)).fill([exercise.exercise1.reps, exercise.exercise2.reps]);
         }
     }
     const [reps, setReps] = useState(getReps());
