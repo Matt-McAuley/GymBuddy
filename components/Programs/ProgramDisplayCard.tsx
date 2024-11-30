@@ -7,11 +7,14 @@ import {getProgram} from "@/db/dbFunctions";
 export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
     const programName = props.programName;
     const db = SQLite.openDatabaseSync('programs.db');
-    const {program, setProgram} = useStore();
+    const {program, setProgram, setCurrentDay, setCurrentExercise, setCurrentScheme} = useStore();
     const {setEditProgram} = useProgramStore();
 
     return (
         <TouchableOpacity onPress={() => {
+            setCurrentDay(0);
+            setCurrentExercise(0);
+            setCurrentScheme('5 x 5');
             setCurrentProgram(db, programName);
             setProgram(getProgram(db));
         }} className={'w-full h-28 border-4 rounded-2xl mb-5 flex-row justify-between items-center'}>
