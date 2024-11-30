@@ -17,7 +17,7 @@ export default function AddExercise() {
     const {db} = useStore();
     const [isPrimary, setIsPrimary] = useState<boolean>(true);
     const [primaryExerciseData, setPrimaryExerciseData] = useState<primaryExerciseDataType>({
-        name: null, rest: null, sets: null, weight_1: null, reps_1: null, weight_2: null, reps_2: null, weight_3: null, reps_3: null});
+        name: null, rest: null, weight_1: null, reps_1: null, weight_2: null, reps_2: null, weight_3: null, reps_3: null});
     const [accessoryExerciseData, setAccessoryExerciseData] = useState<accessoryExerciseDataType>({
         name: null, rest: null, sets: null, weight: null, reps: null});
 
@@ -47,22 +47,13 @@ export default function AddExercise() {
                         placeholder={'Name'}
                         placeholderTextColor={'gray'}>
                     </TextInput>
-                    <View className={'flex-row gap-4'}>
-                        <TextInput
-                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, rest: parseInt(text)})}
-                            placeholder={'Rest'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                        <TextInput
-                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, sets: parseInt(text)})}
-                            placeholder={'Sets'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                    </View>
+                    <TextInput
+                        className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
+                        onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, rest: parseInt(text)})}
+                        placeholder={'Rest (s)'}
+                        keyboardType={'numeric'}
+                        placeholderTextColor={'gray'}>
+                    </TextInput>
                     <Text className={'text-5xl font-bold text-center m-4'}>Weight:</Text>
                     <View className={'flex-row gap-4'}>
                         <TextInput
@@ -158,7 +149,7 @@ export default function AddExercise() {
                               onPress={() => {
                                     if (isPrimary) {
                                         const result = createNewPrimaryExercise(db,
-                                                primaryExerciseData.name, primaryExerciseData.rest, primaryExerciseData.sets,
+                                                primaryExerciseData.name, primaryExerciseData.rest,
                                                 primaryExerciseData.weight_1, primaryExerciseData.reps_1,
                                                 primaryExerciseData.weight_2, primaryExerciseData.reps_2,
                                                 primaryExerciseData.weight_3, primaryExerciseData.reps_3);
@@ -211,7 +202,6 @@ export default function AddExercise() {
 type primaryExerciseDataType = {
     name: string | null,
     rest:number | null,
-    sets: number | null,
     weight_1: number | null,
     reps_1: number | null,
     weight_2: number | null,

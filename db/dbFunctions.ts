@@ -16,7 +16,6 @@ const dbSetup = (db) => {
             CREATE TABLE IF NOT EXISTS primary_exercises (
                 name TEXT PRIMARY KEY NOT NULL,
                 rest INTEGER NOT NULL,
-                sets INTEGER NOT NULL,
                 weight_1 INTEGER NOT NULL,
                 weight_2 INTEGER NOT NULL,
                 weight_3 INTEGER NOT NULL,
@@ -119,7 +118,7 @@ const addMockProgram = (db) => {
 
         db.execSync(`
             INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Bench', 210, 5, 190, 215, 245, 5, 3, 1);
+            VALUES ('Bench', 210, 190, 215, 245, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB OHP', 90, 45, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
@@ -132,7 +131,7 @@ const addMockProgram = (db) => {
             VALUES ('Lateral Raise', 'Tricep Extension');
 
             INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Deadlift', 210, 5, 325, 355, 405, 5, 3, 1);
+            VALUES ('Deadlift', 210, 325, 355, 405, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('BB Curl', 90, 45, 21, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
@@ -145,7 +144,7 @@ const addMockProgram = (db) => {
             VALUES ('Hammer Curl', 'Face Pull');
 
             INSERT INTO primary_exercises (name, rest, sets, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('OHP', 180, 5, 110, 125, 135, 5, 3, 1);
+            VALUES ('OHP', 180, 110, 125, 135, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('BB Row', 180, 165, 5, 5);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
@@ -256,7 +255,6 @@ const getProgram = (db) => {
             const primaryExerciseRes: primaryExerciseType = {
                 name: primaryExercise.name,
                 rest: primaryExercise.rest,
-                sets: primaryExercise.sets,
                 weight_1: primaryExercise.weight_1,
                 weight_2: primaryExercise.weight_2,
                 weight_3: primaryExercise.weight_3,

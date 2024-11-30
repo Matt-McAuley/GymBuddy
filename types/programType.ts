@@ -1,7 +1,6 @@
 type primaryExerciseType = {
     name: string,
     rest: number,
-    sets: number,
     weight_1: number,
     weight_2: number,
     weight_3: number,
