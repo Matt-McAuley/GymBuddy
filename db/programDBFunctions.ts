@@ -169,3 +169,32 @@ export function replaceDay(db, originalName: string, newName: string | null, col
         "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newName, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
     return 'success';
 }
+
+export function createNewPrimaryExercise(db, name: string | null, rest: number | null, sets: number | null, weight_1: number | null, reps_1: number | null, weight_2: number | null, reps_2: number | null, weight_3: number | null, reps_3: number | null) {
+    const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', name);
+    if (name == null) return 'Must include a primary exercise name!';
+    if (rest == null) return 'Must include a rest time!';
+    if (sets == null) return 'Must include a number of sets!';
+    if (weight_1 == null || reps_1 == null) return 'Must include weight and reps for first set!';
+    if (weight_2 == null || reps_2 == null) return 'Must include weight and reps for second set!';
+    if (weight_3 == null || reps_3 == null) return 'Must include weight and reps for third set!';
+    if (rest < 0 || sets < 0 || weight_1 < 0 || reps_1 < 0 || weight_2 < 0 || reps_2 < 0 || weight_3 < 0 || reps_3 < 0) return 'Values must be positive!';
+    if (primary_exercise != null) return 'Primary exercise with that name already exists!';
+    db.runSync("INSERT INTO primary_exercises (name, rest, sets, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?, ?, ?)", name, rest, sets, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3);
+    return 'success';
+}
+
+export function createNewAccessoryExercise(db, name: string | null, rest: number | null, sets: number | null, weight: number | null, reps: number | null) {
+    const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', name);
+    if (name == null) return 'Must include an accessory exercise name!';
+    if (rest == null) return 'Must include a rest time!';
+    if (sets == null) return 'Must include a number of sets!';
+    if (weight == null) return 'Must include weight!';
+    if (reps == null) return 'Must include reps!';
+    if (rest < 0 || sets < 0 || weight < 0 || reps < 0) return 'Values must be positive!';
+    if (accessory_exercise != null) return 'Accessory exercise with that name already exists!';
+    db.runSync("INSERT INTO accessory_exercises (name, rest, sets, weight, reps) VALUES " +
+        "(?, ?, ?, ?, ?)", name, rest, sets, weight, reps);
+    return 'success';
+}
