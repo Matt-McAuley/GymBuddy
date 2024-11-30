@@ -47,6 +47,7 @@ export default function EditProgram() {
             }
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
                               onPress={() => {
+                                  const currentProgram = getProgram(db);
                                   const result = replaceProgram(db, originalName, programData.name, programData.Sunday, programData.Monday,
                                       programData.Tuesday, programData.Wednesday, programData.Thursday,
                                       programData.Friday, programData.Saturday);
@@ -58,7 +59,6 @@ export default function EditProgram() {
                                           text1Style: {fontSize: 30},
                                           text2Style: {fontSize: 30},
                                       });
-                                      const currentProgram = getProgram(db);
                                       if (currentProgram?.name == originalName)
                                           setCurrentProgram(db, programData.name);
                                       setProgram(getProgram(db));
