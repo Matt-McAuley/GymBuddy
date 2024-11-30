@@ -64,9 +64,17 @@ export default function Index() {
               <GestureDetector gesture={panRight}>
                 <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
                     <Text className={`text-6xl font-bold`} style={{color: color}}>{day}</Text>
-                    <Timer/>
-                    <Counter/>
-                    <ExerciseDisplay/>
+                    {(program.days[currentDay].exercises.length == 0) ?
+                        <View className={'flex-col h-full justify-center items-center'}>
+                            <Text className={'text-3xl'}>No Exercises in Day</Text>
+                        </View>
+                        :
+                        <>
+                            <Timer/>
+                            <Counter/>
+                            <ExerciseDisplay/>
+                        </>
+                    }
                 </View>
               </GestureDetector>
               </GestureDetector>
