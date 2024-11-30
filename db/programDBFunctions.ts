@@ -1,6 +1,3 @@
-import {programType, dayType, primaryExerciseType, accessoryExerciseType, superSetType} from "@/types/programType";
-import primaryExercise from "@/components/Home/exerciseDisplays/PrimaryExercise";
-
 export function getProgramNames(db) : string[] {
     const programs = db.getAllSync("SELECT * FROM programs");
     return (programs == null) ? null : programs.map((program) => (program.name));
@@ -9,6 +6,11 @@ export function getProgramNames(db) : string[] {
 export function getDayNames(db) : string[] {
     const days = db.getAllSync("SELECT * FROM days");
     return (days == null) ? null : days.map((day) => (day.name));
+}
+
+export function getDayNamesColors(db) {
+    const days = db.getAllSync("SELECT * FROM days");
+    return (days == null) ? null : days.map((day) => ({name: day.name, color: day.color}));
 }
 
 export function getExerciseNames(db) : string[] {
