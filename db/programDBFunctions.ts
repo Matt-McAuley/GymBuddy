@@ -163,10 +163,16 @@ export function replaceDay(db, originalName: string, newName: string | null, col
     if (new Set([exercise_1_placement.toString(), exercise_2_placement.toString(), exercise_3_placement.toString(), exercise_4_placement.toString(), exercise_5_placement.toString(), superset_1_placement.toString(), superset_2_placement.toString()]).size < 7) return 'Exercise order must be unique!';
     if ((superset_1_1 == null && superset_1_2 != null) || (superset_1_1 != null && superset_1_2 == null) || (superset_2_1 == null && superset_2_2 != null) || (superset_2_1 != null && superset_2_2 == null)) return 'Superset must have two exercises!';
     const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', newName);
+    const programsWithDay = db.getAllSync('SELECT * FROM programs WHERE Sunday = ? OR Monday = ? OR Tuesday = ? OR Wednesday = ? OR Thursday = ? OR Friday = ? OR Saturday = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName);
     if (day != null && originalName != newName) return 'Day with that name already exists!';
     db.runSync('DELETE FROM days WHERE name = ?', originalName);
     db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
         "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newName, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
+    programsWithDay.forEach((program) => {
+        ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].forEach((day) => {
+            if (program[day] == originalName) db.runSync(`UPDATE programs SET ${day} = ? WHERE name = ?`, newName, program.name);
+        });
+    });
     return 'success';
 }
 
