@@ -19,15 +19,15 @@ export default function Days() {
                 <EditDay />
                 :
                 <ScrollView className={'p-4'}>
+                    <TouchableOpacity onPress={() => setAddDayForm(true)}
+                                      className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
+                        <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Day</Text>
+                    </TouchableOpacity>
                     {dayNames.map((day) =>
                         <View key={day.name}>
                             <DayDisplayCard dayName={day.name} dayColor={day.color}/>
                         </View>
                     )}
-                    <TouchableOpacity onPress={() => setAddDayForm(true)}
-                                      className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
-                        <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Day</Text>
-                    </TouchableOpacity>
                 </ScrollView>
     );
 }

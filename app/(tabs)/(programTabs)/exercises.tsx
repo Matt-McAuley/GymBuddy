@@ -19,15 +19,15 @@ export default function Exercises() {
                 <EditExercise />
                 :
                 <ScrollView className={'p-4'}>
+                    <TouchableOpacity onPress={() => setAddExerciseForm(true)}
+                                      className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
+                        <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Exercise</Text>
+                    </TouchableOpacity>
                     {exerciseNames.map((exercise) =>
                         <View key={exercise}>
                             <ExerciseDisplayCard exerciseName={exercise} />
                         </View>
                     )}
-                    <TouchableOpacity onPress={() => setAddExerciseForm(true)}
-                                      className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
-                        <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Exercise</Text>
-                    </TouchableOpacity>
                 </ScrollView>
     );
 }

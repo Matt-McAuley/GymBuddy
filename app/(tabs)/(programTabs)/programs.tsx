@@ -19,15 +19,15 @@ export default function Programs() {
                 <EditProgram />
                 :
         <ScrollView className={'p-4'}>
+            <TouchableOpacity onPress={() => setAddProgramForm(true)}
+                              className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
+                <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Program</Text>
+            </TouchableOpacity>
             {programNames.map((programName) =>
                 <View key={programName}>
                     <ProgramDisplayCard programName={programName}/>
                 </View>
             )}
-            <TouchableOpacity onPress={() => setAddProgramForm(true)}
-                className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
-                <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Program</Text>
-            </TouchableOpacity>
         </ScrollView>
     );
 }
