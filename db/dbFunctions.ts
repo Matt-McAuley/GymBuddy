@@ -195,16 +195,13 @@ const addMockProgram = (db) => {
             INSERT INTO days (name, color, exercise_2, exercise_2_placement, superset_1_1, superset_1_2,
                               superset_1_placement, superset_2_1, superset_2_2, superset_2_placement)
             VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3);
-            
-            INSERT INTO days (name, color, exercise_1, exercise_1_placement)
-            VALUES ('Test', 'orange', 'Bench', 1);
         `);
 
         db.execSync(`
             INSERT INTO programs (name, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
             VALUES ('PPUL', 'Pull', NULL, 'Upper', 'Lower & Arms', NULL, NULL, 'Push');
             INSERT INTO programs (name, Monday)
-            VALUES ('Test0', 'Test');
+            VALUES ('Test0', 'Pull');
             INSERT INTO programs (name, Monday)
             VALUES ('Test1', 'Upper');
             INSERT INTO programs (name, Monday)
@@ -225,7 +222,7 @@ const addMockProgram = (db) => {
 
         db.execSync(`
             INSERT INTO current_program (program)
-            VALUES ('Test0');
+            VALUES ('PPUL');
         `);
     }
     catch (err) {

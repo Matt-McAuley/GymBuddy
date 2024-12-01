@@ -1,25 +1,25 @@
 export function getProgramNames(db) : string[] {
-    const programs = db.getAllSync("SELECT * FROM programs");
+    const programs = db.getAllSync("SELECT * FROM programs ORDER BY name");
     return (programs == null) ? null : programs.map((program) => (program.name));
 }
 
 export function getDayNames(db) : string[] {
-    const days = db.getAllSync("SELECT * FROM days");
+    const days = db.getAllSync("SELECT * FROM days ORDER BY name");
     return (days == null) ? null : days.map((day) => (day.name));
 }
 
 export function getDayNamesColors(db) {
-    const days = db.getAllSync("SELECT * FROM days");
+    const days = db.getAllSync("SELECT * FROM days ORDER BY name");
     return (days == null) ? null : days.map((day) => ({name: day.name, color: day.color}));
 }
 
-export function getExerciseNames(db) : string[] {
+export function getExerciseNamesType(db) {
     let accessory_exercises = db.getAllSync("SELECT * FROM accessory_exercises");
-    accessory_exercises = (accessory_exercises == null) ? [] : accessory_exercises;
+    accessory_exercises = (accessory_exercises == null) ? [] : accessory_exercises.map((exercise) => ({name: exercise.name, isPrimary: false}));
     let primary_exercises = db.getAllSync("SELECT * FROM primary_exercises");
-    primary_exercises = (primary_exercises == null) ? [] : primary_exercises;
+    primary_exercises = (primary_exercises == null) ? [] : primary_exercises.map((exercise) => ({name: exercise.name, isPrimary: true}));
     return (accessory_exercises.length == 0 && primary_exercises.length == 0) ? null
-        : accessory_exercises.concat(primary_exercises).map((accessory_exercises) => (accessory_exercises.name));
+        : primary_exercises.concat(accessory_exercises);
 }
 
 export function setCurrentProgram(db, programName: string | null) {
@@ -73,12 +73,12 @@ export function deleteProgram(db, programName: string) {
 }
 
 export function getPrimaryExercises(db) {
-    const primary_exercises = db.getAllSync("SELECT * FROM primary_exercises");
+    const primary_exercises = db.getAllSync("SELECT * FROM primary_exercises ORDER BY name");
     return (primary_exercises == null) ? null : primary_exercises.map((primary_exercise) => (primary_exercise.name));
 }
 
 export function getAccessoryExercises(db) {
-    const accessory_exercises = db.getAllSync("SELECT * FROM accessory_exercises");
+    const accessory_exercises = db.getAllSync("SELECT * FROM accessory_exercises ORDER BY name");
     return (accessory_exercises == null) ? null : accessory_exercises.map((accessory_exercise) => (accessory_exercise.name));
 }
 
