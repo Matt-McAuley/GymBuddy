@@ -206,21 +206,42 @@ export function createNewAccessoryExercise(db, name: string | null, rest: number
     return 'success';
 }
 
-function deletePlacements(db, name: string) {
+function fixPlacements(db, name: string) {
     const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', name, name, name, name, name, name, name, name, name);
     daysWithExercise.forEach((day) => {
+        const placements = {exercise_1: day.exercise_1_placement, exercise_2: day.exercise_2_placement, exercise_3: day.exercise_3_placement, exercise_4: day.exercise_4_placement, exercise_5: day.exercise_5_placement, superset_1: day.superset_1_placement, superset_2: day.superset_2_placement};
         ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5'].forEach((exercise) => {
-            if (day[exercise] == name) db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
+            if (day[exercise] == name) {
+                db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
+                placements[exercise] = null;
+            }
         });
         ['superset_1', 'superset_2'].forEach((exercise) => {
-            if (day[`${exercise}_1`] == name) db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
-            if (day[`${exercise}_2`] == name) db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
+            if (day[`${exercise}_1`] == name) {
+                db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
+                placements[exercise] = null;
+            }
+            if (day[`${exercise}_2`] == name) {
+                db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
+                placements[exercise] = null;
+            }
         });
+        const newPlacements = [];
+        let i = 1;
+        Object.values(placements).forEach((placement) => {
+            if (placement == null) newPlacements.push(null);
+            else {
+                newPlacements.push(i);
+                i += 1;
+            }
+        });
+        db.runSync('UPDATE days SET exercise_1_placement = ?, exercise_2_placement = ?, exercise_3_placement = ?, exercise_4_placement = ?, exercise_5_placement = ?, superset_1_placement = ?, superset_2_placement = ? WHERE name = ?', newPlacements[0], newPlacements[1], newPlacements[2], newPlacements[3], newPlacements[4], newPlacements[5], newPlacements[6], day.name);
     });
+
 }
 
 export function deleteExercise(db, name: string) {
-    deletePlacements(db, name);
+    fixPlacements(db, name);
     db.runSync('DELETE FROM primary_exercises WHERE name = ?', name);
     db.runSync('DELETE FROM accessory_exercises WHERE name = ?', name);
 }
