@@ -1,7 +1,6 @@
 import {Text, TouchableOpacity, View} from "react-native";
 import * as AuthSession from 'expo-auth-session';
-import Constants from 'expo-constants'
-import Const from "ajv/lib/vocabularies/validation/const";
+import {useEffect} from "react";
 
 export default function Login() {
     const discovery = {
@@ -25,11 +24,17 @@ export default function Login() {
         usePKCE: false,
         redirectUri: AuthSession.makeRedirectUri({
             scheme: 'myapp',
+            path: 'auth',
         }),
     }
     const [request, response, promptAsync] = AuthSession.useAuthRequest(config, discovery);
 
-
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const {access_token} = response.params;
+            console.log(access_token);
+        }
+    }, [response]);
 
     return (
         <View className={'h-full flex justify-center items-center'}>
