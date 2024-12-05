@@ -10,8 +10,8 @@ export default function Login() {
     }
     const config : AuthSession.AuthRequestConfig = {
         responseType: AuthSession.ResponseType.Token,
-        clientId: Constants.manifest.extra.spotifyClientId,
-        clientSecret: process.env.CLIENT_SECRET,
+        clientId: process.env.EXPO_PUBLIC_CLIENT_ID,
+        clientSecret: process.env.EXPO_PUBLIC_CLIENT_SECRET,
         scopes: [
             'user-read-currently-playing',
             'user-read-recently-played',
