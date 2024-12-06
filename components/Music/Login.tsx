@@ -12,7 +12,7 @@ export default function Login() {
         tokenEndpoint: 'https://accounts.spotify.com/api/token',
     }
     const config : AuthSession.AuthRequestConfig = {
-        responseType: AuthSession.ResponseType.Token,
+        responseType: AuthSession.ResponseType.Code,
         clientId: process.env.EXPO_PUBLIC_CLIENT_ID!,
         clientSecret: process.env.EXPO_PUBLIC_CLIENT_SECRET,
         scopes: [
@@ -33,6 +33,24 @@ export default function Login() {
     }
     const [_, response, promptAsync] = AuthSession.useAuthRequest(config, discovery);
 
+    const exchangeCode = async (code: string) => {
+        const tokenRequestConfig: AuthSession.AccessTokenRequestConfig = {
+            code,
+            clientId: process.env.EXPO_PUBLIC_CLIENT_ID!,
+            clientSecret: process.env.EXPO_PUBLIC_CLIENT_SECRET!,
+            redirectUri: AuthSession.makeRedirectUri({
+                scheme: 'myapp',
+                path: 'auth',
+            }),
+        };
+        try {
+            const { accessToken, expiresIn, refreshToken } = await AuthSession.exchangeCodeAsync(tokenRequestConfig, discovery);
+            await storeToken(accessToken, expiresIn!.toString(), refreshToken!);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     const storeToken = async (access_token: string, expires_in: string, refresh_token: string) => {
         try {
             await AsyncStorage.setItem('access_token', access_token);
@@ -47,8 +65,8 @@ export default function Login() {
 
     useEffect(() => {
         if (response?.type === 'success') {
-            const {access_token, expires_in, refresh_token} = response.params;
-            storeToken(access_token, expires_in, refresh_token);
+            const { code } = response.params;
+            exchangeCode(code);
         }
     }, [response]);
 
