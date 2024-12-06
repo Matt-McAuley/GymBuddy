@@ -74,6 +74,13 @@ const useProgramStore = create<programStoreType>((set) => ({
     setEditExercise: (newExercise) => set({ editExercise: newExercise }),
 }));
 
+const useMusicStore = create<musicStoreType>((set) => ({
+    loggedIn: false,
+    setLoggedIn: (newLoggedIn: boolean) => set({ loggedIn: newLoggedIn }),
+    accessToken: null,
+    setAccessToken: (newAccessToken: string | null) => set({ accessToken: newAccessToken }),
+}));
+
 type storeType = {
     set: number,
     setSet: (newSet: number) => void,
@@ -112,4 +119,11 @@ type programStoreType = {
     setEditExercise: (newExercise: string | null) => void,
 }
 
-export { useStore, storeType, useProgramStore };
+type musicStoreType = {
+    loggedIn: boolean,
+    setLoggedIn: (newLoggedIn: boolean) => void,
+    accessToken: string | null,
+    setAccessToken: (newAccessToken: string | null) => void,
+}
+
+export { useStore, useProgramStore, useMusicStore };

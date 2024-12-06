@@ -1,9 +1,12 @@
 import {Text, TouchableOpacity, View} from "react-native";
 import * as AuthSession from 'expo-auth-session';
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMusicStore } from "@/store";
 
 export default function Login() {
+    const {setLoggedIn, setAccessToken} = useMusicStore();
+
     const discovery = {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
         tokenEndpoint: 'https://accounts.spotify.com/api/token',
@@ -28,12 +31,15 @@ export default function Login() {
             path: 'auth',
         }),
     }
-    const [request, response, promptAsync] = AuthSession.useAuthRequest(config, discovery);
+    const [_, response, promptAsync] = AuthSession.useAuthRequest(config, discovery);
 
-    const storeToken = async (token: string) => {
+    const storeToken = async (access_token: string, expires_in: string, refresh_token: string) => {
         try {
-            await AsyncStorage.setItem('access_token', token);
-            console.log('Token stored');
+            await AsyncStorage.setItem('access_token', access_token);
+            await AsyncStorage.setItem('expiration', (Date.now() + parseInt(expires_in) * 1000).toString());
+            await AsyncStorage.setItem('refresh_token', refresh_token);
+            setAccessToken(access_token);
+            setLoggedIn(true);
         } catch (e) {
             console.log(e);
         }
@@ -41,9 +47,8 @@ export default function Login() {
 
     useEffect(() => {
         if (response?.type === 'success') {
-            const {access_token} = response.params;
-            console.log(access_token);
-            storeToken(access_token);
+            const {access_token, expires_in, refresh_token} = response.params;
+            storeToken(access_token, expires_in, refresh_token);
         }
     }, [response]);
 
