@@ -1,6 +1,7 @@
 import {Text, TouchableOpacity, View} from "react-native";
 import * as AuthSession from 'expo-auth-session';
 import {useEffect} from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
     const discovery = {
@@ -9,7 +10,7 @@ export default function Login() {
     }
     const config : AuthSession.AuthRequestConfig = {
         responseType: AuthSession.ResponseType.Token,
-        clientId: process.env.EXPO_PUBLIC_CLIENT_ID,
+        clientId: process.env.EXPO_PUBLIC_CLIENT_ID!,
         clientSecret: process.env.EXPO_PUBLIC_CLIENT_SECRET,
         scopes: [
             'user-read-currently-playing',
@@ -29,10 +30,20 @@ export default function Login() {
     }
     const [request, response, promptAsync] = AuthSession.useAuthRequest(config, discovery);
 
+    const storeToken = async (token: string) => {
+        try {
+            await AsyncStorage.setItem('access_token', token);
+            console.log('Token stored');
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     useEffect(() => {
         if (response?.type === 'success') {
             const {access_token} = response.params;
             console.log(access_token);
+            storeToken(access_token);
         }
     }, [response]);
 
