@@ -1,6 +1,6 @@
 import {Text, TouchableOpacity, View} from "react-native";
 import * as AuthSession from 'expo-auth-session';
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMusicStore } from "@/store";
 
@@ -19,11 +19,8 @@ export default function Login() {
             'user-read-currently-playing',
             'user-read-recently-played',
             'user-read-playback-state',
-            'user-top-read',
             'user-modify-playback-state',
             'streaming',
-            'user-read-email',
-            'user-read-private'
         ],
         usePKCE: false,
         redirectUri: AuthSession.makeRedirectUri({

@@ -1,12 +1,12 @@
-import {View, Text} from "react-native";
 import Login from "@/components/Music/Login";
 import {useMusicStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect} from "react";
 import * as AuthSession from "expo-auth-session";
+import MusicControl from "@/components/Music/MusicControl";
 
 export default function Music() {
-    const {loggedIn, setLoggedIn, accessToken, setAccessToken} = useMusicStore();
+    const {loggedIn, setLoggedIn, setAccessToken} = useMusicStore();
 
     const refreshToken = async (refresh_token: string) => {
         const discovery = {
@@ -18,7 +18,6 @@ export default function Music() {
             clientSecret: process.env.EXPO_PUBLIC_CLIENT_SECRET!,
         }
         const response = await AuthSession.refreshAsync(config, discovery);
-        console.log('refresh-response', response);
         return {access_token: response.accessToken, expiration: Date.now() + response.expiresIn! * 1000};
     }
 
@@ -55,8 +54,6 @@ export default function Music() {
         <Login />
     ) :
     (
-        <View>
-            <Text>Music</Text>
-        </View>
+        <MusicControl />
     );
 }
