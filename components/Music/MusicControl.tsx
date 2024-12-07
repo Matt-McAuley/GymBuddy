@@ -1,5 +1,5 @@
 import {useMusicStore} from "@/store";
-import {Image, Text, View} from "react-native";
+import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import * as Progress from 'react-native-progress';
 
@@ -8,6 +8,7 @@ export default function MusicControl() {
     const [currentlyPlaying, setCurrentlyPlaying] = useState<currentlyPlayingType | null>(null);
     const [previouslyPlayed, setPreviouslyPlayed] = useState<previouslyPlayedType | null>(null);
     const [state, setState] = useState('none'); // none, previous, active
+    const [paused, setPaused] = useState(true);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -29,6 +30,7 @@ export default function MusicControl() {
                 .then(data => {
                     if (data === null) return;
                     setState('active');
+                    setPaused(!data.is_playing);
                     setCurrentlyPlaying(data);
                 })
                 .catch(e => console.log(e));
@@ -55,27 +57,100 @@ export default function MusicControl() {
             }
             // console.log(data.items.map(((item : previouslyPlayedType)=> item.track.name)));
             setState('previous')
+            setPaused(true);
             setPreviouslyPlayed(data.items[0]);
         });
     }
 
+    const playPause = () => {
+        if (paused) {
+            fetch('https://api.spotify.com/v1/me/player/play', {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken!,
+                }
+            }).then(response => response.json())
+                .then(data => {
+                    setPaused(false);
+                })
+                .catch(e => console.log(e));
+        }
+        else {
+            console.log('pausing');
+            fetch('https://api.spotify.com/v1/me/player/pause', {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken!,
+                }
+            }).then(response => response.json())
+                .then(data => {
+                    setPaused(true);
+                })
+                .catch(e => console.log(e));
+        }
+    }
+
+    const nextSong = () => {
+        fetch('https://api.spotify.com/v1/me/player/next', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + accessToken!,
+            }
+        }).then(response => response.json())
+            .then(data => {
+                setPaused(false);
+            })
+            .catch(e => console.log(e));
+    }
+
+    const prevSong = () => {
+        fetch('https://api.spotify.com/v1/me/player/previous', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + accessToken!,
+            }
+        }).then(response => response.json())
+            .then(data => {
+                setPaused(false);
+            })
+            .catch(e => console.log(e));
+    }
+
+    const timeToString = (time: number) => {
+        return (String)(Math.floor((time / 60) % 60)).padStart(2, "0") + ":" +
+            (String)(Math.floor(time % 60)).padStart(2, "0");
+    }
+
     return (state == 'active') ? (
-        <View className={'flex justify-center items-center h-full gap-4'}>
-            <Text className={'text-center text-5xl font-bold'}>{currentlyPlaying?.item?.name}</Text>
+        <View className={'flex justify-center items-center h-full gap-4 p-5'}>
+            <Text className={'text-center text-4xl font-bold'}>{currentlyPlaying?.item?.name}</Text>
             <Image style={{height: 300, width: 300}} source={{uri: currentlyPlaying?.item?.album.images[0].url}}/>
-            <Text className={'text-2xl'}>{currentlyPlaying?.is_playing ? "Playing" : "Paused"}</Text>
-            <Text className={'text-2xl'}>{(currentlyPlaying?.progress_ms !== undefined) ? (Math.round(currentlyPlaying?.progress_ms / 1000)) : null}</Text>
-            <Progress.Bar progress={(currentlyPlaying?.progress_ms !== undefined) ? (currentlyPlaying?.progress_ms / currentlyPlaying?.item?.duration_ms) : 0} width={200} color={'black'}/>
+            <View className={'flex-row justify-between items-center gap-4'}>
+                <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.progress_ms / 1000))}</Text>
+                <Progress.Bar progress={currentlyPlaying!.progress_ms / currentlyPlaying!.item!.duration_ms} width={200} height={9} color={'black'}/>
+                <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.item!.duration_ms / 1000))}</Text>
+            </View>
+            <View className={'flex-row justify-between items-center w-80'}>
+                <TouchableOpacity onPress={prevSong}>
+                    <Image className={'h-18 w-18'} source={require('@/assets/images/music/previousSong.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={playPause}>
+                    <Image className={'h-18 w-18'} source={(!paused) ? require('@/assets/images/music/pauseSong.png') : require('@/assets/images/music/playSong.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={nextSong}>
+                    <Image className={'h-18 w-18'} source={require('@/assets/images/music/nextSong.png')}/>
+                </TouchableOpacity>
+            </View>
         </View>
     ) : (state == 'previous') ? (
-        <View className={'h-full flex justify-center items-center gap-4'}>
+        <View className={'h-full flex justify-center items-center gap-4 p-5'}>
             <Text className={'text-center text-4xl font-bold text-blue-500'}>Previously Played:</Text>
             <Text className={'text-center text-5xl font-bold'}>{previouslyPlayed?.track?.name}</Text>
             <Image style={{height: 300, width: 300}} source={{uri: previouslyPlayed?.track?.album.images[0].url}}/>
             <Text className={'text-2xl'}>Paused</Text>
         </View>
     ) : (
-        <View className={'h-full flex justify-center items-center'}>
+        <View className={'h-full flex justify-center items-center p-5'}>
             <Text className={'text-center text-5xl font-bold'}>No music playing</Text>
         </View>
     );
