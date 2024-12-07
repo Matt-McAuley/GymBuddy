@@ -2,6 +2,7 @@ import {useMusicStore} from "@/store";
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import * as Progress from 'react-native-progress';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MusicControl() {
     const {accessToken} = useMusicStore();
@@ -9,6 +10,7 @@ export default function MusicControl() {
     const [previouslyPlayed, setPreviouslyPlayed] = useState<previouslyPlayedType | null>(null);
     const [state, setState] = useState('none'); // none, previous, active
     const [paused, setPaused] = useState(true);
+    const [deviceID, setDeviceID] = useState<number | null>(null);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -22,7 +24,9 @@ export default function MusicControl() {
                     return null;
                 }
                 if (response.status === 204) {
-                    getRecentlyPlayed();
+                    if (previouslyPlayed === null) {
+                        getRecentlyPlayed();
+                    }
                     return null;
                 }
                 return response.json();
@@ -32,9 +36,23 @@ export default function MusicControl() {
                     setState('active');
                     setPaused(!data.is_playing);
                     setCurrentlyPlaying(data);
+                    setDeviceID(data.device.id);
+                    AsyncStorage.setItem('device_id', data.device.id);
                 })
                 .catch(e => console.log(e));
         }, 1000);
+    }, []);
+
+    const getDeviceID = async () => {
+        const deviceID = await AsyncStorage.getItem('device_id');
+        if (deviceID !== null) {
+            setDeviceID(parseInt(deviceID));
+            return;
+        }
+    }
+
+    useEffect(() => {
+        getDeviceID();
     }, []);
 
     const getRecentlyPlayed = async () => {
@@ -55,7 +73,6 @@ export default function MusicControl() {
             if (data.total === 0) {
                 return;
             }
-            // console.log(data.items.map(((item : previouslyPlayedType)=> item.track.name)));
             setState('previous')
             setPaused(true);
             setPreviouslyPlayed(data.items[0]);
@@ -64,29 +81,59 @@ export default function MusicControl() {
 
     const playPause = () => {
         if (paused) {
-            fetch('https://api.spotify.com/v1/me/player/play', {
+            fetch('https://api.spotify.com/v1/me/player/play',
+                {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + accessToken!,
                 }
-            }).then(response => response.json())
-                .then(data => {
-                    setPaused(false);
+            }).then(response => {
+                setPaused(false);
                 })
                 .catch(e => console.log(e));
         }
-        else {
-            console.log('pausing');
+        if (!paused) {
             fetch('https://api.spotify.com/v1/me/player/pause', {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + accessToken!,
                 }
-            }).then(response => response.json())
-                .then(data => {
+            }).then(response => {
                     setPaused(true);
                 })
                 .catch(e => console.log(e));
+        }
+    }
+
+    const transferPlayback = () => {
+        fetch('https://api.spotify.com/v1/me/player/devices', {
+            headers: {
+                Authorization: 'Bearer ' + accessToken!,
+            }
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            console.log('devices', data);
+        }).catch(e => console.log(e));
+
+        if (deviceID !== null) {
+            console.log('id', deviceID);
+            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`,
+                {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken!,
+                },
+                body: JSON.stringify({
+                    device_ids: [deviceID],
+                    play: true,
+                })
+            }).then(async response => {
+                const responseBody = await response.text();
+                console.log(responseBody);
+                console.log(response);
+                setPaused(false);
+            }).catch(e => console.log(e));
         }
     }
 
@@ -96,8 +143,7 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => response.json())
-            .then(data => {
+        }).then(response => {
                 setPaused(false);
             })
             .catch(e => console.log(e));
@@ -109,8 +155,7 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => response.json())
-            .then(data => {
+        }).then(response => {
                 setPaused(false);
             })
             .catch(e => console.log(e));
@@ -145,9 +190,19 @@ export default function MusicControl() {
     ) : (state == 'previous') ? (
         <View className={'h-full flex justify-center items-center gap-4 p-5'}>
             <Text className={'text-center text-4xl font-bold text-blue-500'}>Previously Played:</Text>
-            <Text className={'text-center text-5xl font-bold'}>{previouslyPlayed?.track?.name}</Text>
+            <Text className={'text-center text-4xl font-bold'}>{previouslyPlayed?.track?.name}</Text>
             <Image style={{height: 300, width: 300}} source={{uri: previouslyPlayed?.track?.album.images[0].url}}/>
-            <Text className={'text-2xl'}>Paused</Text>
+            <View className={'flex-row justify-between items-center w-80'}>
+                <TouchableOpacity onPress={prevSong}>
+                    <Image className={'h-18 w-18'} source={require('@/assets/images/music/previousSong.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={transferPlayback}>
+                    <Image className={'h-18 w-18'} source={(!paused) ? require('@/assets/images/music/pauseSong.png') : require('@/assets/images/music/playSong.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={nextSong}>
+                    <Image className={'h-18 w-18'} source={require('@/assets/images/music/nextSong.png')}/>
+                </TouchableOpacity>
+            </View>
         </View>
     ) : (
         <View className={'h-full flex justify-center items-center p-5'}>
@@ -167,6 +222,7 @@ type currentlyPlayingType = {
                 url: string,
             }[]
         }
+
     }
 }
 
@@ -179,5 +235,8 @@ type previouslyPlayedType = {
                 url: string,
             }[]
         }
+    },
+    context: {
+        uri: string,
     }
 }

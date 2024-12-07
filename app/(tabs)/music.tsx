@@ -46,6 +46,7 @@ export default function Music() {
         // AsyncStorage.removeItem('access_token');
         // AsyncStorage.removeItem('expiration');
         // AsyncStorage.removeItem('refresh_token');
+        // AsyncStorage.removeItem('device_id');
         // AsyncStorage.setItem('expiration', (Date.now() - 100000).toString());
         retrieveToken();
     }, []);
