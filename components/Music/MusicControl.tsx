@@ -2,6 +2,7 @@ import {useMusicStore} from "@/store";
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import Slider from "@react-native-community/slider";
+import BackgroundTimer from "react-native-background-timer";
 
 export default function MusicControl() {
     const {accessToken} = useMusicStore();
@@ -37,8 +38,37 @@ export default function MusicControl() {
                     checkIfLiked();
                 })
                 .catch(e => console.log(e));
-        }, 2500);
+
+        }, 1000);
+        return () => clearInterval(intervalId);
     }, []);
+
+    const manuallyUpdate = () => {
+        fetch('https://api.spotify.com/v1/me/player', {
+            headers: {
+                Authorization: 'Bearer ' + accessToken!,
+            }
+        }).then(response => {
+            if (response.status === 429) {
+                console.log("Rate limited 1");
+                return null;
+            }
+            if (response.status === 204) {
+                console.log("Inactive");
+                setActive(false);
+                return null;
+            }
+            return response.json();
+        })
+            .then(data => {
+                if (data === null) return;
+                setActive(true);
+                setPaused(!data.is_playing);
+                setCurrentlyPlaying(data);
+                checkIfLiked();
+            })
+            .catch(e => console.log(e));
+    }
 
     const checkIfLiked = () => {
         fetch('https://api.spotify.com/v1/me/tracks', {
@@ -64,6 +94,7 @@ export default function MusicControl() {
                 }
             }).then(response => {
                 setPaused(false);
+                manuallyUpdate();
                 })
                 .catch(e => console.log(e));
         }
@@ -88,6 +119,7 @@ export default function MusicControl() {
             }
         }).then(response => {
                 setPaused(false);
+                manuallyUpdate();
             })
             .catch(e => console.log(e));
     }
@@ -100,6 +132,7 @@ export default function MusicControl() {
             }
         }).then(response => {
                 setPaused(false);
+                manuallyUpdate();
             })
             .catch(e => console.log(e));
     }
@@ -128,7 +161,8 @@ export default function MusicControl() {
             body: JSON.stringify({
                 ids: [songId],
             })
-        }).catch(e => console.log(e));
+        }).then(response => manuallyUpdate())
+            .catch(e => console.log(e));
     }
 
     const unlike = () => {
@@ -141,21 +175,20 @@ export default function MusicControl() {
             body: JSON.stringify({
                 ids: [songId],
             })
-        }).catch(e => console.log(e));
+        }).then(response => manuallyUpdate())
+            .catch(e => console.log(e));
     }
 
     const setPosition = (position: number) => {
         fetch('https://api.spotify.com/v1/me/player/seek?' + new URLSearchParams({
-            position_ms: position.toString(),
+            position_ms: Math.round(position).toString(),
         }), {
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => {
-            console.log(response);
-        }).catch(e => console.log(e));
-
+        }).then(response => manuallyUpdate())
+            .catch(e => console.log(e));
     }
 
     const timeToString = (time: number) => {
@@ -171,8 +204,7 @@ export default function MusicControl() {
             <View className={'flex-row justify-between items-center w-full gap-4'}>
                 <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.progress_ms / 1000))}</Text>
                 <Slider style={{width: 200, height: 80}} value={currentlyPlaying!.progress_ms} minimumValue={0} maximumValue={currentlyPlaying!.item!.duration_ms}
-                        onSlidingComplete={(pos) => setPosition(pos)} tapToSeek={true}/>
-                {/*<Progress.Bar progress={currentlyPlaying!.progress_ms / currentlyPlaying!.item!.duration_ms} width={200} height={9} color={'black'}/>*/}
+                        onSlidingComplete={(pos) => setPosition(pos)} tapToSeek={true} minimumTrackTintColor={'black'} />
                 <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.item!.duration_ms / 1000))}</Text>
             </View>
             <View className={'flex-row justify-between items-center w-full'}>
@@ -193,7 +225,7 @@ export default function MusicControl() {
                 </TouchableOpacity></View>
         </View>
     ) : (
-        <View className={'h-full flex justify-center items-center p-5'}>
+        <View className={'h-96 flex justify-center items-center p-5'}>
             <Text className={'text-center text-5xl font-bold'}>No music playing</Text>
         </View>
     );
