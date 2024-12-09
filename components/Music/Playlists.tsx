@@ -44,7 +44,7 @@ export default function Playlists() {
     }
 
     return (
-        <View className={'flex-col justify-center items-center h-60'}>
+        <View className={'flex-col justify-center items-center'}>
             <View className={'flex-row w-full justify-center items-center'}>
                 <View className={'flex-1'}>
                     <Text className={'text-5xl font-bold text-center'}>Playlists</Text>
@@ -53,17 +53,19 @@ export default function Playlists() {
                     <Image source={require('@/assets/images/music/queueIcon.png')} style={{height: 50, width: 50}}/>
                 </TouchableOpacity>
             </View>
-            <ScrollView horizontal className={'h-30'} contentContainerStyle={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                {playlists.map((playlist, index) => {
-                    return (
-                        <View key={playlist.name + index} className={'gap-5'}>
-                            <TouchableOpacity onPress={() => startPlaying(playlist.uri)}>
-                                <Image source={{uri: playlist.image}} style={{width: 150, height: 150, margin: 5}}/>
-                            </TouchableOpacity>
-                        </View>
-                    )
-                })}
-            </ScrollView>
+            <View className={'h-80'}>
+                <ScrollView horizontal contentContainerStyle={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 200}}>
+                    {playlists.map((playlist, index) => {
+                        return (
+                            <View key={playlist.name + index} className={'gap-5'}>
+                                <TouchableOpacity onPress={() => startPlaying(playlist.uri)}>
+                                    <Image source={{uri: playlist.image}} style={{width: 200, height: 200, margin: 5}}/>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    })}
+                </ScrollView>
+            </View>
         </View>
     );
 }
