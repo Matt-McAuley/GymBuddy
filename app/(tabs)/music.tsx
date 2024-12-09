@@ -43,11 +43,11 @@ export default function Music() {
     }
 
     useEffect(() => {
-        // AsyncStorage.removeItem('access_token');
-        // AsyncStorage.removeItem('expiration');
-        // AsyncStorage.removeItem('refresh_token');
-        // AsyncStorage.setItem('expiration', (Date.now() - 100000).toString());
         retrieveToken();
+        const intervalId = setInterval(() => {
+            retrieveToken();
+        }, 1000);
+        return () => clearInterval(intervalId);
     }, []);
 
     return (!loggedIn) ? (
