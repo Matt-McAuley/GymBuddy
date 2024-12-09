@@ -14,9 +14,9 @@ export function getDayNamesColors(db) {
 }
 
 export function getExerciseNamesType(db) {
-    let accessory_exercises = db.getAllSync("SELECT * FROM accessory_exercises");
+    let accessory_exercises = db.getAllSync("SELECT * FROM accessory_exercises ORDER BY name");
     accessory_exercises = (accessory_exercises == null) ? [] : accessory_exercises.map((exercise) => ({name: exercise.name, isPrimary: false}));
-    let primary_exercises = db.getAllSync("SELECT * FROM primary_exercises");
+    let primary_exercises = db.getAllSync("SELECT * FROM primary_exercises ORDER BY name");
     primary_exercises = (primary_exercises == null) ? [] : primary_exercises.map((exercise) => ({name: exercise.name, isPrimary: true}));
     return (accessory_exercises.length == 0 && primary_exercises.length == 0) ? null
         : primary_exercises.concat(accessory_exercises);
