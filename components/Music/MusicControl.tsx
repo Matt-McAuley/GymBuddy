@@ -144,6 +144,20 @@ export default function MusicControl() {
         }).catch(e => console.log(e));
     }
 
+    const setPosition = (position: number) => {
+        fetch('https://api.spotify.com/v1/me/player/seek?' + new URLSearchParams({
+            position_ms: position.toString(),
+        }), {
+            method: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + accessToken!,
+            }
+        }).then(response => {
+            console.log(response);
+        }).catch(e => console.log(e));
+
+    }
+
     const timeToString = (time: number) => {
         return (String)(Math.floor((time / 60) % 60)).padStart(2, "0") + ":" +
             (String)(Math.floor(time % 60)).padStart(2, "0");
@@ -151,12 +165,13 @@ export default function MusicControl() {
 
     return (active) ? (
         <View className={'flex justify-center items-center h-full gap-4 p-7'}>
-            <Text className={'text-center text-4xl font-bold'}>{currentlyPlaying?.item?.name}</Text>
+            <Text className={'text-center text-5xl font-bold'}>{currentlyPlaying?.item?.name.split('(')[0]}</Text>
             <Text className={'text-center text-xl font-bold'}>[{currentlyPlaying?.item?.artists.map(artist => artist.name).join(', ')}]</Text>
             <Image style={{height: 300, width: 300}} source={{uri: currentlyPlaying?.item?.album.images[0].url}}/>
             <View className={'flex-row justify-between items-center w-full gap-4'}>
                 <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.progress_ms / 1000))}</Text>
-                <Slider style={{width: 200, height: 40}} minimumValue={0} maximumValue={currentlyPlaying!.item!.duration_ms}/>
+                <Slider style={{width: 200, height: 80}} value={currentlyPlaying!.progress_ms} minimumValue={0} maximumValue={currentlyPlaying!.item!.duration_ms}
+                        onSlidingComplete={(pos) => setPosition(pos)} tapToSeek={true}/>
                 {/*<Progress.Bar progress={currentlyPlaying!.progress_ms / currentlyPlaying!.item!.duration_ms} width={200} height={9} color={'black'}/>*/}
                 <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.item!.duration_ms / 1000))}</Text>
             </View>

@@ -1,11 +1,11 @@
 import MusicControl from "@/components/Music/MusicControl";
-import {View} from "react-native";
+import {ScrollView, View} from "react-native";
 
 
 export default function MusicPage() {
     return (
-        <View className={"flex-col items-center justify-center"}>
+        <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}} className={"flex-col"}>
             <MusicControl />
-        </View>
+        </ScrollView>
     );
 }
