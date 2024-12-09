@@ -2,12 +2,10 @@ import {useMusicStore} from "@/store";
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import Slider from "@react-native-community/slider";
-import BackgroundTimer from "react-native-background-timer";
 
 export default function MusicControl() {
-    const {accessToken} = useMusicStore();
+    const {accessToken, active, setActive} = useMusicStore();
     const [currentlyPlaying, setCurrentlyPlaying] = useState<currentlyPlayingType | null>(null);
-    const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(true);
     const [shuffled, setShuffled] = useState(true);
     const [liked, setLiked] = useState(false);
@@ -196,8 +194,8 @@ export default function MusicControl() {
             (String)(Math.floor(time % 60)).padStart(2, "0");
     }
 
-    return (active) ? (
-        <View className={'flex justify-center items-center h-full gap-4 p-7'}>
+    return (currentlyPlaying !== null) ? (
+        <View className={'flex justify-center items-center gap-4 p-7'}>
             <Text className={'text-center text-5xl font-bold'}>{currentlyPlaying?.item?.name.split('(')[0]}</Text>
             <Text className={'text-center text-xl font-bold'}>[{currentlyPlaying?.item?.artists.map(artist => artist.name).join(', ')}]</Text>
             <Image style={{height: 300, width: 300}} source={{uri: currentlyPlaying?.item?.album.images[0].url}}/>
@@ -224,11 +222,7 @@ export default function MusicControl() {
                     style={{tintColor: (liked) ? 'green' : 'black'}}/>
                 </TouchableOpacity></View>
         </View>
-    ) : (
-        <View className={'h-96 flex justify-center items-center p-5'}>
-            <Text className={'text-center text-5xl font-bold'}>No music playing</Text>
-        </View>
-    );
+    ) : null;
 }
 
 type currentlyPlayingType = {

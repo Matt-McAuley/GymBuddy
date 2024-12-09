@@ -23,6 +23,7 @@ export default function Login() {
             'streaming',
             'user-library-read',
             'user-library-modify',
+            'playlist-read-private'
         ],
         usePKCE: false,
         redirectUri: AuthSession.makeRedirectUri({
