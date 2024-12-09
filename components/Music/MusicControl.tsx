@@ -244,18 +244,3 @@ type currentlyPlayingType = {
         ]
     }
 }
-
-type previouslyPlayedType = {
-    track: {
-        name: string,
-        duration_ms: number,
-        album: {
-            images: {
-                url: string,
-            }[]
-        }
-    },
-    context: {
-        uri: string,
-    }
-}

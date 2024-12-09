@@ -47,11 +47,12 @@ const useStore = create<storeType>((set) => ({
         return (exercise as superSetType).exercise1 !== undefined;
     },
 
-    exercise: () => useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise],
-    prevExercise: () => (useStore.getState().currentExercise > 0) ?
+    exercise: (): primaryExerciseType | accessoryExerciseType | superSetType =>
+        useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise],
+    prevExercise: ():  primaryExerciseType | accessoryExerciseType | superSetType | null => (useStore.getState().currentExercise > 0) ?
         useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise - 1]
         : null,
-    nextExercise: () => (useStore.getState().currentExercise < useStore.getState().program!.days[useStore.getState().currentDay].exercises.length-1) ?
+    nextExercise: (): primaryExerciseType | accessoryExerciseType | superSetType | null => (useStore.getState().currentExercise < useStore.getState().program!.days[useStore.getState().currentDay].exercises.length-1) ?
         useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise + 1]
         : null,
 
