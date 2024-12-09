@@ -67,7 +67,7 @@ export default function MusicControl() {
                 headers: {
                     Authorization: 'Bearer ' + accessToken!,
                 }
-            }).then(response => {
+            }).then(_ => {
                 setPaused(false);
                 updateCurrent();
                 })
@@ -79,7 +79,7 @@ export default function MusicControl() {
                 headers: {
                     Authorization: 'Bearer ' + accessToken!,
                 }
-            }).then(response => {
+            }).then(_ => {
                     setPaused(true);
                 })
                 .catch(e => console.log(e));
@@ -92,7 +92,7 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => {
+        }).then(_ => {
                 setPaused(false);
                 updateCurrent();
             })
@@ -105,7 +105,7 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => {
+        }).then(_ => {
                 setPaused(false);
                 updateCurrent();
             })
@@ -121,7 +121,7 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => {
+        }).then(_ => {
             setShuffled(!shuffled);
         }).catch(e => console.log(e));
     }
@@ -136,7 +136,7 @@ export default function MusicControl() {
             body: JSON.stringify({
                 ids: [songId],
             })
-        }).then(response => updateCurrent())
+        }).then(_ => updateCurrent())
             .catch(e => console.log(e));
     }
 
@@ -150,7 +150,7 @@ export default function MusicControl() {
             body: JSON.stringify({
                 ids: [songId],
             })
-        }).then(response => updateCurrent())
+        }).then(_ => updateCurrent())
             .catch(e => console.log(e));
     }
 
@@ -162,7 +162,7 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => updateCurrent())
+        }).then(_ => currentlyPlaying!.progress_ms = Math.round(position))
             .catch(e => console.log(e));
     }
 
