@@ -82,6 +82,8 @@ const useMusicStore = create<musicStoreType>((set) => ({
     setAccessToken: (newAccessToken: string | null) => set({ accessToken: newAccessToken }),
     active: false,
     setActive: (newActive: boolean) => set({ active: newActive }),
+    inQueue: false,
+    setInQueue: (newInQueue: boolean) => set({ inQueue: newInQueue }),
 }));
 
 type storeType = {
@@ -129,6 +131,8 @@ type musicStoreType = {
     setAccessToken: (newAccessToken: string | null) => void,
     active: boolean,
     setActive: (newActive: boolean) => void,
+    inQueue: boolean,
+    setInQueue: (newInQueue: boolean) => void,
 }
 
 export { useStore, useProgramStore, useMusicStore };

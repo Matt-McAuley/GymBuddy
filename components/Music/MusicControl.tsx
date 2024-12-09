@@ -4,44 +4,21 @@ import {useEffect, useState} from "react";
 import Slider from "@react-native-community/slider";
 
 export default function MusicControl() {
-    const {accessToken, active, setActive} = useMusicStore();
+    const {accessToken, setActive} = useMusicStore();
     const [currentlyPlaying, setCurrentlyPlaying] = useState<currentlyPlayingType | null>(null);
     const [paused, setPaused] = useState(true);
     const [shuffled, setShuffled] = useState(true);
     const [liked, setLiked] = useState(false);
 
     useEffect(() => {
+        updateCurrent();
         const intervalId = setInterval(() => {
-            fetch('https://api.spotify.com/v1/me/player', {
-                headers: {
-                    Authorization: 'Bearer ' + accessToken!,
-                }
-            }).then(response => {
-                if (response.status === 429) {
-                    console.log("Rate limited 1");
-                    return null;
-                }
-                if (response.status === 204) {
-                    console.log("Inactive");
-                    setActive(false);
-                    return null;
-                }
-                return response.json();
-            })
-                .then(data => {
-                    if (data === null) return;
-                    setActive(true);
-                    setPaused(!data.is_playing);
-                    setCurrentlyPlaying(data);
-                    checkIfLiked();
-                })
-                .catch(e => console.log(e));
-
+            updateCurrent();
         }, 1000);
         return () => clearInterval(intervalId);
     }, []);
 
-    const manuallyUpdate = () => {
+    const updateCurrent = () => {
         fetch('https://api.spotify.com/v1/me/player', {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
@@ -92,7 +69,7 @@ export default function MusicControl() {
                 }
             }).then(response => {
                 setPaused(false);
-                manuallyUpdate();
+                updateCurrent();
                 })
                 .catch(e => console.log(e));
         }
@@ -117,7 +94,7 @@ export default function MusicControl() {
             }
         }).then(response => {
                 setPaused(false);
-                manuallyUpdate();
+                updateCurrent();
             })
             .catch(e => console.log(e));
     }
@@ -130,7 +107,7 @@ export default function MusicControl() {
             }
         }).then(response => {
                 setPaused(false);
-                manuallyUpdate();
+                updateCurrent();
             })
             .catch(e => console.log(e));
     }
@@ -159,7 +136,7 @@ export default function MusicControl() {
             body: JSON.stringify({
                 ids: [songId],
             })
-        }).then(response => manuallyUpdate())
+        }).then(response => updateCurrent())
             .catch(e => console.log(e));
     }
 
@@ -173,7 +150,7 @@ export default function MusicControl() {
             body: JSON.stringify({
                 ids: [songId],
             })
-        }).then(response => manuallyUpdate())
+        }).then(response => updateCurrent())
             .catch(e => console.log(e));
     }
 
@@ -185,7 +162,7 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(response => manuallyUpdate())
+        }).then(response => updateCurrent())
             .catch(e => console.log(e));
     }
 
