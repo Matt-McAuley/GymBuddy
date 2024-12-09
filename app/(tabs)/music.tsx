@@ -3,7 +3,7 @@ import {useMusicStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect} from "react";
 import * as AuthSession from "expo-auth-session";
-import MusicControl from "@/components/Music/MusicControl";
+import MusicPage from "@/components/Music/MusicPage";
 
 export default function Music() {
     const {loggedIn, setLoggedIn, setAccessToken} = useMusicStore();
@@ -46,7 +46,6 @@ export default function Music() {
         // AsyncStorage.removeItem('access_token');
         // AsyncStorage.removeItem('expiration');
         // AsyncStorage.removeItem('refresh_token');
-        // AsyncStorage.removeItem('device_id');
         // AsyncStorage.setItem('expiration', (Date.now() - 100000).toString());
         retrieveToken();
     }, []);
@@ -55,6 +54,6 @@ export default function Music() {
         <Login />
     ) :
     (
-        <MusicControl />
+        <MusicPage />
     );
 }

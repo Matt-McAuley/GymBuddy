@@ -21,6 +21,8 @@ export default function Login() {
             'user-read-playback-state',
             'user-modify-playback-state',
             'streaming',
+            'user-library-read',
+            'user-library-modify',
         ],
         usePKCE: false,
         redirectUri: AuthSession.makeRedirectUri({
