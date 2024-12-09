@@ -1,12 +1,11 @@
 import {useMusicStore} from "@/store";
-import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
-import * as Progress from 'react-native-progress';
+import Slider from "@react-native-community/slider";
 
 export default function MusicControl() {
     const {accessToken} = useMusicStore();
     const [currentlyPlaying, setCurrentlyPlaying] = useState<currentlyPlayingType | null>(null);
-    const [previouslyPlayed, setPreviouslyPlayed] = useState<previouslyPlayedType | null>(null);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(true);
     const [shuffled, setShuffled] = useState(true);
@@ -157,7 +156,8 @@ export default function MusicControl() {
             <Image style={{height: 300, width: 300}} source={{uri: currentlyPlaying?.item?.album.images[0].url}}/>
             <View className={'flex-row justify-between items-center w-full gap-4'}>
                 <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.progress_ms / 1000))}</Text>
-                <Progress.Bar progress={currentlyPlaying!.progress_ms / currentlyPlaying!.item!.duration_ms} width={200} height={9} color={'black'}/>
+                <Slider style={{width: 200, height: 40}} minimumValue={0} maximumValue={currentlyPlaying!.item!.duration_ms}/>
+                {/*<Progress.Bar progress={currentlyPlaying!.progress_ms / currentlyPlaying!.item!.duration_ms} width={200} height={9} color={'black'}/>*/}
                 <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.item!.duration_ms / 1000))}</Text>
             </View>
             <View className={'flex-row justify-between items-center w-full'}>
