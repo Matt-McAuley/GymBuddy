@@ -1,5 +1,5 @@
 import {useMusicStore} from "@/store";
-import {Image, Text, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import * as Progress from 'react-native-progress';
 
@@ -38,7 +38,7 @@ export default function MusicControl() {
                     checkIfLiked();
                 })
                 .catch(e => console.log(e));
-        }, 5000);
+        }, 2500);
     }, []);
 
     const checkIfLiked = () => {
@@ -153,6 +153,7 @@ export default function MusicControl() {
     return (active) ? (
         <View className={'flex justify-center items-center h-full gap-4 p-7'}>
             <Text className={'text-center text-4xl font-bold'}>{currentlyPlaying?.item?.name}</Text>
+            <Text className={'text-center text-xl font-bold'}>[{currentlyPlaying?.item?.artists.map(artist => artist.name).join(', ')}]</Text>
             <Image style={{height: 300, width: 300}} source={{uri: currentlyPlaying?.item?.album.images[0].url}}/>
             <View className={'flex-row justify-between items-center w-full gap-4'}>
                 <Text className={'text-2xl'}>{timeToString(Math.round(currentlyPlaying!.progress_ms / 1000))}</Text>
@@ -194,8 +195,12 @@ type currentlyPlayingType = {
             images: {
                 url: string,
             }[]
-        }
-
+        },
+        artists: [
+            {
+                name: string,
+            }
+        ]
     }
 }
 
