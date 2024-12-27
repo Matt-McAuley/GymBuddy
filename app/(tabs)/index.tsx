@@ -2,14 +2,14 @@ import {View, Text, ScrollView, Dimensions} from "react-native";
 import Timer from "@/components/Home/Timer";
 import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 
 export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
-    const {width, height} = Dimensions.get('window');
+    const {width} = Dimensions.get('window');
     useDrizzleStudio(db);
 
     useEffect(() => {
@@ -18,12 +18,6 @@ export default function Index() {
         addMockProgram(db);
         setProgram(getProgram(db));
     }, []);
-
-    useEffect(() => {
-        if (program == null) return;
-        if (program.days.length == 0) return;
-        const firstDay = program.days[0];
-    }, [program]);
 
     useEffect(() => {
         if (program == null) return;

@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 
 export default function primaryExercise(props: primaryExercisePropsType) {
     const {set, nextExerciseHandler, prevExerciseHandler, isAccessoryExercise,
-        isPrimaryExercise, isSuperSet, currentScheme, setCurrentScheme} = useStore();
+        isPrimaryExercise, currentScheme, setCurrentScheme} = useStore();
     const {exercise, nextExercise, prevExercise} = props;
 
     const superSetNameDisplay = (superSet : superSetType) => {
