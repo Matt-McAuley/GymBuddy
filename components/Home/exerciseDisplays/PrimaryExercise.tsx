@@ -39,7 +39,7 @@ export default function primaryExercise(props: primaryExercisePropsType) {
     return (
             <View
             className={'flex-col justify-center items-center h-60 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
-            <Text className={'font-bold text-5xl'}>{exercise.name} : {weight[set - 1]}</Text>
+            <Text className={'font-bold text-4xl'}>{exercise.name} : {weight[set - 1]}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center w-30'}>
                     <TouchableOpacity onPress={prevExerciseHandler}>

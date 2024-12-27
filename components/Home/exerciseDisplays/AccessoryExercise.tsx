@@ -17,7 +17,7 @@ export default function ExerciseDisplay(props: accessoryExercisePropsType) {
 
     return (
         <View className={'flex-col justify-center items-center h-60 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
-            <Text className={'font-bold text-5xl'}>{exercise.name} : {exercise.weight}</Text>
+            <Text className={'font-bold text-4xl'}>{exercise.name} : {exercise.weight}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center w-40'}>
                     <TouchableOpacity onPress={prevExerciseHandler}>
