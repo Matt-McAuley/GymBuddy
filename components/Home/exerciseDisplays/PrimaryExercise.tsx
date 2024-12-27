@@ -59,7 +59,6 @@ export default function primaryExercise() {
                         prevExercise.weight_1 : (isAccessoryExercise(prevExercise)) ? prevExercise.weight : superSetWeightDisplay(prevExercise)}</Text>
                 </View>
                 <Dropdown style={styles.dropdown} selectedTextStyle={styles.selected}
-                          label={'Scheme'}
                           data={[
                               {label: '5 x 5', value: '5 x 5'},
                               {label: '5 x 3', value: '5 x 3'},

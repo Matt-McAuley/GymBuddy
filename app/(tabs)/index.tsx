@@ -1,4 +1,4 @@
-import {View, Text} from "react-native";
+import {View, Text, ScrollView, Dimensions} from "react-native";
 import Timer from "@/components/Home/Timer";
 import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
@@ -13,6 +13,7 @@ export default function Index() {
     const [day, setDay] = useState("");
     const [color, setColor] = useState("");
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
+    const {width, height} = Dimensions.get('window');
     useDrizzleStudio(db);
 
     useEffect(() => {
@@ -37,15 +38,15 @@ export default function Index() {
         setColor(program.days[currentDay].color);
     }, [currentDay]);
 
-    const panRight = Gesture.Fling().onEnd(() => {
-        runOnJS(setCurrentExercise)(0);
-        runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.min(program!.days.length-1, currentDay + 1)));
-    }).direction(Directions.LEFT);
-
-    const panLeft = Gesture.Fling().onEnd(() => {
-        runOnJS(setCurrentExercise)(0);
-        runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.max(0, currentDay - 1)));
-    }).direction(Directions.RIGHT);
+    // const panRight = Gesture.Fling().onEnd(() => {
+    //     runOnJS(setCurrentExercise)(0);
+    //     runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.min(program!.days.length-1, currentDay + 1)));
+    // }).direction(Directions.LEFT);
+    //
+    // const panLeft = Gesture.Fling().onEnd(() => {
+    //     runOnJS(setCurrentExercise)(0);
+    //     runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.max(0, currentDay - 1)));
+    // }).direction(Directions.RIGHT);
 
 
   return (program == null) ? (
@@ -59,25 +60,35 @@ export default function Index() {
             </View>
         ) :
       (
-          <GestureHandlerRootView>
-              <GestureDetector gesture={panLeft}>
-              <GestureDetector gesture={panRight}>
-                <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
-                    <Text className={`text-6xl font-bold`} style={{color: color}}>{day}</Text>
-                    {(program.days[currentDay].exercises.length == 0) ?
-                        <View className={'flex-col h-full justify-center items-center'}>
-                            <Text className={'text-3xl'}>No Exercises in Day</Text>
-                        </View>
-                        :
-                        <>
-                            <Timer/>
-                            <Counter/>
-                            <ExerciseDisplay/>
-                        </>
-                    }
-                </View>
-              </GestureDetector>
-              </GestureDetector>
-          </GestureHandlerRootView>
+          // <GestureHandlerRootView>
+          //     <GestureDetector gesture={panLeft}>
+          //     <GestureDetector gesture={panRight}>
+          //       <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
+          //           <Text className={`text-6xl font-bold`} style={{color: color}}>{day}</Text>
+          //           {(program.days[currentDay].exercises.length == 0) ?
+          //               <View className={'flex-col h-full justify-center items-center'}>
+          //                   <Text className={'text-3xl'}>No Exercises in Day</Text>
+          //               </View>
+          //               :
+          //               <>
+          //                   <Timer/>
+          //                   <Counter/>
+          //                   <ExerciseDisplay/>
+          //               </>
+          //           }
+          //       </View>
+          //     </GestureDetector>
+          //     </GestureDetector>
+          // </GestureHandlerRootView>
+          <ScrollView snapToInterval={width} decelerationRate={'fast'} horizontal>
+              {program.days.map((day, index) => (
+                  <View>
+                      <Timer />
+                      <Counter />
+                      <ExerciseDisplay />
+                  </View>
+                  ))}
+          </ScrollView>
+
   );
 }

@@ -25,8 +25,10 @@ export default function ExerciseDisplay() {
             : (isSuperSet(exercise)) ? <SuperSet /> : null;
 
     return (
-        <Animated.View style={{transform: [{ translateX: slideAnim }]}}>
+        // <Animated.View style={{transform: [{ translateX: slideAnim }]}}>
+        <>
             {exerciseComponent}
-        </Animated.View>
+        </>
+        // </Animated.View>
     )
 }
