@@ -1,12 +1,10 @@
 import {View, Text, Image, TouchableOpacity, StyleSheet} from "react-native";
 import {useStore} from "@/store";
-import {superSetType} from "@/types/programType";
+import {accessoryExerciseType, primaryExerciseType, superSetType} from "@/types/programType";
 
-export default function ExerciseDisplay() {
+export default function ExerciseDisplay(props: superSetExercisePropsType) {
     const {nextExerciseHandler, prevExerciseHandler, isAccessoryExercise, isPrimaryExercise, isSuperSet} = useStore();
-    const exercise = useStore((state) => state.exercise());
-    const prevExercise = useStore((state) => state.prevExercise());
-    const nextExercise = useStore((state) => state.nextExercise());
+    const {exercise, nextExercise, prevExercise} = props;
 
     const superSetNameDisplay = (superSet : superSetType) => {
         return superSet.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & '
@@ -17,7 +15,7 @@ export default function ExerciseDisplay() {
         return superSet.exercise1.weight + ' | ' + superSet.exercise2.weight;
     }
 
-    return (isSuperSet(exercise)) ? (
+    return (
         <View className={'flex-col justify-center items-center h-70 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
             <Text className={'font-bold text-4xl'}>{exercise.exercise1.name} : {exercise.exercise1.weight}</Text>
             <Text className={'font-bold text-4xl'}>{exercise.exercise2.name} : {exercise.exercise2.weight}</Text>
@@ -44,5 +42,11 @@ export default function ExerciseDisplay() {
                 </View>
             </View>
         </View>
-    ) : null;
+    );
+}
+
+type superSetExercisePropsType = {
+    exercise: superSetType;
+    nextExercise: primaryExerciseType | accessoryExerciseType | superSetType | null;
+    prevExercise: primaryExerciseType | accessoryExerciseType | superSetType | null;
 }

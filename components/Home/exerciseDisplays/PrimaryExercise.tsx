@@ -1,15 +1,13 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Dropdown} from "react-native-element-dropdown";
 import {useStore} from "@/store";
-import {superSetType} from "@/types/programType";
+import {accessoryExerciseType, primaryExerciseType, superSetType} from "@/types/programType";
 import {useEffect, useState} from "react";
 
-export default function primaryExercise() {
+export default function primaryExercise(props: primaryExercisePropsType) {
     const {set, nextExerciseHandler, prevExerciseHandler, isAccessoryExercise,
         isPrimaryExercise, isSuperSet, currentScheme, setCurrentScheme} = useStore();
-    const exercise = useStore((state) => state.exercise());
-    const prevExercise = useStore((state) => state.prevExercise());
-    const nextExercise = useStore((state) => state.nextExercise());
+    const {exercise, nextExercise, prevExercise} = props;
 
     const superSetNameDisplay = (superSet : superSetType) => {
         return superSet.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & '
@@ -21,7 +19,6 @@ export default function primaryExercise() {
     }
 
     const getWeight = () => {
-        if (isPrimaryExercise(exercise)) {
             if (currentScheme === '5 x 5') {
                 return [exercise.weight_1, exercise.weight_1, exercise.weight_1, exercise.weight_1, exercise.weight_1];
             }
@@ -31,19 +28,15 @@ export default function primaryExercise() {
             else {
                 return [exercise.weight_1, exercise.weight_2, exercise.weight_3, exercise.weight_2, exercise.weight_1];
             }
-        } else if (isAccessoryExercise(exercise)) {
-            return new Array(5).fill(exercise.weight);
-        } else {
-            return new Array(5).fill(exercise.exercise1.weight + '|' + exercise.exercise2.weight);
         }
-    }
+
     const [weight, setWeight] = useState(getWeight());
 
     useEffect(() => {
         setWeight(getWeight());
     }, [exercise, currentScheme]);
 
-    return (isPrimaryExercise(exercise)) ? (
+    return (
             <View
             className={'flex-col justify-center items-center h-60 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
             <Text className={'font-bold text-5xl'}>{exercise.name} : {weight[set - 1]}</Text>
@@ -83,7 +76,7 @@ export default function primaryExercise() {
                 </View>
             </View>
         </View>
-    ) : null;
+    );
 }
 
 const styles = StyleSheet.create({
@@ -117,3 +110,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     }
 });
+
+type primaryExercisePropsType = {
+    exercise: primaryExerciseType;
+    nextExercise: primaryExerciseType | accessoryExerciseType | superSetType | null;
+    prevExercise: primaryExerciseType | accessoryExerciseType | superSetType | null;
+}
