@@ -21,7 +21,6 @@ export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
                     :
                     <TouchableOpacity onPress={() => {
                         setCurrentDay(0);
-                        setCurrentExercise(0);
                         setCurrentScheme('5 x 5');
                         setCurrentProgram(db, programName);
                         setProgram(getProgram(db))}}>

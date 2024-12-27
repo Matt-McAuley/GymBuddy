@@ -159,7 +159,6 @@ export default function EditExercise() {
                                               text2Style: {fontSize: 30},
                                           });
                                           setCurrentDay(0);
-                                          setCurrentExercise(0);
                                           setProgram(getProgram(db));
                                       }
                                       else {
@@ -183,7 +182,6 @@ export default function EditExercise() {
                                               text2Style: {fontSize: 30},
                                           });
                                           setCurrentDay(0);
-                                          setCurrentExercise(0);
                                           setProgram(getProgram(db));
                                       }
                                       else {
@@ -207,7 +205,6 @@ export default function EditExercise() {
                                       text2: "Exercise Deleted",
                                   });
                                   setCurrentDay(0);
-                                  setCurrentExercise(0);
                                   setProgram(getProgram(db));
                                   setEditExercise(null);
                               }}>

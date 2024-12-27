@@ -62,7 +62,6 @@ export default function EditProgram() {
                                       if (currentProgram?.name == originalName)
                                           setCurrentProgram(db, programData.name);
                                       setCurrentDay(0);
-                                      setCurrentExercise(0);
                                       setProgram(getProgram(db));
                                   }
                                   else {
@@ -88,7 +87,6 @@ export default function EditProgram() {
                                   });
                                   setNullIfCurrentProgram(db, originalName);
                                   setCurrentDay(0);
-                                  setCurrentExercise(0);
                                   setProgram(getProgram(db));
                                   setEditProgram(null);
                               }}>

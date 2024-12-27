@@ -151,7 +151,6 @@ export default function EditDay() {
                                           text2Style: {fontSize: 30},
                                       });
                                       setCurrentDay(0);
-                                      setCurrentExercise(0);
                                       setProgram(getProgram(db));
                                   }
                                   else {
@@ -174,7 +173,6 @@ export default function EditDay() {
                                       text2: "Program Deleted",
                                   });
                                   setCurrentDay(0);
-                                  setCurrentExercise(0);
                                   setProgram(getProgram(db));
                                   setEditDay(null);
                               }}>

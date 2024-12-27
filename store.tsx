@@ -8,7 +8,10 @@ const useStore = create<storeType>((set) => ({
     currentExercise: 0,
     setCurrentExercise: (newExercise: number) => set({ currentExercise: newExercise }),
     currentDay: 0,
-    setCurrentDay: (newDay: number) => set({ currentDay: newDay }),
+    setCurrentDay: (newDay: number) => {
+        set({currentDay: newDay});
+        set({currentExercise: 0});
+    },
     currentScheme: '5 x 5',
     setCurrentScheme: (newScheme: string) => set({ currentScheme: newScheme }),
 

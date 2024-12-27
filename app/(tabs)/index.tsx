@@ -2,7 +2,7 @@ import {View, Text, ScrollView, Dimensions} from "react-native";
 import Timer from "@/components/Home/Timer";
 import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
@@ -10,6 +10,7 @@ import {useStore} from "@/store";
 export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
     const {width} = Dimensions.get('window');
+    const scrollRef = useRef<ScrollView>(null);
     useDrizzleStudio(db);
 
     useEffect(() => {
@@ -31,6 +32,11 @@ export default function Index() {
         setCurrentExercise(0);
     }
 
+    useEffect(() => {
+        if (scrollRef.current == null || currentDay != 0) return;
+        scrollRef.current.scrollTo({x: currentDay * width, y: 0, animated: false});
+    }, [currentDay]);
+
 
   return (program == null) ? (
       <View className={'flex justify-center items-center h-full'}>
@@ -43,7 +49,7 @@ export default function Index() {
             </View>
         ) :
       (
-          <ScrollView snapToInterval={width} decelerationRate={'fast'} horizontal onScroll={handleScroll} pagingEnabled>
+          <ScrollView ref={scrollRef} snapToInterval={width} decelerationRate={'fast'} horizontal onScroll={handleScroll} pagingEnabled>
               {program.days.map((day, index) => (
                   <View key={index} style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
                       <View className={'h-20'}>
