@@ -30,6 +30,13 @@ export default function Index() {
         if (program.days.length == 0) return;
     }, [currentDay]);
 
+    const handleScroll = (event: any) => {
+        const contentOffsetX = event.nativeEvent.contentOffset.x;
+        const day = Math.min(Math.max(Math.ceil(contentOffsetX / width), 0), program!.days.length - 1);
+        setCurrentDay(day);
+        setCurrentExercise(0);
+    }
+
 
   return (program == null) ? (
       <View className={'flex justify-center items-center h-full'}>
@@ -42,9 +49,9 @@ export default function Index() {
             </View>
         ) :
       (
-          <ScrollView snapToInterval={width} decelerationRate={'fast'} horizontal>
+          <ScrollView snapToInterval={width} decelerationRate={'fast'} horizontal onScroll={handleScroll} pagingEnabled>
               {program.days.map((day, index) => (
-                  <View key={index} className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
+                  <View key={index} style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
                       <Text className={`text-6xl font-bold`} style={{color: day.color}}>{day.name}</Text>
                              {(day.exercises.length == 0) ?
                                  <View className={'flex-col h-full justify-center items-center'}>
