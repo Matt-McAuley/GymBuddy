@@ -6,12 +6,8 @@ import {useEffect, useState} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
-import {GestureDetector, Gesture, GestureHandlerRootView, Directions} from "react-native-gesture-handler";
-import {runOnJS} from "react-native-reanimated";
 
 export default function Index() {
-    const [day, setDay] = useState("");
-    const [color, setColor] = useState("");
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
     const {width, height} = Dimensions.get('window');
     useDrizzleStudio(db);
@@ -27,26 +23,12 @@ export default function Index() {
         if (program == null) return;
         if (program.days.length == 0) return;
         const firstDay = program.days[0];
-        setColor(firstDay!.color);
-        setDay(firstDay!.name);
     }, [program]);
 
     useEffect(() => {
         if (program == null) return;
         if (program.days.length == 0) return;
-        setDay(program.days[currentDay].name);
-        setColor(program.days[currentDay].color);
     }, [currentDay]);
-
-    // const panRight = Gesture.Fling().onEnd(() => {
-    //     runOnJS(setCurrentExercise)(0);
-    //     runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.min(program!.days.length-1, currentDay + 1)));
-    // }).direction(Directions.LEFT);
-    //
-    // const panLeft = Gesture.Fling().onEnd(() => {
-    //     runOnJS(setCurrentExercise)(0);
-    //     runOnJS(setCurrentDay)(Math.min(program!.days.length-1, Math.max(0, currentDay - 1)));
-    // }).direction(Directions.RIGHT);
 
 
   return (program == null) ? (
@@ -60,32 +42,21 @@ export default function Index() {
             </View>
         ) :
       (
-          // <GestureHandlerRootView>
-          //     <GestureDetector gesture={panLeft}>
-          //     <GestureDetector gesture={panRight}>
-          //       <View className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
-          //           <Text className={`text-6xl font-bold`} style={{color: color}}>{day}</Text>
-          //           {(program.days[currentDay].exercises.length == 0) ?
-          //               <View className={'flex-col h-full justify-center items-center'}>
-          //                   <Text className={'text-3xl'}>No Exercises in Day</Text>
-          //               </View>
-          //               :
-          //               <>
-          //                   <Timer/>
-          //                   <Counter/>
-          //                   <ExerciseDisplay/>
-          //               </>
-          //           }
-          //       </View>
-          //     </GestureDetector>
-          //     </GestureDetector>
-          // </GestureHandlerRootView>
           <ScrollView snapToInterval={width} decelerationRate={'fast'} horizontal>
               {program.days.map((day, index) => (
-                  <View>
-                      <Timer />
-                      <Counter />
-                      <ExerciseDisplay />
+                  <View key={index} className={'flex-1 flex-col justify-start items-center p-3 gap-4'}>
+                      <Text className={`text-6xl font-bold`} style={{color: day.color}}>{day.name}</Text>
+                             {(day.exercises.length == 0) ?
+                                 <View className={'flex-col h-full justify-center items-center'}>
+                                     <Text className={'text-3xl'}>No Exercises in Day</Text>
+                                 </View>
+                                 :
+                                 <>
+                                     <Timer/>
+                                     <Counter/>
+                                     <ExerciseDisplay/>
+                                 </>
+                             }
                   </View>
                   ))}
           </ScrollView>
