@@ -46,7 +46,11 @@ export default function Index() {
           <ScrollView snapToInterval={width} decelerationRate={'fast'} horizontal onScroll={handleScroll} pagingEnabled>
               {program.days.map((day, index) => (
                   <View key={index} style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
-                      <Text className={`text-6xl font-bold`} style={{color: day.color}}>{day.name}</Text>
+                      <View className={'h-20'}>
+                      <ScrollView horizontal contentContainerStyle={{alignItems: 'center', height: '100%'}}>
+                        <Text className={`text-center text-6xl font-bold`} style={{color: day.color}}>{day.name}</Text>
+                      </ScrollView>
+                      </View>
                              {(day.exercises.length == 0) ?
                                  <View className={'flex-col h-full justify-center items-center'}>
                                      <Text className={'text-3xl'}>No Exercises in Day</Text>
