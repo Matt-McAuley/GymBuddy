@@ -1,12 +1,14 @@
 import {useMusicStore} from "@/store";
 import {Image, Text, TouchableOpacity, View} from "react-native";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Slider from "@react-native-community/slider";
 
 export default function MusicControl() {
     const {accessToken, setActive} = useMusicStore();
     const [currentlyPlaying, setCurrentlyPlaying] = useState<currentlyPlayingType | null>(null);
+    const currentlyPlayingRef = useRef(currentlyPlaying);
     const [paused, setPaused] = useState(true);
+    const pausedRef = useRef(paused);
     const [shuffled, setShuffled] = useState(true);
     const [liked, setLiked] = useState(false);
 
@@ -43,6 +45,44 @@ export default function MusicControl() {
                 checkIfLiked();
             })
             .catch(e => console.log(e));
+    }
+
+    useEffect(() => {
+        pausedRef.current = paused;
+    }, [paused]);
+
+    useEffect(() => {
+        currentlyPlayingRef.current = currentlyPlaying;
+    }, [currentlyPlaying]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            console.log(pausedRef.current);
+            if (pausedRef.current) {
+                quickPoll();
+                setPosition(currentlyPlayingRef.current!.progress_ms-200);
+            }
+        }, 3000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const quickPoll = () => {
+        fetch('https://api.spotify.com/v1/me/player/play',
+            {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken!,
+                }
+            }).then(_ => {
+            fetch('https://api.spotify.com/v1/me/player/pause',
+                {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken!,
+                    }
+                }).then().catch(e => console.log(e));
+        }).catch(e => console.log(e));
     }
 
     const checkIfLiked = () => {
