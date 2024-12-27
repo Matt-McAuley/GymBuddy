@@ -3,11 +3,12 @@ import PrimaryExercise from '@/components/Home/exerciseDisplays/PrimaryExercise'
 import AccessoryExercise from '@/components/Home/exerciseDisplays/AccessoryExercise';
 import SuperSet from '@/components/Home/exerciseDisplays/SuperSet';
 
-export default function ExerciseDisplay() {
-    const {isAccessoryExercise, isPrimaryExercise, isSuperSet} = useStore();
-    const exercise = useStore((state) => state.exercise());
-    const prevExercise = useStore((state) => state.prevExercise());
-    const nextExercise = useStore((state) => state.nextExercise());
+export default function ExerciseDisplay(props: ExerciseDisplayProps) {
+    const {isAccessoryExercise, isPrimaryExercise, isSuperSet, program} = useStore();
+    const {currentExercise, currentDay} = props;
+    const exercise = program!.days[currentDay].exercises[currentExercise];
+    const prevExercise = (currentExercise > 0) ? program!.days[currentDay].exercises[currentExercise - 1] : null;
+    const nextExercise = (currentExercise < program!.days[currentDay].exercises.length-1) ? program!.days[currentDay].exercises[currentExercise + 1] : null;
 
     const exerciseComponent =
         (isPrimaryExercise(exercise)) ? <PrimaryExercise exercise={exercise} nextExercise={nextExercise} prevExercise={prevExercise}/>
@@ -19,4 +20,9 @@ export default function ExerciseDisplay() {
             {exerciseComponent}
         </>
     )
+}
+
+type ExerciseDisplayProps = {
+    currentExercise: number,
+    currentDay: number
 }

@@ -1,11 +1,11 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import {Dropdown} from "react-native-element-dropdown";
 import {useStore} from "@/store";
 import {accessoryExerciseType, primaryExerciseType, superSetType} from "@/types/programType";
 import {useEffect, useState} from "react";
 
 export default function primaryExercise(props: primaryExercisePropsType) {
-    const {set, nextExerciseHandler, prevExerciseHandler, isAccessoryExercise,
+    const {set, isAccessoryExercise,
         isPrimaryExercise, currentScheme, setCurrentScheme} = useStore();
     const {exercise, nextExercise, prevExercise} = props;
 
@@ -38,14 +38,10 @@ export default function primaryExercise(props: primaryExercisePropsType) {
 
     return (
             <View
-            className={'flex-col justify-center items-center h-60 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>
+            className={'flex-col justify-between items-center h-60 w-full bg-amber-50 border-4 border-black p-7 rounded-2xl'}>
             <Text className={'font-bold text-4xl'}>{exercise.name} : {weight[set - 1]}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
-                <View className={'flex-col justify-center items-center w-30'}>
-                    <TouchableOpacity onPress={prevExerciseHandler}>
-                        <Image className={"h-18 w-18"}
-                               source={require("@/assets/images/exerciseDisplay/leftArrow.png")}/>
-                    </TouchableOpacity>
+                <View className={'flex-col justify-center items-center'}>
                     <Text className={'text-2xl'}>{(prevExercise == null) ? 'None' : (isPrimaryExercise(prevExercise)) ?
                         prevExercise.name : (isAccessoryExercise(prevExercise)) ? prevExercise.name : superSetNameDisplay(prevExercise)}</Text>
                     <Text className={'text-2xl'}>{(prevExercise == null) ? 'X' : (isPrimaryExercise(prevExercise)) ?
@@ -64,11 +60,7 @@ export default function primaryExercise(props: primaryExercisePropsType) {
                                   <Text style={styles.itemText}>{item.label}</Text>
                               </View>)}
                           onChange={(item) => setCurrentScheme(item.value)}/>
-                <View className={'flex-col justify-center items-center w-30'}>
-                    <TouchableOpacity onPress={nextExerciseHandler}>
-                        <Image className={"h-18 w-18"}
-                               source={require("@/assets/images/exerciseDisplay/rightArrow.png")}/>
-                    </TouchableOpacity>
+                <View className={'flex-col justify-center items-center'}>
                     <Text className={'text-2xl'}>{(nextExercise == null) ? 'None' : (isPrimaryExercise(nextExercise)) ?
                         nextExercise.name : (isAccessoryExercise(nextExercise)) ? nextExercise.name : superSetNameDisplay(nextExercise)}</Text>
                     <Text className={'text-2xl'}>{(nextExercise == null) ? 'X' : (isPrimaryExercise(nextExercise)) ?
