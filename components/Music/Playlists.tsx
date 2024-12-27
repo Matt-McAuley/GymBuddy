@@ -19,7 +19,7 @@ export default function Playlists() {
             return response.json();
         }).then(data => {
             if (data === null) return;
-            setPlaylists(data.items.filter((item : any) => item !== null).map((playlist: any) => {
+            setPlaylists(data.items.reverse().filter((item : any) => item !== null).map((playlist: any) => {
                 return {
                     name: playlist.name,
                     id: playlist.id,
