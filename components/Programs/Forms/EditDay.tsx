@@ -14,7 +14,7 @@ import {getProgram} from "@/db/dbFunctions";
 
 export default function EditDay() {
     const {setEditDay, editDay} = useProgramStore();
-    const {db, setProgram, setCurrentDay, setCurrentExercise} = useStore();
+    const {db, setProgram, setCurrentDay, reset} = useStore();
     const [dayData, setDayData] = useState<dayDataType>(getDayByName(db, editDay!));
     const originalName = getDayByName(db, editDay!).name;
     const primaryExercises = getPrimaryExercises(db);
@@ -150,7 +150,7 @@ export default function EditDay() {
                                           text1Style: {fontSize: 30},
                                           text2Style: {fontSize: 30},
                                       });
-                                      setCurrentDay(0);
+                                      reset();
                                       setProgram(getProgram(db));
                                   }
                                   else {
@@ -172,7 +172,7 @@ export default function EditDay() {
                                       text1: "Success",
                                       text2: "Program Deleted",
                                   });
-                                  setCurrentDay(0);
+                                  reset();
                                   setProgram(getProgram(db));
                                   setEditDay(null);
                               }}>

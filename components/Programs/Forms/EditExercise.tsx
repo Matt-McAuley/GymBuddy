@@ -11,7 +11,7 @@ import {getProgram} from "@/db/dbFunctions";
 
 export default function EditExercise() {
     const {setEditExercise, editExercise} = useProgramStore();
-    const {db, setCurrentExercise, setCurrentDay, setProgram} = useStore();
+    const {db, reset, setProgram} = useStore();
     const [primaryExerciseData, setPrimaryExerciseData] = useState<primaryExerciseDataType | null>(getPrimaryExerciseByName(db, editExercise!));
     const [accessoryExerciseData, setAccessoryExerciseData] = useState<accessoryExerciseDataType | null>(getAccessoryExerciseByName(db, editExercise!));
     const [isPrimary, _] = useState<boolean>(primaryExerciseData != null);
@@ -158,7 +158,7 @@ export default function EditExercise() {
                                               text1Style: {fontSize: 30},
                                               text2Style: {fontSize: 30},
                                           });
-                                          setCurrentDay(0);
+                                          reset();
                                           setProgram(getProgram(db));
                                       }
                                       else {
@@ -181,7 +181,7 @@ export default function EditExercise() {
                                               text1Style: {fontSize: 30},
                                               text2Style: {fontSize: 30},
                                           });
-                                          setCurrentDay(0);
+                                          reset();
                                           setProgram(getProgram(db));
                                       }
                                       else {
@@ -204,7 +204,7 @@ export default function EditExercise() {
                                       text1: "Success",
                                       text2: "Exercise Deleted",
                                   });
-                                  setCurrentDay(0);
+                                  reset();
                                   setProgram(getProgram(db));
                                   setEditExercise(null);
                               }}>

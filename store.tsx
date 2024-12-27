@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import {accessoryExerciseType, superSetType, primaryExerciseType, programType} from "@/types/programType";
 import * as SQLite from "expo-sqlite";
+import {useRef} from "react";
+import {ScrollView} from "react-native";
 
 const useStore = create<storeType>((set) => ({
     set: 1,
@@ -14,6 +16,15 @@ const useStore = create<storeType>((set) => ({
     },
     currentScheme: '5 x 5',
     setCurrentScheme: (newScheme: string) => set({ currentScheme: newScheme }),
+    timesReset: 0,
+    setTimesReset: (newTimesReset: number) => set({ timesReset: newTimesReset }),
+    reset: () => {
+        set({ set: 1 });
+        set({ currentExercise: 0 });
+        set({ currentDay: 0 });
+        set({ currentScheme: '5 x 5' });
+        set({ timesReset: useStore.getState().timesReset + 1 });
+    },
 
     nextExerciseHandler: () => {
         const currentExercise = useStore.getState().currentExercise;
@@ -98,6 +109,9 @@ type storeType = {
     setCurrentDay: (newDay: number) => void,
     currentScheme: string,
     setCurrentScheme: (newScheme: string) => void,
+    timesReset: number,
+    setTimesReset: (newTimesReset: number) => void,
+    reset: () => void,
     nextExerciseHandler: () => void,
     prevExerciseHandler: () => void,
     program: programType | null,

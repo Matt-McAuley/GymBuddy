@@ -7,7 +7,7 @@ import {getProgram} from "@/db/dbFunctions";
 export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
     const programName = props.programName;
     const db = SQLite.openDatabaseSync('programs.db');
-    const {program, setProgram, setCurrentDay, setCurrentExercise, setCurrentScheme} = useStore();
+    const {program, setProgram, reset} = useStore();
     const {setEditProgram} = useProgramStore();
 
     return (
@@ -20,8 +20,7 @@ export default function ProgramDisplayCard(props: ProgramDisplayCardPropsType) {
                     <Image className={'w-15 h-15 bg-green-500 rounded-2xl'} style={{tintColor: 'black', marginLeft: 20}} source={require('@/assets/images/programs/selected.png')}/>
                     :
                     <TouchableOpacity onPress={() => {
-                        setCurrentDay(0);
-                        setCurrentScheme('5 x 5');
+                        reset();
                         setCurrentProgram(db, programName);
                         setProgram(getProgram(db))}}>
                         <Image className={'w-15 h-15 rounded-2xl'} style={{borderColor: 'gray', borderWidth: 2, tintColor: 'gray', marginLeft: 20}} source={require('@/assets/images/programs/selected.png')}/>

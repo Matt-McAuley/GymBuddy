@@ -8,9 +8,9 @@ import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 
 export default function Index() {
-    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise} = useStore();
+    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset} = useStore();
     const {width} = Dimensions.get('window');
-    const scrollRef = useRef<ScrollView>(null);
+    const scrollRef = useRef<ScrollView | null>(null);
     useDrizzleStudio(db);
 
     useEffect(() => {
@@ -27,16 +27,13 @@ export default function Index() {
 
     const handleScroll = (event: any) => {
         const contentOffsetX = event.nativeEvent.contentOffset.x;
-        const day = Math.min(Math.max(Math.ceil(contentOffsetX / width), 0), program!.days.length - 1);
+        const day = Math.min(Math.max(Math.ceil((contentOffsetX-195) / width), 0), program!.days.length - 1);
         setCurrentDay(day);
-        setCurrentExercise(0);
     }
 
     useEffect(() => {
-        if (scrollRef.current == null || currentDay != 0) return;
-        scrollRef.current.scrollTo({x: currentDay * width, y: 0, animated: false});
-    }, [currentDay]);
-
+        scrollRef.current?.scrollTo({x: currentDay * width, y: 0, animated: false});
+    }, [timesReset]);
 
   return (program == null) ? (
       <View className={'flex justify-center items-center h-full'}>
