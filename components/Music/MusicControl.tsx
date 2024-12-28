@@ -2,15 +2,17 @@ import {useMusicStore} from "@/store";
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useRef, useState} from "react";
 import Slider from "@react-native-community/slider";
+import { VolumeManager } from "react-native-volume-manager";
 
 export default function MusicControl() {
     const {accessToken, setActive} = useMusicStore();
     const [currentlyPlaying, setCurrentlyPlaying] = useState<currentlyPlayingType | null>(null);
     const currentlyPlayingRef = useRef(currentlyPlaying);
-    const [paused, setPaused] = useState(true);
+    const [paused, setPaused] = useState(false);
     const pausedRef = useRef(paused);
     const [shuffled, setShuffled] = useState(true);
     const [liked, setLiked] = useState(false);
+    const [volume, setVolume] = useState(1);
 
     useEffect(() => {
         updateCurrent();
@@ -40,7 +42,7 @@ export default function MusicControl() {
             .then(data => {
                 if (data === null) return;
                 setActive(true);
-                setPaused(!data.is_playing);
+                // setPaused(!data.is_playing);
                 setCurrentlyPlaying(data);
                 checkIfLiked();
             })
@@ -57,9 +59,8 @@ export default function MusicControl() {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            console.log(pausedRef.current);
             if (pausedRef.current) {
-                quickPoll();
+                // quickPoll();
                 setPosition(currentlyPlayingRef.current!.progress_ms-200);
             }
         }, 3000);
@@ -97,6 +98,19 @@ export default function MusicControl() {
                 }
                 else setLiked(false);
             }).catch(e => console.log(e));
+    }
+
+    const fakePause = () => {
+        VolumeManager.getVolume().then(vol => {
+            setVolume(vol.volume);
+        });
+        setPaused(true);
+        VolumeManager.setVolume(0.0);
+    }
+
+    const fakePlay = () => {
+        setPaused(false);
+        VolumeManager.setVolume(volume);
     }
 
     const playPause = () => {
@@ -228,7 +242,7 @@ export default function MusicControl() {
                 </TouchableOpacity><TouchableOpacity onPress={prevSong}>
                     <Image className={'h-18 w-18'} source={require('@/assets/images/music/previousSong.png')}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={playPause}>
+                <TouchableOpacity onPress={(paused) ? fakePlay : fakePause}>
                     <Image className={'h-18 w-18'} source={(!paused) ? require('@/assets/images/music/pauseSong.png') : require('@/assets/images/music/playSong.png')}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={nextSong}>
@@ -243,6 +257,12 @@ export default function MusicControl() {
 }
 
 type currentlyPlayingType = {
+    device: {
+        id: string,
+        type: string,
+        volume_percent: number,
+        supports_volume: boolean,
+    },
     is_playing: boolean,
     progress_ms: number,
     item: {
@@ -259,5 +279,5 @@ type currentlyPlayingType = {
                 name: string,
             }
         ]
-    }
+    },
 }
