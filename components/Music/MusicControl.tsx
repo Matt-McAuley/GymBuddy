@@ -29,7 +29,7 @@ export default function MusicControl() {
             }
         }).then(response => {
             if (response.status === 429) {
-                console.log("Rate limited 1");
+                console.log("Rate limited");
                 return null;
             }
             if (response.status === 204) {
@@ -42,7 +42,6 @@ export default function MusicControl() {
             .then(data => {
                 if (data === null) return;
                 setActive(true);
-                // setPaused(!data.is_playing);
                 setCurrentlyPlaying(data);
                 checkIfLiked();
             })
@@ -60,10 +59,9 @@ export default function MusicControl() {
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (pausedRef.current) {
-                // quickPoll();
-                setPosition(currentlyPlayingRef.current!.progress_ms-200);
+                setPosition(currentlyPlayingRef.current!.progress_ms-900);
             }
-        }, 3000);
+        }, 1000);
 
         return () => clearInterval(intervalId);
     }, []);
