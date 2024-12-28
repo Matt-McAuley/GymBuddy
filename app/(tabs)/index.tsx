@@ -11,7 +11,7 @@ export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset} = useStore();
     const {width} = Dimensions.get('window');
     const dayScrollRef = useRef<ScrollView | null>(null);
-    const exerciseScrollRef = useRef<ScrollView | null>(null);
+    const exerciseScrollRefs = useRef<{ [key: number]: ScrollView | null }>({});
     useDrizzleStudio(db);
 
     useEffect(() => {
@@ -29,7 +29,12 @@ export default function Index() {
     const handleDayScroll = (event: any) => {
         const contentOffsetX = event.nativeEvent.contentOffset.x;
         const day = Math.min(Math.max(Math.ceil((contentOffsetX-195) / width), 0), program!.days.length - 1);
-        setCurrentDay(day);
+        if (day != currentDay) {
+            Object.keys(exerciseScrollRefs.current).forEach((key) => {
+                exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: 0, y: 0, animated: false});
+            });
+            setCurrentDay(day);
+        }
     }
 
     const handleExerciseScroll = (event: any) => {
@@ -39,8 +44,10 @@ export default function Index() {
     }
 
     useEffect(() => {
-        dayScrollRef.current?.scrollTo({x: currentDay * width, y: 0, animated: false});
-        exerciseScrollRef.current?.scrollTo({x: 0, y: 0, animated: false});
+        Object.keys(exerciseScrollRefs.current).forEach((key) => {
+            exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: 0, y: 0, animated: false});
+        });
+        dayScrollRef.current?.scrollTo({x: 0, y: 0, animated: false});
     }, [timesReset]);
 
   return (program == null) ? (
@@ -70,7 +77,7 @@ export default function Index() {
                                  <>
                                      <Timer/>
                                      <Counter/>
-                                     <ScrollView ref={exerciseScrollRef} horizontal snapToInterval={width} decelerationRate={'fast'} pagingEnabled onScroll={handleExerciseScroll}>
+                                     <ScrollView ref={(ref) => (exerciseScrollRefs.current[dayIndex] = ref)} horizontal snapToInterval={width} decelerationRate={'fast'} pagingEnabled onScroll={handleExerciseScroll}>
                                          {day.exercises.map((exercise, exerciseIndex) => (
                                              <View key={exerciseIndex} style={{width: width-20, marginRight: 20, padding: 3}}>
                                                  <ExerciseDisplay currentExercise={exerciseIndex} currentDay={dayIndex}/>
