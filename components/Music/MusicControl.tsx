@@ -10,7 +10,6 @@ export default function MusicControl() {
     const currentlyPlayingRef = useRef(currentlyPlaying);
     const [paused, setPaused] = useState(false);
     const pausedRef = useRef(paused);
-    const [shuffled, setShuffled] = useState(true);
     const [liked, setLiked] = useState(false);
     const [volume, setVolume] = useState(1);
 
@@ -167,7 +166,7 @@ export default function MusicControl() {
     }
 
     const shuffle = () => {
-        const shuffle = (shuffled) ? 'false' : 'true';
+        const shuffle = (currentlyPlayingRef.current?.shuffle_state) ? 'false' : 'true';
         fetch('https://api.spotify.com/v1/me/player/shuffle?' + new URLSearchParams({
             state: shuffle,
         }), {
@@ -175,8 +174,6 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(_ => {
-            setShuffled(!shuffled);
         }).catch(e => console.log(e));
     }
 
@@ -238,7 +235,7 @@ export default function MusicControl() {
             </View>
             <View className={'flex-row justify-between items-center w-full'}>
                 <TouchableOpacity onPress={shuffle}>
-                    <Image className={'h-13 w-13'} source={require('@/assets/images/music/shuffleIcon.png')} style={{tintColor: (shuffled) ? 'green' : 'black'}}/>
+                    <Image className={'h-13 w-13'} source={require('@/assets/images/music/shuffleIcon.png')} style={{tintColor: (currentlyPlaying!.shuffle_state) ? 'green' : 'black'}}/>
                 </TouchableOpacity><TouchableOpacity onPress={prevSong}>
                     <Image className={'h-18 w-18'} source={require('@/assets/images/music/previousSong.png')}/>
                 </TouchableOpacity>
@@ -263,6 +260,7 @@ type currentlyPlayingType = {
         volume_percent: number,
         supports_volume: boolean,
     },
+    shuffle_state: boolean,
     is_playing: boolean,
     progress_ms: number,
     item: {
