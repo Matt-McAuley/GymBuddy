@@ -58,7 +58,7 @@ export default function MusicControl() {
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (pausedRef.current) {
-                setPosition(currentlyPlayingRef.current!.progress_ms-900);
+                setPosition(currentlyPlayingRef.current!.progress_ms-1000);
             }
         }, 1000);
 
@@ -206,6 +206,7 @@ export default function MusicControl() {
     }
 
     const setPosition = (position: number) => {
+        currentlyPlaying!.progress_ms = Math.round(position);
         fetch('https://api.spotify.com/v1/me/player/seek?' + new URLSearchParams({
             position_ms: Math.round(position).toString(),
         }), {
@@ -213,8 +214,8 @@ export default function MusicControl() {
             headers: {
                 Authorization: 'Bearer ' + accessToken!,
             }
-        }).then(_ => currentlyPlaying!.progress_ms = Math.round(position))
-            .catch(e => console.log(e));
+        }).catch(e => console.log(e));
+        currentlyPlaying!.progress_ms = Math.round(position);
     }
 
     const timeToString = (time: number) => {
