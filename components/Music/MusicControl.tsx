@@ -17,6 +17,9 @@ export default function MusicControl() {
         updateCurrent();
         const intervalId = setInterval(() => {
             updateCurrent();
+            if (pausedRef.current) {
+                setPosition(currentlyPlayingRef.current!.progress_ms-1000);
+            }
         }, 1000);
         return () => clearInterval(intervalId);
     }, []);
@@ -54,16 +57,6 @@ export default function MusicControl() {
     useEffect(() => {
         currentlyPlayingRef.current = currentlyPlaying;
     }, [currentlyPlaying]);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            if (pausedRef.current) {
-                setPosition(currentlyPlayingRef.current!.progress_ms-1000);
-            }
-        }, 1000);
-
-        return () => clearInterval(intervalId);
-    }, []);
 
     const quickPoll = () => {
         fetch('https://api.spotify.com/v1/me/player/play',
