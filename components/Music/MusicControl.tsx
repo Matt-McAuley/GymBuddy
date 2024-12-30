@@ -91,8 +91,7 @@ export default function MusicControl() {
             }
         }).then(response => response.json())
             .then(data => {
-                if (data.items.some((item: { track: { id: string; }; }) => item.track.id === currentlyPlaying?.item?.id)) {
-                    console.log('liked')
+                if (data.items.some((item: { track: { id: string; }; }) => item.track.id === currentlyPlayingRef.current?.item?.id)) {
                     setLiked(true);
                 }
                 else setLiked(false);
