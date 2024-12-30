@@ -3,6 +3,7 @@ import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useRef, useState} from "react";
 import Slider from "@react-native-community/slider";
 import { VolumeManager } from "react-native-volume-manager";
+import BackgroundService from 'react-native-background-actions';
 
 export default function MusicControl() {
     const {accessToken, setActive} = useMusicStore();
@@ -13,7 +14,28 @@ export default function MusicControl() {
     const [liked, setLiked] = useState(false);
     const [volume, setVolume] = useState(1);
 
+    const backgroundTask = async () => {
+        await new Promise( async (resolve) => {
+            for (let i = 0; BackgroundService.isRunning(); i++) {
+                console.log(i);
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+        });
+    }
+
     useEffect(() => {
+        BackgroundService.start(backgroundTask, {
+            taskName: 'MusicControl',
+            taskTitle: 'Music Control',
+            taskDesc: 'Control your music from the background',
+            taskIcon: {
+                name: '',
+                type: '',
+            },
+            color: '#ffffff',
+            parameters: {
+                delay: 1000,
+            }});
         updateCurrent();
         const intervalId = setInterval(() => {
             updateCurrent();
