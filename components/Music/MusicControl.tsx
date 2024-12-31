@@ -14,36 +14,35 @@ export default function MusicControl() {
     const [liked, setLiked] = useState(false);
     const [volume, setVolume] = useState(1);
 
-    const backgroundTask = async () => {
+    const backgroundPauseLoop = async () => {
         await new Promise( async (resolve) => {
-            for (let i = 0; BackgroundService.isRunning(); i++) {
-                console.log(i);
+            while (BackgroundService.isRunning()) {
+                if (pausedRef.current) {
+                    setPosition(currentlyPlayingRef.current!.progress_ms-1000);
+                }
                 await new Promise((resolve) => setTimeout(resolve, 1000));
             }
         });
     }
 
     useEffect(() => {
-        BackgroundService.start(backgroundTask, {
-            taskName: 'MusicControl',
+        BackgroundService.start(backgroundPauseLoop, {
+            taskName: 'Music Control',
             taskTitle: 'Music Control',
-            taskDesc: 'Control your music from the background',
+            taskDesc: 'Music Control',
             taskIcon: {
                 name: '',
                 type: '',
-            },
-            color: '#ffffff',
-            parameters: {
-                delay: 1000,
             }});
         updateCurrent();
         const intervalId = setInterval(() => {
             updateCurrent();
-            if (pausedRef.current) {
-                setPosition(currentlyPlayingRef.current!.progress_ms-1000);
-            }
+
         }, 1000);
-        return () => clearInterval(intervalId);
+        return () => {
+            clearInterval(intervalId);
+            BackgroundService.stop();
+        }
     }, []);
 
     const updateCurrent = () => {
@@ -221,7 +220,8 @@ export default function MusicControl() {
     }
 
     const setPosition = (position: number) => {
-        currentlyPlaying!.progress_ms = Math.round(position);
+        if (currentlyPlaying !== null)
+            setCurrentlyPlaying({...currentlyPlaying, progress_ms: Math.round(position)});
         fetch('https://api.spotify.com/v1/me/player/seek?' + new URLSearchParams({
             position_ms: Math.round(position).toString(),
         }), {
@@ -230,7 +230,8 @@ export default function MusicControl() {
                 Authorization: 'Bearer ' + accessToken!,
             }
         }).catch(e => console.log(e));
-        currentlyPlaying!.progress_ms = Math.round(position);
+        if (currentlyPlaying !== null)
+            setCurrentlyPlaying({...currentlyPlaying, progress_ms: Math.round(position)});
     }
 
     const timeToString = (time: number) => {
