@@ -58,7 +58,7 @@ export default function Playlists() {
                     <Image source={require('@/assets/images/music/queueIcon.png')} style={{height: 50, width: 50}}/>
                 </TouchableOpacity>
             </View>
-            <View className={'h-80'}>
+            <View style={{height: 230}}>
                 <ScrollView horizontal contentContainerStyle={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 200}}>
                     {playlists.map((playlist, index) => {
                         return (
