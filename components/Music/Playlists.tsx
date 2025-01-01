@@ -1,10 +1,11 @@
 import {View, Text, Image, ScrollView, TouchableOpacity} from "react-native";
 import {useEffect, useState} from "react";
 import {useMusicStore} from "@/store";
+import {VolumeManager} from "react-native-volume-manager";
 
 
 export default function Playlists() {
-    const {accessToken, setInQueue} = useMusicStore();
+    const {accessToken, setInQueue, setPaused, volume} = useMusicStore();
     const [playlists, setPlaylists] = useState<playlistType[]>([]);
 
     useEffect(() => {
@@ -40,7 +41,11 @@ export default function Playlists() {
             body: JSON.stringify({
                 context_uri: playlistURI
             })
-        }).catch(e => console.log(e));
+        }).then(_ => {
+            setPaused(false);
+            VolumeManager.setVolume(volume);
+        })
+            .catch(e => console.log(e));
     }
 
     return (

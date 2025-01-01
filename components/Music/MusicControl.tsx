@@ -6,13 +6,11 @@ import { VolumeManager } from "react-native-volume-manager";
 import BackgroundService from 'react-native-background-actions';
 
 export default function MusicControl() {
-    const {accessToken, setActive} = useMusicStore();
+    const {accessToken, setActive, paused, setPaused, volume, setVolume} = useMusicStore();
     const [currentlyPlaying, setCurrentlyPlaying] = useState<currentlyPlayingType | null>(null);
     const currentlyPlayingRef = useRef(currentlyPlaying);
-    const [paused, setPaused] = useState(false);
     const pausedRef = useRef(paused);
     const [liked, setLiked] = useState(false);
-    const [volume, setVolume] = useState(1);
 
     const backgroundPauseLoop = async () => {
         await new Promise( async (resolve) => {
@@ -160,9 +158,8 @@ export default function MusicControl() {
         }).then(_ => {
                 setPaused(false);
                 updateCurrent();
-            })
+            }).then(_ => fakePlay())
             .catch(e => console.log(e));
-        fakePlay();
     }
 
     const prevSong = () => {
@@ -174,9 +171,8 @@ export default function MusicControl() {
         }).then(_ => {
                 setPaused(false);
                 updateCurrent();
-            })
+            }).then(_ => fakePlay())
             .catch(e => console.log(e));
-        fakePlay();
     }
 
     const shuffle = () => {

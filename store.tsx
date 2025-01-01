@@ -72,6 +72,10 @@ const useMusicStore = create<musicStoreType>((set) => ({
     setActive: (newActive: boolean) => set({ active: newActive }),
     inQueue: false,
     setInQueue: (newInQueue: boolean) => set({ inQueue: newInQueue }),
+    paused: false,
+    setPaused: (newPaused: boolean) => set({ paused: newPaused }),
+    volume: 1,
+    setVolume: (newVolume: number) => set({ volume: newVolume }),
 }));
 
 type storeType = {
@@ -120,6 +124,10 @@ type musicStoreType = {
     setActive: (newActive: boolean) => void,
     inQueue: boolean,
     setInQueue: (newInQueue: boolean) => void,
+    paused: boolean,
+    setPaused: (newPaused: boolean) => void,
+    volume: number,
+    setVolume: (newVolume: number) => void,
 }
 
 export { useStore, useProgramStore, useMusicStore };
