@@ -1,16 +1,16 @@
 export function getProgramNames(db) : string[] {
     const programs = db.getAllSync("SELECT * FROM programs ORDER BY name");
-    return (programs == null) ? null : programs.map((program) => (program.name));
+    return programs.map((program) => (program.name));
 }
 
 export function getDayNames(db) : string[] {
     const days = db.getAllSync("SELECT * FROM days ORDER BY name");
-    return (days == null) ? null : days.map((day) => (day.name));
+    return days.map((day) => (day.name));
 }
 
 export function getDayNamesColors(db) {
     const days = db.getAllSync("SELECT * FROM days ORDER BY name");
-    return (days == null) ? null : days.map((day) => ({name: day.name, color: day.color}));
+    return days.map((day) => ({name: day.name, color: day.color}));
 }
 
 export function getExerciseNamesType(db) {
@@ -18,8 +18,7 @@ export function getExerciseNamesType(db) {
     accessory_exercises = (accessory_exercises == null) ? [] : accessory_exercises.map((exercise) => ({name: exercise.name, isPrimary: false}));
     let primary_exercises = db.getAllSync("SELECT * FROM primary_exercises ORDER BY name");
     primary_exercises = (primary_exercises == null) ? [] : primary_exercises.map((exercise) => ({name: exercise.name, isPrimary: true}));
-    return (accessory_exercises.length == 0 && primary_exercises.length == 0) ? null
-        : primary_exercises.concat(accessory_exercises);
+    return primary_exercises.concat(accessory_exercises);
 }
 
 export function setCurrentProgram(db, programName: string | null) {
