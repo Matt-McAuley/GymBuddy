@@ -22,6 +22,11 @@ export function getExerciseNamesType(db) {
 }
 
 export function setCurrentProgram(db, programName: string | null) {
+    const currentProgram = db.getFirstSync("SELECT * FROM current_program");
+    if (currentProgram == null) {
+        db.runSync("INSERT INTO current_program (program) VALUES (?)", programName);
+        return;
+    }
     db.runSync("UPDATE current_program SET program = ?", [programName]);
 }
 
