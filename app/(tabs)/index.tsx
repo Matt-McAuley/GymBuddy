@@ -15,9 +15,9 @@ export default function Index() {
     useDrizzleStudio(db);
 
     useEffect(() => {
-        dbTeardown(db);
-        dbSetup(db);
-        addMockProgram(db);
+        // dbTeardown(db);
+        // dbSetup(db);
+        // addMockProgram(db);
         setProgram(getProgram(db));
     }, []);
 
