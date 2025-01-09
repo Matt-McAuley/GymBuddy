@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
     createNewAccessoryExercise,
     createNewPrimaryExercise,
@@ -15,6 +15,12 @@ export default function AddExercise() {
         name: null, rest: null, weight_1: null, reps_1: null, weight_2: null, reps_2: null, weight_3: null, reps_3: null});
     const [accessoryExerciseData, setAccessoryExerciseData] = useState<accessoryExerciseDataType>({
         name: null, rest: null, sets: null, weight: null, reps: null});
+
+
+    useEffect(() => {
+        setPrimaryExerciseData({name: null, rest: null, weight_1: null, reps_1: null, weight_2: null, reps_2: null, weight_3: null, reps_3: null});
+        setAccessoryExerciseData({name: null, rest: null, sets: null, weight: null, reps: null});
+    }, [isPrimary]);
 
     return (
         <ScrollView className={'p-4'}>
@@ -40,6 +46,7 @@ export default function AddExercise() {
                         className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
                         onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, name: text})}
                         placeholder={'Name'}
+                        value={primaryExerciseData.name}
                         placeholderTextColor={'gray'}>
                     </TextInput>
                     <TextInput
@@ -104,6 +111,7 @@ export default function AddExercise() {
                         className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
                         onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, name: text})}
                         placeholder={'Name'}
+                        value={accessoryExerciseData.name}
                         placeholderTextColor={'gray'}>
                     </TextInput>
                     <View className={'flex-row gap-4'}>
