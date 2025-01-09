@@ -44,25 +44,47 @@ export default function EditDay() {
                       onChange={(item) => {setDayData({...dayData, color: item.value})}}/>
             <View className={'flex-row'}>
                 <Dropdown style={styles.dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
-                          label={'Primary Exercise'}
+                          label={'Primary Exercise 1'}
                           data={primaryExercises.map((pe : string) => ({label: pe, value: pe}))}
-                          labelField='label' valueField='value' placeholder={`Primary Exercise`}
-                          value={dayData.primary_exercise} renderRightIcon={() => null}
+                          labelField='label' valueField='value' placeholder={`Primary 1`}
+                          value={dayData.primary_exercise_1} renderRightIcon={() => null}
                           renderItem={(item) => (
                               <View style={styles.item}>
                                   <Text style={styles.itemText}>{item.label}</Text>
                               </View>)}
-                          onChange={(item) => {setDayData({...dayData, primary_exercise: item.value})}}/>
+                          onChange={(item) => {setDayData({...dayData, primary_exercise_1: item.value})}}/>
                 <Dropdown style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.orderPlaceholder}
                           label={'Order'}
-                          data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
-                          labelField='label' valueField='value' placeholder={dayData.primary_exercise_order?.toString()}
-                          value={dayData.primary_exercise_order} renderRightIcon={() => null}
+                          data={[1, 2, 3, 4, 5, 6, 7, 8].map((order) => ({label: order.toString(), value: order.toString()}))}
+                          labelField='label' valueField='value' placeholder={dayData.primary_exercise_1_order?.toString()}
+                          value={dayData.primary_exercise_1_order} renderRightIcon={() => null}
                           renderItem={(item) => (
                               <View style={styles.item}>
                                   <Text style={styles.itemText}>{item.label}</Text>
                               </View>)}
-                          onChange={(item) => {setDayData({...dayData, primary_exercise_order: item.value})}}/>
+                          onChange={(item) => {setDayData({...dayData, primary_exercise_1_order: item.value})}}/>
+            </View>
+            <View className={'flex-row'}>
+                <Dropdown style={styles.dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
+                          label={'Primary Exercise 2'}
+                          data={primaryExercises.map((pe : string) => ({label: pe, value: pe}))}
+                          labelField='label' valueField='value' placeholder={`Primary 2`}
+                          value={dayData.primary_exercise_2} renderRightIcon={() => null}
+                          renderItem={(item) => (
+                              <View style={styles.item}>
+                                  <Text style={styles.itemText}>{item.label}</Text>
+                              </View>)}
+                          onChange={(item) => {setDayData({...dayData, primary_exercise_2: item.value})}}/>
+                <Dropdown style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.orderPlaceholder}
+                          label={'Order'}
+                          data={[1, 2, 3, 4, 5, 6, 7, 8].map((order) => ({label: order.toString(), value: order.toString()}))}
+                          labelField='label' valueField='value' placeholder={dayData.primary_exercise_2_order?.toString()}
+                          value={dayData.primary_exercise_2_order} renderRightIcon={() => null}
+                          renderItem={(item) => (
+                              <View style={styles.item}>
+                                  <Text style={styles.itemText}>{item.label}</Text>
+                              </View>)}
+                          onChange={(item) => {setDayData({...dayData, primary_exercise_2_order: item.value})}}/>
             </View>
             {
                 [1, 2, 3, 4].map((num) => {
@@ -80,7 +102,7 @@ export default function EditDay() {
                                       onChange={(item) => {setDayData({...dayData, [`accessory_exercise_${num}`]: item.value})}}/>
                             <Dropdown key={num + 'aeOrder'} style={styles.dropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.orderPlaceholder}
                                       label={'Order'}
-                                      data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
+                                      data={[1, 2, 3, 4, 5, 6, 7, 8].map((order) => ({label: order.toString(), value: order.toString()}))}
                                       labelField='label' valueField='value' placeholder={dayData[`accessory_exercise_${num}_order`]?.toString()}
                                       value={dayData[`accessory_exercise_${num}_order`]} renderRightIcon={() => null}
                                       renderItem={(item) => (
@@ -120,7 +142,7 @@ export default function EditDay() {
                             </View>
                             <Dropdown key={num + 'ssOrder'} style={styles.ssDropdownRight} selectedTextStyle={styles.selected} placeholderStyle={styles.orderPlaceholder}
                                       label={'Order'}
-                                      data={[1, 2, 3, 4, 5, 6, 7].map((order) => ({label: order.toString(), value: order.toString()}))}
+                                      data={[1, 2, 3, 4, 5, 6, 7, 8].map((order) => ({label: order.toString(), value: order.toString()}))}
                                       labelField='label' valueField='value' placeholder={dayData[`superset_${num}_order`]?.toString()}
                                       value={dayData[`superset_${num}_order`]} renderRightIcon={() => null}
                                       renderItem={(item) => (
@@ -135,7 +157,8 @@ export default function EditDay() {
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
                               onPress={() => {
                                   const result = replaceDay(db, originalName, dayData.name, dayData.color,
-                                      dayData.primary_exercise, dayData.primary_exercise_order,
+                                      dayData.primary_exercise_1, dayData.primary_exercise_1_order,
+                                      dayData.primary_exercise_2, dayData.primary_exercise_2_order,
                                       dayData.accessory_exercise_1, dayData.accessory_exercise_1_order,
                                       dayData.accessory_exercise_2, dayData.accessory_exercise_2_order,
                                       dayData.accessory_exercise_3, dayData.accessory_exercise_3_order,
@@ -185,8 +208,10 @@ export default function EditDay() {
 type dayDataType = {
     name: string | null,
     color: string | null,
-    primary_exercise: string | null,
-    primary_exercise_order: number,
+    primary_exercise_1: string | null,
+    primary_exercise_1_order: number,
+    primary_exercise_2: string | null,
+    primary_exercise_2_order: number,
     accessory_exercise_1: string | null,
     accessory_exercise_1_order: number,
     accessory_exercise_2: string | null,
