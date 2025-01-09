@@ -86,22 +86,22 @@ export function getAccessoryExercises(db) {
     return (accessory_exercises == null) ? null : accessory_exercises.map((accessory_exercise) => (accessory_exercise.name));
 }
 
-export function createNewDay(db, name: string | null, color: string | null, exercise_1: string | null, exercise_1_placement: number, exercise_2: string | null, exercise_2_placement: number, exercise_3: string | null, exercise_3_placement: number, exercise_4: string | null, exercise_4_placement: number, exercise_5: string | null, exercise_5_placement: number, superset_1_1: string | null, superset_1_2: string | null, superset_1_placement: number, superset_2_1: string | null, superset_2_2: string | null, superset_2_placement: number) {
+export function createNewDay(db, name: string | null, color: string | null, exercise_1: string | null, exercise_1_placement: number, exercise_2: string | null, exercise_2_placement: number, exercise_3: string | null, exercise_3_placement: number, exercise_4: string | null, exercise_4_placement: number, exercise_5: string | null, exercise_5_placement: number, exercise_6: string | null, exercise_6_placement: number, superset_1_1: string | null, superset_1_2: string | null, superset_1_placement: number, superset_2_1: string | null, superset_2_2: string | null, superset_2_placement: number) {
     const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', name);
     if (name == null) return 'Must include a day name!';
     if (color == null) return 'Must include a color!';
-    if (exercise_1 == null && exercise_2 == null && exercise_3 == null && exercise_4 == null && exercise_5 == null && superset_1_1 == null && superset_1_2 == null && superset_2_1 == null && superset_2_2 == null) return 'Must have at least one exercise!';
-    if (new Set([exercise_1_placement.toString(), exercise_2_placement.toString(), exercise_3_placement.toString(), exercise_4_placement.toString(), exercise_5_placement.toString(), superset_1_placement.toString(), superset_2_placement.toString()]).size < 7) return 'Exercise order must be unique!';
+    if (exercise_1 == null && exercise_2 == null && exercise_3 == null && exercise_4 == null && exercise_5 == null && exercise_6 == null && superset_1_1 == null && superset_1_2 == null && superset_2_1 == null && superset_2_2 == null) return 'Must have at least one exercise!';
+    if (new Set([exercise_1_placement.toString(), exercise_2_placement.toString(), exercise_3_placement.toString(), exercise_4_placement.toString(), exercise_5_placement.toString(), exercise_6_placement.toString(), superset_1_placement.toString(), superset_2_placement.toString()]).size < 7) return 'Exercise order must be unique!';
     if ((superset_1_1 == null && superset_1_2 != null) || (superset_1_1 != null && superset_1_2 == null) || (superset_2_1 == null && superset_2_2 != null) || (superset_2_1 != null && superset_2_2 == null)) return 'Superset must have two exercises!';
     if (day != null) return 'Program with that name already exists!';
-    db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
+    db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
     return 'success';
 }
 
 export function getDayByName(db, dayName: string) {
     const day = db.getFirstSync("SELECT * FROM days WHERE name = ?", dayName);
-    let maxPlacement = Math.max(day.exercise_1_placement, day.exercise_2_placement, day.exercise_3_placement, day.exercise_4_placement, day.exercise_5_placement, day.superset_1_placement, day.superset_2_placement);
+    let maxPlacement = Math.max(day.exercise_1_placement, day.exercise_2_placement, day.exercise_3_placement, day.exercise_4_placement, day.exercise_5_placement, day.exercise_6_placement, day.superset_1_placement, day.superset_2_placement);
 
     const res = {
         exercise_1_placement: 0,
@@ -109,16 +109,12 @@ export function getDayByName(db, dayName: string) {
         exercise_3_placement: 0,
         exercise_4_placement: 0,
         exercise_5_placement: 0,
+        exercise_6_placement: 0,
         superset_1_placement: 0,
         superset_2_placement: 0,
     }
-    if (day.exercise_1_placement == null) {
-        res.exercise_1_placement = maxPlacement + 1
-        maxPlacement += 1;
-    }
-    else res.exercise_1_placement = day.exercise_1_placement;
 
-    for (let i = 2; i <= 5; i++) {
+    for (let i = 1; i <= 6; i++) {
         if (day[`exercise_${i}_placement`] == null) {
             res[`exercise_${i}_placement`] = maxPlacement + 1;
             maxPlacement += 1;
@@ -137,16 +133,18 @@ export function getDayByName(db, dayName: string) {
     return {
         name: day.name,
         color: day.color,
-        primary_exercise: day.exercise_1,
-        primary_exercise_order: res.exercise_1_placement,
-        accessory_exercise_1: day.exercise_2,
-        accessory_exercise_1_order: res.exercise_2_placement,
-        accessory_exercise_2: day.exercise_3,
-        accessory_exercise_2_order: res.exercise_3_placement,
-        accessory_exercise_3: day.exercise_4,
-        accessory_exercise_3_order: res.exercise_4_placement,
-        accessory_exercise_4: day.exercise_5,
-        accessory_exercise_4_order: res.exercise_5_placement,
+        primary_exercise_1: day.exercise_1,
+        primary_exercise_1_order: res.exercise_1_placement,
+        primary_exercise_2: day.exercise_2,
+        primary_exercise_2_order: res.exercise_2_placement,
+        accessory_exercise_1: day.exercise_3,
+        accessory_exercise_1_order: res.exercise_3_placement,
+        accessory_exercise_2: day.exercise_4,
+        accessory_exercise_2_order: res.exercise_4_placement,
+        accessory_exercise_3: day.exercise_5,
+        accessory_exercise_3_order: res.exercise_5_placement,
+        accessory_exercise_4: day.exercise_6,
+        accessory_exercise_4_order: res.exercise_6_placement,
         superset_1_1: day.superset_1_1,
         superset_1_2: day.superset_1_2,
         superset_1_order: res.superset_1_placement,
@@ -160,18 +158,18 @@ export function deleteDay(db, dayName: string) {
     db.runSync('DELETE FROM days WHERE name = ?', dayName);
 }
 
-export function replaceDay(db, originalName: string, newName: string | null, color: string | null, exercise_1: string | null, exercise_1_placement: number, exercise_2: string | null, exercise_2_placement: number, exercise_3: string | null, exercise_3_placement: number, exercise_4: string | null, exercise_4_placement: number, exercise_5: string | null, exercise_5_placement: number, superset_1_1: string | null, superset_1_2: string | null, superset_1_placement: number, superset_2_1: string | null, superset_2_2: string | null, superset_2_placement: number) {
+export function replaceDay(db, originalName: string, newName: string | null, color: string | null, exercise_1: string | null, exercise_1_placement: number, exercise_2: string | null, exercise_2_placement: number, exercise_3: string | null, exercise_3_placement: number, exercise_4: string | null, exercise_4_placement: number, exercise_5: string | null, exercise_5_placement: number, exercise_6: string | null, exercise_6_placement: number, superset_1_1: string | null, superset_1_2: string | null, superset_1_placement: number, superset_2_1: string | null, superset_2_2: string | null, superset_2_placement: number) {
     if (newName == null) return 'Must include a day name!';
     if (color == null) return 'Must include a color!';
-    if (exercise_1 == null && exercise_2 == null && exercise_3 == null && exercise_4 == null && exercise_5 == null && superset_1_1 == null && superset_1_2 == null && superset_2_1 == null && superset_2_2 == null) return 'Must have at least one exercise!';
-    if (new Set([exercise_1_placement.toString(), exercise_2_placement.toString(), exercise_3_placement.toString(), exercise_4_placement.toString(), exercise_5_placement.toString(), superset_1_placement.toString(), superset_2_placement.toString()]).size < 7) return 'Exercise order must be unique!';
+    if (exercise_1 == null && exercise_2 == null && exercise_3 == null && exercise_4 == null && exercise_5 == null && exercise_6 == null && superset_1_1 == null && superset_1_2 == null && superset_2_1 == null && superset_2_2 == null) return 'Must have at least one exercise!';
+    if (new Set([exercise_1_placement.toString(), exercise_2_placement.toString(), exercise_3_placement.toString(), exercise_4_placement.toString(), exercise_5_placement.toString(), exercise_6_placement.toString(), superset_1_placement.toString(), superset_2_placement.toString()]).size < 7) return 'Exercise order must be unique!';
     if ((superset_1_1 == null && superset_1_2 != null) || (superset_1_1 != null && superset_1_2 == null) || (superset_2_1 == null && superset_2_2 != null) || (superset_2_1 != null && superset_2_2 == null)) return 'Superset must have two exercises!';
     const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', newName);
     const programsWithDay = db.getAllSync('SELECT * FROM programs WHERE Sunday = ? OR Monday = ? OR Tuesday = ? OR Wednesday = ? OR Thursday = ? OR Friday = ? OR Saturday = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName);
     if (day != null && originalName != newName) return 'Day with that name already exists!';
     db.runSync('DELETE FROM days WHERE name = ?', originalName);
-    db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newName, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
+    db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
+        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newName, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
     programsWithDay.forEach((program) => {
         ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].forEach((day) => {
             if (program[day] == originalName) db.runSync(`UPDATE programs SET ${day} = ? WHERE name = ?`, newName, program.name);
@@ -211,10 +209,10 @@ export function createNewAccessoryExercise(db, name: string | null, rest: number
 }
 
 function fixPlacements(db, name: string) {
-    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', name, name, name, name, name, name, name, name, name);
+    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR exercise_6 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', name, name, name, name, name, name, name, name, name, name);
     daysWithExercise.forEach((day) => {
-        const placements = {exercise_1: day.exercise_1_placement, exercise_2: day.exercise_2_placement, exercise_3: day.exercise_3_placement, exercise_4: day.exercise_4_placement, exercise_5: day.exercise_5_placement, superset_1: day.superset_1_placement, superset_2: day.superset_2_placement};
-        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5'].forEach((exercise) => {
+        const placements = {exercise_1: day.exercise_1_placement, exercise_2: day.exercise_2_placement, exercise_3: day.exercise_3_placement, exercise_4: day.exercise_4_placement, exercise_5: day.exercise_5_placement, exercise_6: day.exercise_6_placement, superset_1: day.superset_1_placement, superset_2: day.superset_2_placement};
+        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'exercise_6'].forEach((exercise) => {
             if (day[exercise] == name) {
                 db.runSync(`UPDATE days SET ${exercise}_placement = NULL WHERE name = ?`, day.name);
                 placements[exercise] = null;
@@ -239,7 +237,7 @@ function fixPlacements(db, name: string) {
                 i += 1;
             }
         });
-        db.runSync('UPDATE days SET exercise_1_placement = ?, exercise_2_placement = ?, exercise_3_placement = ?, exercise_4_placement = ?, exercise_5_placement = ?, superset_1_placement = ?, superset_2_placement = ? WHERE name = ?', newPlacements[0], newPlacements[1], newPlacements[2], newPlacements[3], newPlacements[4], newPlacements[5], newPlacements[6], day.name);
+        db.runSync('UPDATE days SET exercise_1_placement = ?, exercise_2_placement = ?, exercise_3_placement = ?, exercise_4_placement = ?, exercise_5_placement = ?, exercise_6_placement = ?, superset_1_placement = ?, superset_2_placement = ? WHERE name = ?', newPlacements[0], newPlacements[1], newPlacements[2], newPlacements[3], newPlacements[4], newPlacements[5], newPlacements[6], newPlacements[7], day.name);
     });
 
 }
@@ -285,14 +283,14 @@ export function replaceAccessoryExercise(db, originalName: string, newName: stri
     const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', newName);
     const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', newName);
     if (originalName != newName && (accessory_exercise != null || primary_exercise != null)) return 'Exercise with that name already exists!';
-    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
+    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR exercise_6 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
     const superSetsWithExerciseAsFirst = db.getAllSync('SELECT * FROM supersets WHERE exercise_1 = ?', originalName);
     const superSetsWithExerciseAsSecond = db.getAllSync('SELECT * FROM supersets WHERE exercise_2 = ?', originalName);
     db.runSync('DELETE FROM accessory_exercises WHERE name = ?', originalName);
     db.runSync("INSERT INTO accessory_exercises (name, rest, sets, weight, reps) VALUES " +
         "(?, ?, ?, ?, ?)", newName, rest, sets, weight, reps);
     daysWithExercise.forEach((day) => {
-        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5'].forEach((exercise) => {
+        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'exercise_6'].forEach((exercise) => {
             if (day[exercise] == originalName) db.runSync(`UPDATE days SET ${exercise} = ? WHERE name = ?`, newName, day.name);
         });
     });
@@ -321,12 +319,12 @@ export function replacePrimaryExercise(db, originalName: string, newName: string
     const accessory_exercise = db.getFirstSync('SELECT * FROM accessory_exercises WHERE name = ?', newName);
     const primary_exercise = db.getFirstSync('SELECT * FROM primary_exercises WHERE name = ?', newName);
     if (originalName != newName && (accessory_exercise != null || primary_exercise != null)) return 'Exercise with that name already exists!';
-    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
+    const daysWithExercise = db.getAllSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR exercise_6 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName, originalName);
     db.runSync('DELETE FROM primary_exercises WHERE name = ?', originalName);
     db.runSync("INSERT INTO primary_exercises (name, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3) VALUES " +
         "(?, ?, ?, ?, ?, ?, ?, ?)", newName, rest, weight_1, reps_1, weight_2, reps_2, weight_3, reps_3);
     daysWithExercise.forEach((day) => {
-        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'superset_1_1', 'superset_1_2', 'superset_2_1', 'superset_2_2'].forEach((exercise) => {
+        ['exercise_1', 'exercise_2', 'exercise_3', 'exercise_4', 'exercise_5', 'exercise_6', 'superset_1_1', 'superset_1_2', 'superset_2_1', 'superset_2_2'].forEach((exercise) => {
             if (day[exercise] == originalName) db.runSync(`UPDATE days SET ${exercise} = ? WHERE name = ?`, newName, day.name);
         });
     });

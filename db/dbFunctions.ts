@@ -49,6 +49,8 @@ const dbSetup = (db) => {
                 exercise_4_placement INTEGER NULL,
                 exercise_5 TEXT NULL,
                 exercise_5_placement INTEGER NULL,
+                exercise_6 TEXT NULL,
+                exercise_6_placement INTEGER NULL,
                 superset_1_1 TEXT NULL,
                 superset_1_2 TEXT NULL,
                 superset_1_placement INTEGER NULL,
@@ -56,10 +58,11 @@ const dbSetup = (db) => {
                 superset_2_2 TEXT NULL,
                 superset_2_placement INTEGER NULL,
                 FOREIGN KEY (exercise_1) REFERENCES primary_exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (exercise_2) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (exercise_2) REFERENCES primary_exercises(name) ON DELETE SET NULL,
                 FOREIGN KEY (exercise_3) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
                 FOREIGN KEY (exercise_4) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
                 FOREIGN KEY (exercise_5) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (exercise_6) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
                 FOREIGN KEY (superset_1_1, superset_1_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL,
                 FOREIGN KEY (superset_2_1, superset_2_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL
             );
@@ -111,20 +114,12 @@ const dbTeardown = (db) => {
         DROP TABLE IF EXISTS days;
         DROP TABLE IF EXISTS programs;
         DROP TABLE IF EXISTS current_program;
-        DROP TRIGGER IF EXISTS clear_exercise_1_placement;
-        DROP TRIGGER IF EXISTS clear_exercise_2_placement;
-        DROP TRIGGER IF EXISTS clear_exercise_3_placement;
-        DROP TRIGGER IF EXISTS clear_exercise_4_placement;
-        DROP TRIGGER IF EXISTS clear_exercise_5_placement;
-        DROP TRIGGER IF EXISTS clear_superset_1_placement;
-        DROP TRIGGER IF EXISTS clear_superset_2_placement;
     `);
 }
 
 const addMockProgram = (db) => {
     try {
-        const result = db.getFirstSync(`SELECT *
-                                        FROM primary_exercises`);
+        const result = db.getFirstSync(`SELECT * FROM primary_exercises`);
         if (result != null) return;
 
         db.execSync(`
@@ -156,8 +151,8 @@ const addMockProgram = (db) => {
 
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
             VALUES ('OHP', 180, 110, 125, 135, 5, 3, 1);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('BB Row', 180, 165, 5, 5);
+            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
+            VALUES ('BB Row', 180, 165, 185, 185, 5, 3, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB Bench', 120, 65, 12, 4);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
@@ -180,19 +175,19 @@ const addMockProgram = (db) => {
         `);
 
         db.execSync(`
-            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
-                              exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
+            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_3, exercise_3_placement,
+                              exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement)
             VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Lateral Raise', 'Tricep Extension', 4);
 
-            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
-                              exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
+            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_3, exercise_3_placement,
+                              exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement)
             VALUES ('Pull', 'blue', 'Deadlift', 1, 'BB Curl', 2, 'Lat Pull', 3, 'Hammer Curl', 'Face Pull', 4);
 
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
                               exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
             VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'Lateral Raise', 'BTB Shrug', 4);
 
-            INSERT INTO days (name, color, exercise_2, exercise_2_placement, superset_1_1, superset_1_2,
+            INSERT INTO days (name, color, exercise_3, exercise_3_placement, superset_1_1, superset_1_2,
                               superset_1_placement, superset_2_1, superset_2_2, superset_2_placement)
             VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3);
         `);
@@ -258,26 +253,42 @@ const getProgram = (db) => {
             color: day.color,
             exercises: [],
         }
-        const exerciseRes = Array(7).fill(null);
+        const exerciseRes = Array(8).fill(null);
 
-        // Get the primary exercise
-        const primaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = '${day.exercise_1}'`);
-        if (primaryExercise != null) {
-            const primaryExerciseRes: primaryExerciseType = {
-                name: primaryExercise.name,
-                rest: primaryExercise.rest,
-                weight_1: primaryExercise.weight_1,
-                weight_2: primaryExercise.weight_2,
-                weight_3: primaryExercise.weight_3,
-                reps_1: primaryExercise.reps_1,
-                reps_2: primaryExercise.reps_2,
-                reps_3: primaryExercise.reps_3
+        // Get the first primary exercise
+        const firstPrimaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = '${day.exercise_1}'`);
+        if (firstPrimaryExercise != null) {
+            const firstPrimaryExerciseRes: primaryExerciseType = {
+                name: firstPrimaryExercise.name,
+                rest: firstPrimaryExercise.rest,
+                weight_1: firstPrimaryExercise.weight_1,
+                weight_2: firstPrimaryExercise.weight_2,
+                weight_3: firstPrimaryExercise.weight_3,
+                reps_1: firstPrimaryExercise.reps_1,
+                reps_2: firstPrimaryExercise.reps_2,
+                reps_3: firstPrimaryExercise.reps_3
             }
-            exerciseRes[day.exercise_1_placement - 1] = primaryExerciseRes;
+            exerciseRes[day.exercise_1_placement - 1] = firstPrimaryExerciseRes;
+        }
+
+        // Get the second primary exercise
+        const secondPrimaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = '${day.exercise_2}'`);
+        if (secondPrimaryExercise != null) {
+            const secondPrimaryExerciseRes: primaryExerciseType = {
+                name: secondPrimaryExercise.name,
+                rest: secondPrimaryExercise.rest,
+                weight_1: secondPrimaryExercise.weight_1,
+                weight_2: secondPrimaryExercise.weight_2,
+                weight_3: secondPrimaryExercise.weight_3,
+                reps_1: secondPrimaryExercise.reps_1,
+                reps_2: secondPrimaryExercise.reps_2,
+                reps_3: secondPrimaryExercise.reps_3
+            }
+            exerciseRes[day.exercise_2_placement - 1] = secondPrimaryExerciseRes;
         }
 
         // Get the accessory exercises
-        for (let i = 2; i < 6; i++) {
+        for (let i = 3; i < 7; i++) {
             if (day[`exercise_${i}`] != null) {
                 const accessoryExercise = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = '${day[`exercise_${i}`]}'`);
                 const accessoryExerciseRes : accessoryExerciseType = {
