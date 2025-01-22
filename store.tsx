@@ -5,7 +5,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const useStore = create<storeType>((set) => ({
     set: 1,
-    setSet: (newSet: number) => set({ set: newSet }),
+    setSet: (newSet: number) => {
+        AsyncStorage.setItem('set', newSet.toString());
+        set({set: newSet});
+    },
     currentExercise: 0,
     setCurrentExercise: (newExercise: number) => {
         AsyncStorage.setItem('currentExercise', newExercise.toString());

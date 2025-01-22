@@ -9,7 +9,7 @@ import {useStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
-    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset, setCurrentScheme} = useStore();
+    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset, setCurrentScheme, setSet} = useStore();
     const {width} = Dimensions.get('window');
     const dayScrollRef = useRef<ScrollView | null>(null);
     const exerciseScrollRefs = useRef<{ [key: number]: ScrollView | null }>({});
@@ -21,21 +21,17 @@ export default function Index() {
         // addMockProgram(db);
         setProgram(getProgram(db));
         AsyncStorage.getItem('currentDay').then((value) => {
-            console.log(value);
             setCurrentDay(parseInt(value || '0'));
             dayScrollRef.current?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
         });
         AsyncStorage.getItem('currentExercise').then((value) => {
-            console.log(value);
             setCurrentExercise(parseInt(value || '0'));
             Object.keys(exerciseScrollRefs.current).forEach((key) => {
                 exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
             });
         });
-        AsyncStorage.getItem('currentScheme').then((value) => {
-            console.log(value);
-            setCurrentScheme(value || '5 x 5');
-        });
+        AsyncStorage.getItem('currentScheme').then((value) => {setCurrentScheme(value || '5 x 5')});
+        AsyncStorage.getItem('set').then((value) => {setSet(parseInt(value || '1'))});
     }, []);
 
     useEffect(() => {
