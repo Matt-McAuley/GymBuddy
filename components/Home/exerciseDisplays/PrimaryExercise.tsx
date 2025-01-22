@@ -38,31 +38,29 @@ export default function primaryExercise(props: primaryExercisePropsType) {
 
     return (
             <View
-            className={'flex-col justify-between items-center w-full bg-amber-50 border-4 border-black p-7 rounded-2xl'} style={{height: 220}}>
+            className={'flex-col justify-between items-center w-full bg-amber-50 border-4 border-black p-4 rounded-2xl'} style={{height: 235}}>
             <Text className={'font-bold text-4xl'}>{exercise.name} : {weight[set - 1]}</Text>
+            <Dropdown style={styles.dropdown} selectedTextStyle={styles.selected}
+                      data={[
+                          {label: '5 x 5', value: '5 x 5'},
+                          {label: '5 x 3', value: '5 x 3'},
+                          {label: '5 3 1', value: '5 3 1'},
+                      ]}
+                      labelField='label' valueField='value' placeholder={currentScheme}
+                      value={currentScheme} renderRightIcon={() => null}
+                      renderItem={(item) => (
+                          <View style={styles.item}>
+                              <Text style={styles.itemText}>{item.label}</Text>
+                          </View>)}
+                      onChange={(item) => setCurrentScheme(item.value)}/>
             <View className={'flex-row justify-between items-center w-full'}>
-                <View className={'flex-col justify-center items-center'} style={{width: 80}}>
-                    <View style={{height: 80}}/>
+                <View className={'flex-col justify-center items-center'} >
                     <Text className={'text-2xl'}>{(prevExercise == null) ? 'None' : (isPrimaryExercise(prevExercise)) ?
                         prevExercise.name : (isAccessoryExercise(prevExercise)) ? prevExercise.name : superSetNameDisplay(prevExercise)}</Text>
                     <Text className={'text-2xl'}>{(prevExercise == null) ? 'X' : (isPrimaryExercise(prevExercise)) ?
                         prevExercise.weight_1 : (isAccessoryExercise(prevExercise)) ? prevExercise.weight : superSetWeightDisplay(prevExercise)}</Text>
                 </View>
-                <Dropdown style={styles.dropdown} selectedTextStyle={styles.selected}
-                          data={[
-                              {label: '5 x 5', value: '5 x 5'},
-                              {label: '5 x 3', value: '5 x 3'},
-                              {label: '5 3 1', value: '5 3 1'},
-                          ]}
-                          labelField='label' valueField='value' placeholder={currentScheme}
-                          value={currentScheme} renderRightIcon={() => null}
-                          renderItem={(item) => (
-                              <View style={styles.item}>
-                                  <Text style={styles.itemText}>{item.label}</Text>
-                              </View>)}
-                          onChange={(item) => setCurrentScheme(item.value)}/>
-                <View className={'flex-col justify-center items-center'} style={{width: 80}}>
-                    <View style={{height: 80}}/>
+                <View className={'flex-col justify-center items-center'}>
                     <Text className={'text-2xl'}>{(nextExercise == null) ? 'None' : (isPrimaryExercise(nextExercise)) ?
                         nextExercise.name : (isAccessoryExercise(nextExercise)) ? nextExercise.name : superSetNameDisplay(nextExercise)}</Text>
                     <Text className={'text-2xl'}>{(nextExercise == null) ? 'X' : (isPrimaryExercise(nextExercise)) ?
