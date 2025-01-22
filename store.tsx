@@ -1,21 +1,28 @@
 import { create } from 'zustand';
 import {accessoryExerciseType, superSetType, primaryExerciseType, programType} from "@/types/programType";
 import * as SQLite from "expo-sqlite";
-import {useRef} from "react";
-import {ScrollView} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const useStore = create<storeType>((set) => ({
     set: 1,
     setSet: (newSet: number) => set({ set: newSet }),
     currentExercise: 0,
-    setCurrentExercise: (newExercise: number) => set({ currentExercise: newExercise }),
+    setCurrentExercise: (newExercise: number) => {
+        AsyncStorage.setItem('currentExercise', newExercise.toString());
+        set({currentExercise: newExercise})
+    },
     currentDay: 0,
     setCurrentDay: (newDay: number) => {
+        AsyncStorage.setItem('currentDay', newDay.toString());
+        AsyncStorage.setItem('currentExercise', '0');
         set({currentDay: newDay});
         set({currentExercise: 0});
     },
     currentScheme: '5 x 5',
-    setCurrentScheme: (newScheme: string) => set({ currentScheme: newScheme }),
+    setCurrentScheme: (newScheme: string) => {
+        AsyncStorage.setItem('currentScheme', newScheme);
+        set({currentScheme: newScheme});
+    },
     timesReset: 0,
     setTimesReset: (newTimesReset: number) => set({ timesReset: newTimesReset }),
     reset: () => {
