@@ -2,42 +2,71 @@ import {View, Text, ScrollView, Dimensions} from "react-native";
 import Timer from "@/components/Home/Timer";
 import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
-    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset, setCurrentScheme, setSet} = useStore();
+    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset,
+        setCurrentScheme, setSet, setRetrievedTime, currentExercise, setRetrievedPaused, setRetrievedYet} = useStore();
     const {width} = Dimensions.get('window');
     const dayScrollRef = useRef<ScrollView | null>(null);
     const exerciseScrollRefs = useRef<{ [key: number]: ScrollView | null }>({});
     useDrizzleStudio(db);
 
+
+    const setup = async () => {
+        const timer = await AsyncStorage.getItem('timer');
+        const paused = await AsyncStorage.getItem('paused');
+        console.log(timer, paused);
+        const day = await AsyncStorage.getItem('currentDay');
+        const exercise = await AsyncStorage.getItem('currentExercise');
+        const scheme = await AsyncStorage.getItem('currentScheme');
+        const set = await AsyncStorage.getItem('set');
+        console.log(timer, paused, day, exercise, scheme, set);
+        setRetrievedTime((timer === null) ? null : parseInt(timer));
+        setRetrievedPaused((paused === null) ? null : (paused === 'true'));
+        setCurrentDay(parseInt(day || '0'));
+        dayScrollRef.current?.scrollTo({x: parseInt(day || '0') * width, y: 0, animated: false});
+        setCurrentExercise(parseInt(exercise || '0'));
+        Object.keys(exerciseScrollRefs.current).forEach((key) => {
+            exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: parseInt(exercise || '0') * width, y: 0, animated: false});
+        });
+        setCurrentScheme(scheme || '5 x 5');
+        setSet(parseInt(set || '1'));
+    }
+
     useEffect(() => {
         // dbTeardown(db);
         // dbSetup(db);
         // addMockProgram(db);
+        // AsyncStorage.getItem('timer').then((value) => {
+        //     console.log("timer", value);
+        //     setRetrievedTime((value === null) ? null : parseInt(value));
+        // });
+        // AsyncStorage.getItem('paused').then((value) => {
+        //     console.log("paused", value);
+        //     setRetrievedPaused((value === null) ? null : (value === 'true'));
+        // });
+        // AsyncStorage.getItem('currentDay').then((value) => {
+        //     // console.log(value);
+        //     setCurrentDay(parseInt(value || '0'));
+        //     dayScrollRef.current?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
+        // });
+        // AsyncStorage.getItem('currentExercise').then((value) => {
+        //     // console.log(value);
+        //     setCurrentExercise(parseInt(value || '0'));
+        //     Object.keys(exerciseScrollRefs.current).forEach((key) => {
+        //         exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
+        //     });
+        // });
+        // AsyncStorage.getItem('currentScheme').then((value) => {setCurrentScheme(value || '5 x 5')});
+        // AsyncStorage.getItem('set').then((value) => {setSet(parseInt(value || '1'))});
+        setup().then(() => setRetrievedYet(true));
         setProgram(getProgram(db));
-        AsyncStorage.getItem('currentDay').then((value) => {
-            setCurrentDay(parseInt(value || '0'));
-            dayScrollRef.current?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
-        });
-        AsyncStorage.getItem('currentExercise').then((value) => {
-            setCurrentExercise(parseInt(value || '0'));
-            Object.keys(exerciseScrollRefs.current).forEach((key) => {
-                exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
-            });
-        });
-        AsyncStorage.getItem('currentScheme').then((value) => {setCurrentScheme(value || '5 x 5')});
-        AsyncStorage.getItem('set').then((value) => {setSet(parseInt(value || '1'))});
     }, []);
-
-    useEffect(() => {
-        if (program == null) return;
-        if (program.days.length == 0) return;
-    }, [currentDay]);
 
     const handleDayScroll = (event: any) => {
         const contentOffsetX = event.nativeEvent.contentOffset.x;
@@ -53,7 +82,9 @@ export default function Index() {
     const handleExerciseScroll = (event: any) => {
         const contentOffsetX = event.nativeEvent.contentOffset.x;
         const exercise = Math.min(Math.max(Math.ceil((contentOffsetX-195) / width), 0), program!.days[currentDay].exercises.length - 1);
-        setCurrentExercise(exercise);
+        if (exercise !== currentExercise) {
+            setCurrentExercise(exercise);
+        }
     }
 
     useEffect(() => {

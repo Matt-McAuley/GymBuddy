@@ -2,9 +2,11 @@ import {Image, Text, TouchableOpacity, View, Vibration, Platform} from "react-na
 import {useEffect, useState} from "react";
 import BackgroundTimer from 'react-native-background-timer';
 import { useStore } from "@/store";
+import {AST} from "eslint";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Timer() {
-    const {isAccessoryExercise, isPrimaryExercise, isSuperSet } = useStore();
+    const {isAccessoryExercise, isPrimaryExercise, retrievedTime, setRetrievedTime, retrievedPaused, setRetrievedPaused, retrievedYet } = useStore();
     const exercise = useStore((state) => state.exercise());
     const [startTime, setStartTime] = useState((isAccessoryExercise(exercise)) ? exercise.rest : (isPrimaryExercise(exercise))
         ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
@@ -17,12 +19,31 @@ export default function Timer() {
     }
 
     useEffect(() => {
+        console.log(paused);
+        AsyncStorage.setItem('timer', time.toString());
+        AsyncStorage.setItem('paused', paused.toString());
+    }, [time, paused]);
+
+    useEffect(() => {
+        console.log('overwriting retrievedTime');
         setPaused(true);
         setStartTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
             ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
         setTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
             ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
     }, [exercise]);
+
+    useEffect(() => {
+        console.log('retrievedYet', retrievedYet);
+        if (retrievedTime !== null && retrievedPaused !== null) {
+            console.log("retrievedTime", retrievedTime);
+            console.log("retrievedPaused", retrievedPaused);
+            setPaused(retrievedPaused);
+            setTime(retrievedTime);
+            setRetrievedTime(null);
+            setRetrievedPaused(null);
+        }
+    }, [retrievedYet]);
 
     useEffect(() => {
         if (!paused) {

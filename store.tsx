@@ -35,6 +35,12 @@ const useStore = create<storeType>((set) => ({
         set({ currentScheme: '5 x 5' });
         set({ timesReset: useStore.getState().timesReset + 1 });
     },
+    retrievedTime : null,
+    setRetrievedTime: (newRetrievedTime: number | null) => set({ retrievedTime: newRetrievedTime }),
+    retrievedPaused: null,
+    setRetrievedPaused: (newRetrievedPaused: boolean | null) => set({ retrievedPaused: newRetrievedPaused }),
+    retrievedYet: false,
+    setRetrievedYet: (newRetrievedYet: boolean) => set({ retrievedYet: newRetrievedYet }),
 
     program: null,
     setProgram: (newProgram) => {set({ program: newProgram });},
@@ -100,6 +106,12 @@ type storeType = {
     timesReset: number,
     setTimesReset: (newTimesReset: number) => void,
     reset: () => void,
+    retrievedTime: number | null,
+    setRetrievedTime: (newRetrievedTime: number | null) => void,
+    retrievedPaused: boolean | null,
+    setRetrievedPaused: (newRetrievedPaused: boolean | null) => void,
+    retrievedYet: boolean,
+    setRetrievedYet: (newRetrievedYet: boolean) => void,
     program: programType | null,
     setProgram: (newProgram: programType | null) => void,
     isPrimaryExercise: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is primaryExerciseType,
