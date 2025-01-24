@@ -16,11 +16,9 @@ export default function Index() {
     const exerciseScrollRefs = useRef<{ [key: number]: ScrollView | null }>({});
     useDrizzleStudio(db);
 
-
     const setup = async () => {
         const timer = await AsyncStorage.getItem('timer');
         const paused = await AsyncStorage.getItem('paused');
-        console.log(timer, paused);
         const day = await AsyncStorage.getItem('currentDay');
         const exercise = await AsyncStorage.getItem('currentExercise');
         const scheme = await AsyncStorage.getItem('currentScheme');
@@ -31,11 +29,11 @@ export default function Index() {
         setCurrentDay(parseInt(day || '0'));
         dayScrollRef.current?.scrollTo({x: parseInt(day || '0') * width, y: 0, animated: false});
         setCurrentExercise(parseInt(exercise || '0'));
+        setCurrentScheme(scheme || '5 x 5');
+        setSet(parseInt(set || '1'));
         Object.keys(exerciseScrollRefs.current).forEach((key) => {
             exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: parseInt(exercise || '0') * width, y: 0, animated: false});
         });
-        setCurrentScheme(scheme || '5 x 5');
-        setSet(parseInt(set || '1'));
     }
 
     useEffect(() => {
@@ -64,8 +62,10 @@ export default function Index() {
         // });
         // AsyncStorage.getItem('currentScheme').then((value) => {setCurrentScheme(value || '5 x 5')});
         // AsyncStorage.getItem('set').then((value) => {setSet(parseInt(value || '1'))});
-        setup().then(() => setRetrievedYet(true));
-        setProgram(getProgram(db));
+        setup().then(() => {
+            setProgram(getProgram(db));
+            setRetrievedYet(true);
+        });
     }, []);
 
     const handleDayScroll = (event: any) => {

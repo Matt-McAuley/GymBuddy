@@ -6,12 +6,11 @@ import {AST} from "eslint";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Timer() {
-    const {isAccessoryExercise, isPrimaryExercise, retrievedTime, setRetrievedTime, retrievedPaused, setRetrievedPaused, retrievedYet } = useStore();
+    const {isAccessoryExercise, isPrimaryExercise, retrievedTime, setRetrievedTime, retrievedPaused,
+        setRetrievedPaused, retrievedYet, time, setTime, paused, setPaused } = useStore();
     const exercise = useStore((state) => state.exercise());
     const [startTime, setStartTime] = useState((isAccessoryExercise(exercise)) ? exercise.rest : (isPrimaryExercise(exercise))
         ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
-    const [time, setTime] = useState(startTime);
-    const [paused, setPaused] = useState(true);
 
     const timerEnd = () => {
         Vibration.vibrate([700, 50, 700, 50, 700]);
@@ -19,13 +18,11 @@ export default function Timer() {
     }
 
     useEffect(() => {
-        console.log(paused);
         AsyncStorage.setItem('timer', time.toString());
         AsyncStorage.setItem('paused', paused.toString());
     }, [time, paused]);
 
     useEffect(() => {
-        console.log('overwriting retrievedTime');
         setPaused(true);
         setStartTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
             ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
@@ -34,10 +31,7 @@ export default function Timer() {
     }, [exercise]);
 
     useEffect(() => {
-        console.log('retrievedYet', retrievedYet);
         if (retrievedTime !== null && retrievedPaused !== null) {
-            console.log("retrievedTime", retrievedTime);
-            console.log("retrievedPaused", retrievedPaused);
             setPaused(retrievedPaused);
             setTime(retrievedTime);
             setRetrievedTime(null);
@@ -47,20 +41,17 @@ export default function Timer() {
 
     useEffect(() => {
         if (!paused) {
-            const intervalId = BackgroundTimer.setInterval(() => {
-                setTime(prevTime => {
-                    if (prevTime == 0) {
-                        timerEnd();
-                        return startTime;
-                    }
-                    else
-                        return prevTime - 1;
-                });
-            }, 1000); // Update every second
+            const interval = BackgroundTimer.setInterval(() => {
+                if (time === 0) {
+                    timerEnd();
+                    return;
+                }
+                setTime(time - 1);
+            }, 1000);
 
-            return () => BackgroundTimer.clearInterval(intervalId);
+            return () => BackgroundTimer.clearInterval(interval);
         }
-    }, [paused]);
+    }, [paused, time]);
 
 
     return (

@@ -35,6 +35,10 @@ const useStore = create<storeType>((set) => ({
         set({ currentScheme: '5 x 5' });
         set({ timesReset: useStore.getState().timesReset + 1 });
     },
+    time: 0,
+    setTime: (newTime: number) => set({ time: newTime }),
+    paused: true,
+    setPaused: (newPaused: boolean) => set({ paused: newPaused }),
     retrievedTime : null,
     setRetrievedTime: (newRetrievedTime: number | null) => set({ retrievedTime: newRetrievedTime }),
     retrievedPaused: null,
@@ -106,6 +110,10 @@ type storeType = {
     timesReset: number,
     setTimesReset: (newTimesReset: number) => void,
     reset: () => void,
+    time: number,
+    setTime: (newTime: number) => void,
+    paused: boolean,
+    setPaused: (newPaused: boolean) => void,
     retrievedTime: number | null,
     setRetrievedTime: (newRetrievedTime: number | null) => void,
     retrievedPaused: boolean | null,
