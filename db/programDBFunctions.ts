@@ -228,16 +228,18 @@ function fixPlacements(db, name: string) {
                 placements[exercise] = null;
             }
         });
-        const newPlacements = [];
         let i = 1;
-        Object.values(placements).forEach((placement) => {
-            if (placement == null) newPlacements.push(null);
+        console.log(Object.entries(placements).sort(([,a],[,b]) => a-b));
+        Object.entries(placements).sort(([,a],[,b]) => a-b).forEach(([key, placement]) => {
+            console.log(key, placement);
+            if (placement == null) placements[key] = null;
             else {
-                newPlacements.push(i);
+                placements[key] = i;
                 i += 1;
             }
         });
-        db.runSync('UPDATE days SET exercise_1_placement = ?, exercise_2_placement = ?, exercise_3_placement = ?, exercise_4_placement = ?, exercise_5_placement = ?, exercise_6_placement = ?, superset_1_placement = ?, superset_2_placement = ? WHERE name = ?', newPlacements[0], newPlacements[1], newPlacements[2], newPlacements[3], newPlacements[4], newPlacements[5], newPlacements[6], newPlacements[7], day.name);
+        console.log(placements);
+        db.runSync('UPDATE days SET exercise_1_placement = ?, exercise_2_placement = ?, exercise_3_placement = ?, exercise_4_placement = ?, exercise_5_placement = ?, exercise_6_placement = ?, superset_1_placement = ?, superset_2_placement = ? WHERE name = ?', placements['exercise_1'], placements['exercise_2'], placements['exercise_3'], placements['exercise_4'], placements['exercise_5'], placements['exercise_6'], placements['superset_1'], placements['superset_2'], day.name);
     });
 
 }
