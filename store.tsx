@@ -43,11 +43,16 @@ const useStore = create<storeType>((set) => ({
     setTime: (newTime: number) => {
         set({time: newTime});
         AsyncStorage.setItem('timer', newTime.toString());
+        AsyncStorage.setItem('time', new Date().getTime().toString());
     },
     paused: true,
     setPaused: (newPaused: boolean) => {
         set({paused: newPaused});
         AsyncStorage.setItem('paused', newPaused.toString());
+        if (newPaused)
+            AsyncStorage.removeItem('time');
+        else
+            AsyncStorage.setItem('time', new Date().getTime().toString());
     },
     retrievedTime : null,
     setRetrievedTime: (newRetrievedTime: number | null) => set({ retrievedTime: newRetrievedTime }),
