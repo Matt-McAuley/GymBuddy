@@ -168,6 +168,10 @@ export function replaceDay(db, originalName: string, newName: string | null, col
     const programsWithDay = db.getAllSync('SELECT * FROM programs WHERE Sunday = ? OR Monday = ? OR Tuesday = ? OR Wednesday = ? OR Thursday = ? OR Friday = ? OR Saturday = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName);
     if (day != null && originalName != newName) return 'Day with that name already exists!';
     db.runSync('DELETE FROM days WHERE name = ?', originalName);
+    const superset1 = db.getFirstSync('SELECT * FROM supersets WHERE exercise_1 = ? AND exercise_2 = ?', superset_1_1, superset_1_2);
+    const superset2 = db.getFirstSync('SELECT * FROM supersets WHERE exercise_1 = ? AND exercise_2 = ?', superset_2_1, superset_2_2);
+    if (superset_1_1 && superset_1_2 && superset1 == null) db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', superset_1_1, superset_1_2);
+    if (superset_2_1 && superset_2_2 && superset2 == null) db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', superset_2_1, superset_2_2);
     db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
         "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newName, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
     programsWithDay.forEach((program) => {
@@ -229,16 +233,13 @@ function fixPlacements(db, name: string) {
             }
         });
         let i = 1;
-        console.log(Object.entries(placements).sort(([,a],[,b]) => a-b));
         Object.entries(placements).sort(([,a],[,b]) => a-b).forEach(([key, placement]) => {
-            console.log(key, placement);
             if (placement == null) placements[key] = null;
             else {
                 placements[key] = i;
                 i += 1;
             }
         });
-        console.log(placements);
         db.runSync('UPDATE days SET exercise_1_placement = ?, exercise_2_placement = ?, exercise_3_placement = ?, exercise_4_placement = ?, exercise_5_placement = ?, exercise_6_placement = ?, superset_1_placement = ?, superset_2_placement = ? WHERE name = ?', placements['exercise_1'], placements['exercise_2'], placements['exercise_3'], placements['exercise_4'], placements['exercise_5'], placements['exercise_6'], placements['superset_1'], placements['superset_2'], day.name);
     });
 
