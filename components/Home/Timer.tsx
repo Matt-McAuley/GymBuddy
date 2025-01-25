@@ -2,12 +2,11 @@ import {Image, Text, TouchableOpacity, View, Vibration, Platform} from "react-na
 import {useEffect, useState} from "react";
 import BackgroundTimer from 'react-native-background-timer';
 import { useStore } from "@/store";
-import {AST} from "eslint";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Timer() {
     const {isAccessoryExercise, isPrimaryExercise, retrievedTime, setRetrievedTime, retrievedPaused,
-        setRetrievedPaused, retrievedYet, time, setTime, paused, setPaused } = useStore();
+        setRetrievedPaused, retrievedYet, time, setTime, paused, setPaused, currentExercise, currentDay } = useStore();
     const exercise = useStore((state) => state.exercise());
     const [startTime, setStartTime] = useState((isAccessoryExercise(exercise)) ? exercise.rest : (isPrimaryExercise(exercise))
         ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
@@ -17,10 +16,10 @@ export default function Timer() {
         setPaused(true);
     }
 
-    useEffect(() => {
-        AsyncStorage.setItem('timer', time.toString());
-        AsyncStorage.setItem('paused', paused.toString());
-    }, [time, paused]);
+    // useEffect(() => {
+    //     AsyncStorage.setItem('timer', time.toString());
+    //     AsyncStorage.setItem('paused', paused.toString());
+    // }, [time, paused]);
 
     useEffect(() => {
         setPaused(true);
@@ -31,7 +30,7 @@ export default function Timer() {
     }, [exercise]);
 
     useEffect(() => {
-        if (retrievedTime !== null && retrievedPaused !== null) {
+        if (retrievedYet && retrievedTime !== null && retrievedPaused !== null) {
             setPaused(retrievedPaused);
             setTime(retrievedTime);
             setRetrievedTime(null);

@@ -10,61 +10,43 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset,
-        setCurrentScheme, setSet, setRetrievedTime, currentExercise, setRetrievedPaused, setRetrievedYet} = useStore();
+        setCurrentScheme, setSet, setRetrievedTime, currentExercise, setRetrievedPaused, setRetrievedYet, setRetrievedSet} = useStore();
     const {width} = Dimensions.get('window');
     const dayScrollRef = useRef<ScrollView | null>(null);
     const exerciseScrollRefs = useRef<{ [key: number]: ScrollView | null }>({});
     useDrizzleStudio(db);
 
-    const setup = async () => {
+    const retrieveOverwrittenValues = async () => {
         const timer = await AsyncStorage.getItem('timer');
         const paused = await AsyncStorage.getItem('paused');
+        const set = await AsyncStorage.getItem('set');
+        setRetrievedTime((timer === null) ? null : parseInt(timer));
+        setRetrievedPaused((paused === null) ? null : (paused === 'true'));
+        setRetrievedSet((set === null) ? null : parseInt(set));
+    }
+
+    const retrieveOtherValues = async () => {
         const day = await AsyncStorage.getItem('currentDay');
         const exercise = await AsyncStorage.getItem('currentExercise');
         const scheme = await AsyncStorage.getItem('currentScheme');
-        const set = await AsyncStorage.getItem('set');
-        console.log(timer, paused, day, exercise, scheme, set);
-        setRetrievedTime((timer === null) ? null : parseInt(timer));
-        setRetrievedPaused((paused === null) ? null : (paused === 'true'));
-        setCurrentDay(parseInt(day || '0'));
         dayScrollRef.current?.scrollTo({x: parseInt(day || '0') * width, y: 0, animated: false});
-        setCurrentExercise(parseInt(exercise || '0'));
-        setCurrentScheme(scheme || '5 x 5');
-        setSet(parseInt(set || '1'));
         Object.keys(exerciseScrollRefs.current).forEach((key) => {
             exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: parseInt(exercise || '0') * width, y: 0, animated: false});
         });
+        setCurrentDay(parseInt(day || '0'));
+        setCurrentExercise(parseInt(exercise || '0'));
+        setCurrentScheme(scheme || '5 x 5');
     }
 
     useEffect(() => {
         // dbTeardown(db);
         // dbSetup(db);
         // addMockProgram(db);
-        // AsyncStorage.getItem('timer').then((value) => {
-        //     console.log("timer", value);
-        //     setRetrievedTime((value === null) ? null : parseInt(value));
-        // });
-        // AsyncStorage.getItem('paused').then((value) => {
-        //     console.log("paused", value);
-        //     setRetrievedPaused((value === null) ? null : (value === 'true'));
-        // });
-        // AsyncStorage.getItem('currentDay').then((value) => {
-        //     // console.log(value);
-        //     setCurrentDay(parseInt(value || '0'));
-        //     dayScrollRef.current?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
-        // });
-        // AsyncStorage.getItem('currentExercise').then((value) => {
-        //     // console.log(value);
-        //     setCurrentExercise(parseInt(value || '0'));
-        //     Object.keys(exerciseScrollRefs.current).forEach((key) => {
-        //         exerciseScrollRefs.current[parseInt(key)]?.scrollTo({x: parseInt(value || '0') * width, y: 0, animated: false});
-        //     });
-        // });
-        // AsyncStorage.getItem('currentScheme').then((value) => {setCurrentScheme(value || '5 x 5')});
-        // AsyncStorage.getItem('set').then((value) => {setSet(parseInt(value || '1'))});
-        setup().then(() => {
+        retrieveOverwrittenValues().then(() => {
             setProgram(getProgram(db));
-            setRetrievedYet(true);
+            retrieveOtherValues().then(() => {
+                setRetrievedYet(true);
+            });
         });
     }, []);
 

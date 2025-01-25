@@ -6,16 +6,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const useStore = create<storeType>((set) => ({
     set: 1,
     setSet: (newSet: number) => {
+        // console.log('setting set to', newSet);
         AsyncStorage.setItem('set', newSet.toString());
         set({set: newSet});
     },
     currentExercise: 0,
     setCurrentExercise: (newExercise: number) => {
+        // console.log('setting exercise to', newExercise);
         AsyncStorage.setItem('currentExercise', newExercise.toString());
         set({currentExercise: newExercise})
     },
     currentDay: 0,
     setCurrentDay: (newDay: number) => {
+        // console.log('setting day to', newDay);
         AsyncStorage.setItem('currentDay', newDay.toString());
         AsyncStorage.setItem('currentExercise', '0');
         set({currentDay: newDay});
@@ -23,6 +26,7 @@ const useStore = create<storeType>((set) => ({
     },
     currentScheme: '5 x 5',
     setCurrentScheme: (newScheme: string) => {
+        // console.log('setting scheme to', newScheme);
         AsyncStorage.setItem('currentScheme', newScheme);
         set({currentScheme: newScheme});
     },
@@ -36,13 +40,21 @@ const useStore = create<storeType>((set) => ({
         set({ timesReset: useStore.getState().timesReset + 1 });
     },
     time: 0,
-    setTime: (newTime: number) => set({ time: newTime }),
+    setTime: (newTime: number) => {
+        set({time: newTime});
+        AsyncStorage.setItem('timer', newTime.toString());
+    },
     paused: true,
-    setPaused: (newPaused: boolean) => set({ paused: newPaused }),
+    setPaused: (newPaused: boolean) => {
+        set({paused: newPaused});
+        AsyncStorage.setItem('paused', newPaused.toString());
+    },
     retrievedTime : null,
     setRetrievedTime: (newRetrievedTime: number | null) => set({ retrievedTime: newRetrievedTime }),
     retrievedPaused: null,
     setRetrievedPaused: (newRetrievedPaused: boolean | null) => set({ retrievedPaused: newRetrievedPaused }),
+    retrievedSet: null,
+    setRetrievedSet: (newRetrievedSet: number | null) => set({ retrievedSet: newRetrievedSet }),
     retrievedYet: false,
     setRetrievedYet: (newRetrievedYet: boolean) => set({ retrievedYet: newRetrievedYet }),
 
@@ -118,6 +130,8 @@ type storeType = {
     setRetrievedTime: (newRetrievedTime: number | null) => void,
     retrievedPaused: boolean | null,
     setRetrievedPaused: (newRetrievedPaused: boolean | null) => void,
+    retrievedSet: number | null,
+    setRetrievedSet: (newRetrievedSet: number | null) => void,
     retrievedYet: boolean,
     setRetrievedYet: (newRetrievedYet: boolean) => void,
     program: programType | null,
