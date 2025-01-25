@@ -35,7 +35,7 @@ export default function EditProgram() {
                 ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => {
                     return <Dropdown key={day} style={styles.dropdown} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                      label={(programData[day] == null) ? day : programData[day]}
-                                     data={dayNames.map((day) => ({label: day, value: day}))}
+                                     data={[{label: 'None', value: null}, ...dayNames.map((day) => ({label: day, value: day}))]}
                                      labelField='label' valueField='value' placeholder={`Enter ${day}`}
                                      value={programData[day]} renderRightIcon={() => null}
                                      renderItem={(item) => (
@@ -145,3 +145,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     }
 });
+
+type arrayType = {
+    label: string,
+    value: string | null,
+}

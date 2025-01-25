@@ -45,7 +45,7 @@ export default function EditDay() {
             <View className={'flex-row'}>
                 <Dropdown style={styles.dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                           label={'Primary Exercise 1'}
-                          data={primaryExercises.map((pe : string) => ({label: pe, value: pe}))}
+                          data={[{label: 'None', value: null}, ...primaryExercises.map((pe : string) => ({label: pe, value: pe}))]}
                           labelField='label' valueField='value' placeholder={`Primary 1`}
                           value={dayData.primary_exercise_1} renderRightIcon={() => null}
                           renderItem={(item) => (
@@ -67,7 +67,7 @@ export default function EditDay() {
             <View className={'flex-row'}>
                 <Dropdown style={styles.dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                           label={'Primary Exercise 2'}
-                          data={primaryExercises.map((pe : string) => ({label: pe, value: pe}))}
+                          data={[{label: 'None', value: null}, ...primaryExercises.map((pe : string) => ({label: pe, value: pe}))]}
                           labelField='label' valueField='value' placeholder={`Primary 2`}
                           value={dayData.primary_exercise_2} renderRightIcon={() => null}
                           renderItem={(item) => (
@@ -92,7 +92,7 @@ export default function EditDay() {
                         <View key={num + 'eaView'} className={'flex-row'}>
                             <Dropdown key={num + 'aeDrop'} style={styles.dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                       label={`Accessory Exercise ${num}`}
-                                      data={accessoryExercises.map((ae) => ({label: ae, value: ae}))}
+                                      data={[{label: 'None', value: null}, ...accessoryExercises.map((ae) => ({label: ae, value: ae}))]}
                                       labelField='label' valueField='value' placeholder={`Accessory ${num}`}
                                       value={dayData[`accessory_exercise_${num}`]} renderRightIcon={() => null}
                                       renderItem={(item) => (
@@ -121,7 +121,7 @@ export default function EditDay() {
                             <View key={num + 'ssView2'} className={'w-80 border-black border-4 rounded-2xl bg-white mb-3'}>
                                 <Dropdown key={num + 'ss1'} style={styles.ss1DropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                           label={`SS ${num} Exercise 1`}
-                                          data={accessoryExercises.map((se) => ({label: se, value: se}))}
+                                          data={[{label: 'None', value: null}, ...accessoryExercises.map((se) => ({label: se, value: se}))]}
                                           labelField='label' valueField='value' placeholder={`SS ${num} Exercise 1`}
                                           value={dayData[`superset_${num}_1`]} renderRightIcon={() => null}
                                           renderItem={(item) => (
@@ -131,7 +131,7 @@ export default function EditDay() {
                                           onChange={(item) => {setDayData({...dayData, [`superset_${num}_1`]: item.value})}}/>
                                 <Dropdown key={num + 'ss2'} style={styles.ss2dropdownLeft} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
                                           label={`SS ${num} Exercise 2`}
-                                          data={accessoryExercises.map((se) => ({label: se, value: se}))}
+                                          data={[{label: 'None', value: null}, ...accessoryExercises.map((se) => ({label: se, value: se}))]}
                                           labelField='label' valueField='value' placeholder={`SS ${num} Exercise 2`}
                                           value={dayData[`superset_${num}_2`]} renderRightIcon={() => null}
                                           renderItem={(item) => (
@@ -193,7 +193,7 @@ export default function EditDay() {
                                   Toast.show({
                                       type: "success",
                                       text1: "Success",
-                                      text2: "Program Deleted",
+                                      text2: "Day Deleted",
                                   });
                                   reset();
                                   setProgram(getProgram(db));

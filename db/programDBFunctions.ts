@@ -94,6 +94,10 @@ export function createNewDay(db, name: string | null, color: string | null, exer
     if (new Set([exercise_1_placement.toString(), exercise_2_placement.toString(), exercise_3_placement.toString(), exercise_4_placement.toString(), exercise_5_placement.toString(), exercise_6_placement.toString(), superset_1_placement.toString(), superset_2_placement.toString()]).size < 7) return 'Exercise order must be unique!';
     if ((superset_1_1 == null && superset_1_2 != null) || (superset_1_1 != null && superset_1_2 == null) || (superset_2_1 == null && superset_2_2 != null) || (superset_2_1 != null && superset_2_2 == null)) return 'Superset must have two exercises!';
     if (day != null) return 'Program with that name already exists!';
+    const superset1 = db.getFirstSync('SELECT * FROM supersets WHERE exercise_1 = ? AND exercise_2 = ?', superset_1_1, superset_1_2);
+    const superset2 = db.getFirstSync('SELECT * FROM supersets WHERE exercise_1 = ? AND exercise_2 = ?', superset_2_1, superset_2_2);
+    if (superset_1_1 && superset_1_2 && superset1 == null) db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', superset_1_1, superset_1_2);
+    if (superset_2_1 && superset_2_2 && superset2 == null) db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', superset_2_1, superset_2_2);
     db.runSync("INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement) VALUES " +
         "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement, exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, exercise_6, exercise_6_placement, superset_1_1, superset_1_2, superset_1_placement, superset_2_1, superset_2_2, superset_2_placement);
     return 'success';
