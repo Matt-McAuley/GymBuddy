@@ -244,6 +244,15 @@ function fixPlacements(db, name: string) {
 
 export function deleteExercise(db, name: string) {
     fixPlacements(db, name);
+    const day = db.getFirstSync('SELECT * FROM days WHERE exercise_1 = ? OR exercise_2 = ? OR exercise_3 = ? OR exercise_4 = ? OR exercise_5 = ? OR exercise_6 = ? OR superset_1_1 = ? OR superset_1_2 = ? OR superset_2_1 = ? OR superset_2_2 = ?', name, name, name, name, name, name, name, name, name, name);
+    db.runSync('UPDATE days SET exercise_1 = NULL WHERE exercise_1 = ?', name);
+    db.runSync('UPDATE days SET exercise_2 = NULL WHERE exercise_2 = ?', name);
+    db.runSync('UPDATE days SET exercise_3 = NULL WHERE exercise_3 = ?', name);
+    db.runSync('UPDATE days SET exercise_4 = NULL WHERE exercise_4 = ?', name);
+    db.runSync('UPDATE days SET exercise_5 = NULL WHERE exercise_5 = ?', name);
+    db.runSync('UPDATE days SET exercise_6 = NULL WHERE exercise_6 = ?', name);
+    db.runSync('UPDATE days SET superset_1_1 = NULL, superset_1_2 = NULL WHERE superset_1_1 = ? OR superset_1_2 = ?', name, name);
+    db.runSync('UPDATE days SET superset_2_1 = NULL, superset_2_2 = NULL WHERE superset_2_1 = ? OR superset_2_2 = ?', name, name);
     db.runSync('DELETE FROM primary_exercises WHERE name = ?', name);
     db.runSync('DELETE FROM accessory_exercises WHERE name = ?', name);
 }

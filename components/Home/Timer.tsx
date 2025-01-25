@@ -1,8 +1,7 @@
-import {Image, Text, TouchableOpacity, View, Vibration, Platform} from "react-native";
+import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
 import {useEffect, useState} from "react";
 import BackgroundTimer from 'react-native-background-timer';
 import { useStore } from "@/store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Timer() {
     const {isAccessoryExercise, isPrimaryExercise, retrievedTime, setRetrievedTime, retrievedPaused,
@@ -46,7 +45,6 @@ export default function Timer() {
             return () => BackgroundTimer.clearInterval(interval);
         }
     }, [paused, time]);
-
 
     return (
         <View className={'flex-row justify-between items-center h-40 w-full bg-gray-500 rounded-2xl pl-3 pr-3 border-black border-4'}>

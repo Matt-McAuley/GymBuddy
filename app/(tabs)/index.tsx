@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, Dimensions} from "react-native";
+import {View, Text, ScrollView, Dimensions, AppState} from "react-native";
 import Timer from "@/components/Home/Timer";
 import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
@@ -9,12 +9,28 @@ import {useStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
-    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset,
-        setCurrentScheme, setSet, setRetrievedTime, currentExercise, setRetrievedPaused, setRetrievedYet, setRetrievedSet} = useStore();
+    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset, paused,
+        setCurrentScheme, setSet, setRetrievedTime, currentExercise, setRetrievedPaused, setRetrievedYet, setRetrievedSet, time, setTime} = useStore();
     const {width} = Dimensions.get('window');
     const dayScrollRef = useRef<ScrollView | null>(null);
     const exerciseScrollRefs = useRef<{ [key: number]: ScrollView | null }>({});
+    const [backgroundStart, setBackgroundStart] = useState<number | null>(null);
+    const appState = useRef(AppState.currentState);
     useDrizzleStudio(db);
+
+    useEffect(() => {
+        const subscription = AppState.addEventListener('change', nextAppState => {
+            if (appState.current.match(/inactive|background/) && nextAppState === 'active' && backgroundStart !== null && !paused) {
+                setTime(time - Math.floor((new Date().getTime() - backgroundStart) / 1000));
+            }
+            else if (appState.current.match(/active/) && nextAppState === 'background') {
+                setBackgroundStart(new Date().getTime());
+            }
+            appState.current = nextAppState;
+        });
+
+        return () => subscription.remove();
+    }, [backgroundStart]);
 
     const retrieveOverwrittenValues = async () => {
         const timer = await AsyncStorage.getItem('timer');
@@ -22,9 +38,6 @@ export default function Index() {
         const startTime = await AsyncStorage.getItem('startTime');
         const newTime = (initialTime === null || startTime === null) ? (timer === null) ? null : parseInt(timer) :
             Math.max(1, parseInt(startTime) - Math.floor((new Date().getTime() - parseInt(initialTime)) / 1000));
-        console.log('timer', timer);
-        console.log('time passed', (new Date().getTime() - parseInt(initialTime || '0')) / 1000);
-        console.log('newTime', newTime);
         const paused = await AsyncStorage.getItem('paused');
         const set = await AsyncStorage.getItem('set');
         setRetrievedTime(newTime);
