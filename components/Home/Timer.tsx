@@ -41,7 +41,7 @@ export default function Timer() {
                     return;
                 }
                 setTime(time - 1);
-            }, 1000);
+            }, 820);
 
             return () => BackgroundTimer.clearInterval(interval);
         }

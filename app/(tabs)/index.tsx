@@ -18,9 +18,13 @@ export default function Index() {
 
     const retrieveOverwrittenValues = async () => {
         const timer = await AsyncStorage.getItem('timer');
-        const time = await AsyncStorage.getItem('time');
-        const newTime = (timer === null) ? null : (time === null) ? parseInt(timer) :
-            Math.max(1, parseInt(timer) - Math.floor((new Date().getTime() - parseInt(time)) / 1000));
+        const initialTime = await AsyncStorage.getItem('initialTime');
+        const startTime = await AsyncStorage.getItem('startTime');
+        const newTime = (initialTime === null || startTime === null) ? (timer === null) ? null : parseInt(timer) :
+            Math.max(1, parseInt(startTime) - Math.floor((new Date().getTime() - parseInt(initialTime)) / 1000));
+        console.log('timer', timer);
+        console.log('time passed', (new Date().getTime() - parseInt(initialTime || '0')) / 1000);
+        console.log('newTime', newTime);
         const paused = await AsyncStorage.getItem('paused');
         const set = await AsyncStorage.getItem('set');
         setRetrievedTime(newTime);
