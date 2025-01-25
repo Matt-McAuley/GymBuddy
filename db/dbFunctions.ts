@@ -124,7 +124,7 @@ const addMockProgram = (db) => {
 
         db.execSync(`
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Bench', 210, 190, 215, 245, 5, 3, 1);
+            VALUES ('Bench', 210, 195, 220, 255, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB OHP', 90, 45, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
@@ -135,22 +135,26 @@ const addMockProgram = (db) => {
             VALUES ('Tricep Extension', 90, 30, 15, 3);
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Lateral Raise', 'Tricep Extension');
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Leg Raises', 90, 0, 15, 4);
 
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
             VALUES ('Deadlift', 210, 325, 355, 405, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('BB Curl', 90, 45, 21, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Lat Pull', 90, 130, 12, 3);
+            VALUES ('Lat Pull', 90, 143, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('Hammer Curl', 90, 30, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('Face Pull', 90, 30, 15, 3);
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Hammer Curl', 'Face Pull');
+            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
+            VALUES ('Core Machine', 90, 85, 15, 4);
 
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('OHP', 180, 110, 125, 135, 5, 3, 1);
+            VALUES ('OHP', 180, 115, 130, 140, 5, 3, 1);
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
             VALUES ('BB Row', 180, 165, 185, 185, 5, 3, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
@@ -167,7 +171,7 @@ const addMockProgram = (db) => {
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('Leg Extension', 90, 120, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('DB Curl', 90, 35, 12, 3);
+            VALUES ('DB Curl', 90, 30, 12, 3);
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Hamstring Curl', 'Dips');
             INSERT INTO supersets (exercise_1, exercise_2)
@@ -176,44 +180,26 @@ const addMockProgram = (db) => {
 
         db.execSync(`
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_3, exercise_3_placement,
-                              exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Lateral Raise', 'Tricep Extension', 4);
+                              exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement)
+            VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Leg Raises', 5, 'Lateral Raise', 'Tricep Extension', 4);
 
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_3, exercise_3_placement,
-                              exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Pull', 'blue', 'Deadlift', 1, 'BB Curl', 2, 'Lat Pull', 3, 'Hammer Curl', 'Face Pull', 4);
+                              exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement)
+            VALUES ('Pull', 'blue', 'Deadlift', 1, 'BB Curl', 2, 'Lat Pull', 3, 'Core Machine', 5,'Hammer Curl', 'Face Pull', 4);
 
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
-                              exercise_3, exercise_3_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'Lateral Raise', 'BTB Shrug', 4);
+                              exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement)
+            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'Leg Raises', 5, 'Lateral Raise', 'BTB Shrug', 4);
 
             INSERT INTO days (name, color, exercise_3, exercise_3_placement, superset_1_1, superset_1_2,
-                              superset_1_placement, superset_2_1, superset_2_2, superset_2_placement)
-            VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3);
+                              superset_1_placement, superset_2_1, superset_2_2, superset_2_placement, exercise_4, exercise_4_placement)
+            VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3, 'Core Machine', 4);
         `);
 
         db.execSync(`
             INSERT INTO programs (name, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
             VALUES ('PPUL', 'Pull', NULL, 'Upper', 'Lower & Arms', NULL, NULL, 'Push');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test0', 'Pull');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test1', 'Upper');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test2', 'Lower & Arms');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test3', 'Pull');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test4', 'Upper');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test5', 'Lower & Arms');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test6', 'Pull');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test7', 'Upper');
-            INSERT INTO programs (name, Monday)
-            VALUES ('Test8', 'Lower & Arms');
-        `);
+            `);
 
         db.execSync(`
             INSERT INTO current_program (program)

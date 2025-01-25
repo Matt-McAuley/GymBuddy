@@ -16,11 +16,6 @@ export default function Timer() {
         setPaused(true);
     }
 
-    // useEffect(() => {
-    //     AsyncStorage.setItem('timer', time.toString());
-    //     AsyncStorage.setItem('paused', paused.toString());
-    // }, [time, paused]);
-
     useEffect(() => {
         setPaused(true);
         setStartTime(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
