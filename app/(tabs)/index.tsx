@@ -122,9 +122,12 @@ export default function Index() {
       (
           <>
           <View className={'flex justify-center items-center'}>
-            <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:day?.color.toLowerCase()}}
+            <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:day?.color}}
                   data={program.days.map((d, index) => ({label: d.name, value: {index, color: d.color}}))}
                   labelField='label' valueField='value' value={{label: day?.name, value: {index: currentDay, color: day?.color}}}
+                  renderRightIcon={() => (
+                    <Text style={{...styles.icon, color: 'black'}}>{'⌄'}</Text>
+                  )}
                   renderItem={(item, selected) => (
                   (selected) ? null :
                   <View style={styles.item}>
@@ -159,19 +162,27 @@ export default function Index() {
 const styles = StyleSheet.create({
     dropdown: {
         height: 80,
-        padding: 10,
         width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     selected: {
-        color: 'black',
         textAlign: 'center',
         fontSize: 45,
         fontWeight: 'bold',
+        justifyContent: 'center',
+        flex: 0,
+    },
+    icon: {
+        marginLeft: 5,
+        fontSize: 40,
+        fontWeight: 'bold',
+        alignSelf: 'flex-start',
     },
     item: {
         padding: 10,
-        height: 70,
-        width: '100%',
+        height: 75,
         borderBottomWidth: 2,
         borderBottomColor: 'gray',
         display: 'flex',
