@@ -6,19 +6,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const useStore = create<storeType>((set) => ({
     set: 1,
     setSet: (newSet: number) => {
-        // console.log('setting set to', newSet);
         AsyncStorage.setItem('set', newSet.toString());
         set({set: newSet});
     },
     currentExercise: 0,
     setCurrentExercise: (newExercise: number) => {
-        // console.log('setting exercise to', newExercise);
         AsyncStorage.setItem('currentExercise', newExercise.toString());
         set({currentExercise: newExercise})
     },
     currentDay: 0,
     setCurrentDay: (newDay: number) => {
-        // console.log('setting day to', newDay);
         AsyncStorage.setItem('currentDay', newDay.toString());
         AsyncStorage.setItem('currentExercise', '0');
         set({currentDay: newDay});
@@ -26,7 +23,6 @@ const useStore = create<storeType>((set) => ({
     },
     currentScheme: '5 x 5',
     setCurrentScheme: (newScheme: string) => {
-        // console.log('setting scheme to', newScheme);
         AsyncStorage.setItem('currentScheme', newScheme);
         set({currentScheme: newScheme});
     },
