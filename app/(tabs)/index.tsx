@@ -123,15 +123,14 @@ export default function Index() {
           <>
           <View className={'flex justify-center items-center'}>
             <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:day?.color.toLowerCase()}}
-                  label={'day'}
-                  data={program.days.map((d, index) => ({label: d.name, value: index}))}
-                  labelField='label' valueField='value'
-                  value={currentDay}
-                  renderItem={(item, index) => (
-                <View style={styles.item}>
-                    <Text style={{...styles.itemText, color: program?.days[index].color}}>{item.label}</Text>
-                </View>)}
-                  onChange={(item) => {setCurrentDay(item.value)}}/>
+                  data={program.days.map((d, index) => ({label: d.name, value: {index, color: d.color}}))}
+                  labelField='label' valueField='value' value={{label: day?.name, value: {index: currentDay, color: day?.color}}}
+                  renderItem={(item, selected) => (
+                  (selected) ? null :
+                  <View style={styles.item}>
+                    <Text style={{...styles.itemText, color: item.value.color}}>{item.label}</Text>
+                  </View>)}
+                  onChange={(item) => {setCurrentDay(item.value.index)}}/>
           </View>
               <View style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
                      {(day?.exercises.length == 0) ?
@@ -161,17 +160,17 @@ const styles = StyleSheet.create({
     dropdown: {
         height: 80,
         padding: 10,
-        width: '70%',
+        width: '100%',
     },
     selected: {
         color: 'black',
         textAlign: 'center',
-        fontSize: 50,
+        fontSize: 45,
         fontWeight: 'bold',
     },
     item: {
         padding: 10,
-        height: 60,
+        height: 70,
         width: '100%',
         borderBottomWidth: 2,
         borderBottomColor: 'gray',
@@ -180,7 +179,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemText: {
-        fontSize: 30,
+        fontSize: 35,
         color: 'black',
         fontWeight: 'bold',
     },

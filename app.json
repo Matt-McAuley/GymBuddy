@@ -5,6 +5,7 @@
       "image": "./assets/images/splash.png"
     },
     "icon": "./assets/images/icon.png",
+    "jsEngine": "hermes",
     "slug": "GymBuddy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,7 +17,8 @@
       "bundleIdentifier": "com.mattmcauley.GymBuddy",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "jsEngine": "jsc"
     },
     "android": {
       "adaptiveIcon": {
