@@ -14,16 +14,10 @@ export default function Index() {
         setCurrentScheme, setSet, setRetrievedTime, currentExercise, setRetrievedPaused, setRetrievedYet, setRetrievedSet, time, setTime} = useStore();
     const day = program?.days[currentDay];
     const {width} = Dimensions.get('window');
-    const exerciseScrollRefs = useRef<ScrollView | null >(null);
+    const exerciseScrollRef = useRef<ScrollView | null >(null);
     const [backgroundStart, setBackgroundStart] = useState<number | null>(null);
     const appState = useRef(AppState.currentState);
     useDrizzleStudio(db);
-    // console.log(program);
-    // console.log(currentDay);
-    // AsyncStorage.removeItem('currentDay');
-    // AsyncStorage.getItem('currentDay').then((value) => {
-    //     console.log('currentDay', value);
-    // });
 
     useEffect(() => {
         const subscription = AppState.addEventListener('change', nextAppState => {
@@ -56,7 +50,8 @@ export default function Index() {
         const day = await AsyncStorage.getItem('currentDay');
         const exercise = await AsyncStorage.getItem('currentExercise');
         const scheme = await AsyncStorage.getItem('currentScheme');
-        exerciseScrollRefs.current?.scrollTo({x: parseInt(day || '0') * width, y: 0, animated: false});
+        console.log(day, exercise, scheme);
+        exerciseScrollRef.current?.scrollTo({x: parseInt(exercise || '0') * width, y: 0, animated: false});
         setCurrentDay(parseInt(day || '0'));
         setCurrentExercise(parseInt(exercise || '0'));
         setCurrentScheme(scheme || '5 x 5');
@@ -67,29 +62,6 @@ export default function Index() {
         // dbSetup(db);
         // addMockProgram(db);
         retrieveOverwrittenValues().then(() => {
-            const program = getProgram(db);
-            const dummyProgram = {
-                name: 'Dummy Program',
-                days: [
-                    {
-                        name: 'Day 1',
-                        color: 'red',
-                        exercises: [
-                            {
-                                name: 'Squat',
-                                rest: 90,
-                                weight_1: 100,
-                                weight_2: 105,
-                                weight_3: 110,
-                                reps_1: 5,
-                                reps_2: 5,
-                                reps_3: 5
-                            },
-                        ]
-                    }
-                ]
-            }
-            setProgram((program === null) ? dummyProgram : program);
             setProgram(getProgram(db));
             retrieveOtherValues().then(() => {
                 setRetrievedYet(true);
@@ -106,7 +78,7 @@ export default function Index() {
     }
 
     useEffect(() => {
-        exerciseScrollRefs.current?.scrollTo({x: 0, y: 0, animated: false});
+        exerciseScrollRef.current?.scrollTo({x: 0, y: 0, animated: false});
     }, [timesReset]);
 
   return (program == null) ? (
@@ -144,7 +116,7 @@ export default function Index() {
                          <>
                              <Timer/>
                              <Counter/>
-                             <ScrollView ref={(ref) => (exerciseScrollRefs.current = ref)} horizontal snapToInterval={width}
+                             <ScrollView ref={(ref) => (exerciseScrollRef.current = ref)} horizontal snapToInterval={width}
                                          decelerationRate={'fast'} pagingEnabled onScroll={handleExerciseScroll}>
                                  {day?.exercises.map((exercise, exerciseIndex) => (
                                      <View key={exerciseIndex} style={{width: width-20, marginRight: 20, padding: 3}}>
