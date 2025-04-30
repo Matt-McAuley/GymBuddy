@@ -126,7 +126,7 @@ export default function Index() {
                   data={program.days.map((d, index) => ({label: d.name, value: {index, color: d.color}}))}
                   labelField='label' valueField='value' value={{label: day?.name, value: {index: currentDay, color: day?.color}}}
                   renderRightIcon={() => (
-                    <Text style={{...styles.icon, color: 'black'}}>{'⌄'}</Text>
+                    <Text style={{...styles.icon, color: 'black'}}>{'▼'}</Text>
                   )}
                   renderItem={(item, selected) => (
                   (selected) ? null :
@@ -161,28 +161,29 @@ export default function Index() {
 
 const styles = StyleSheet.create({
     dropdown: {
-        height: 80,
-        width: '100%',
+        height: 60,
+        width: '90%',
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: 8,
+        borderWidth: 1,
+        margin: 10,
+        padding: 10,
+
     },
     selected: {
         textAlign: 'center',
-        fontSize: 45,
+        fontSize: 30,
         fontWeight: 'bold',
-        justifyContent: 'center',
-        flex: 0,
     },
     icon: {
         marginLeft: 5,
-        fontSize: 40,
+        fontSize: 20,
         fontWeight: 'bold',
-        alignSelf: 'flex-start',
     },
     item: {
         padding: 10,
-        height: 75,
+        height: 60,
         borderBottomWidth: 2,
         borderBottomColor: 'gray',
         display: 'flex',
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemText: {
-        fontSize: 35,
+        fontSize: 30,
         color: 'black',
         fontWeight: 'bold',
     },
