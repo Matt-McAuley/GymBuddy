@@ -2,9 +2,10 @@
   "expo": {
     "name": "GymBuddy",
     "splash": {
-        "image": "./assets/images/splash.png"
+      "image": "./assets/images/splash.png"
     },
     "icon": "./assets/images/icon.png",
+    "jsEngine": "hermes",
     "slug": "GymBuddy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,7 +14,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mattmcauley.GymBuddy"
+      "bundleIdentifier": "com.mattmcauley.GymBuddy",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "jsEngine": "jsc"
     },
     "android": {
       "adaptiveIcon": {

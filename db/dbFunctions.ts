@@ -1,6 +1,7 @@
 import {programType, dayType, primaryExerciseType, accessoryExerciseType, superSetType} from "@/types/programType";
+import * as SQLite from "expo-sqlite";
 
-const dbSetup = (db) => {
+const dbSetup = (db:  SQLite.SQLiteDatabase) => {
     try {
         db.execSync(`
             CREATE TABLE IF NOT EXISTS accessory_exercises (
@@ -106,7 +107,7 @@ const dbSetup = (db) => {
     }
 }
 
-const dbTeardown = (db) => {
+const dbTeardown = (db:  SQLite.SQLiteDatabase) => {
     db.execSync(`
         DROP TABLE IF EXISTS primary_exercises;
         DROP TABLE IF EXISTS accessory_exercises;
@@ -117,20 +118,20 @@ const dbTeardown = (db) => {
     `);
 }
 
-const addMockProgram = (db) => {
+const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
     try {
         const result = db.getFirstSync(`SELECT * FROM primary_exercises`);
         if (result != null) return;
 
         db.execSync(`
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Bench', 210, 195, 220, 255, 5, 3, 1);
+            VALUES ('Bench', 210, 205, 235, 260, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB OHP', 90, 45, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('Dips', 90, 0, 15, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Lateral Raise', 90, 20, 15, 3);
+            VALUES ('Lateral Raise', 90, 25, 15, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('Tricep Extension', 90, 30, 15, 3);
             INSERT INTO supersets (exercise_1, exercise_2)
@@ -139,7 +140,7 @@ const addMockProgram = (db) => {
             VALUES ('Leg Raises', 90, 0, 15, 4);
 
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Deadlift', 210, 325, 355, 405, 5, 3, 1);
+            VALUES ('Deadlift', 210, 325, 365, 425, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('BB Curl', 90, 45, 21, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
@@ -147,20 +148,20 @@ const addMockProgram = (db) => {
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('Hammer Curl', 90, 30, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Face Pull', 90, 30, 15, 3);
+            VALUES ('Face Pull', 90, 20, 15, 3);
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Hammer Curl', 'Face Pull');
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Core Machine', 90, 85, 15, 4);
+            VALUES ('Cable Crunches', 90, 60, 15, 4);
 
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('OHP', 180, 115, 130, 140, 5, 3, 1);
+            VALUES ('OHP', 180, 115, 140, 150, 5, 3, 1);
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
             VALUES ('BB Row', 180, 165, 185, 185, 5, 3, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB Bench', 120, 65, 12, 4);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('BTB Shrug', 90, 40, 12, 3);
+            VALUES ('BTB Shrug', 90, 50, 12, 3);
             INSERT INTO supersets (exercise_1, exercise_2)
             VALUES ('Lateral Raise', 'BTB Shrug');
 
@@ -185,7 +186,7 @@ const addMockProgram = (db) => {
 
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_3, exercise_3_placement,
                               exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Pull', 'blue', 'Deadlift', 1, 'BB Curl', 2, 'Lat Pull', 3, 'Core Machine', 5,'Hammer Curl', 'Face Pull', 4);
+            VALUES ('Pull', 'blue', 'Deadlift', 1, 'BB Curl', 2, 'Lat Pull', 3, 'Cable Crunches', 5,'Hammer Curl', 'Face Pull', 4);
 
             INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
                               exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement)
@@ -193,7 +194,7 @@ const addMockProgram = (db) => {
 
             INSERT INTO days (name, color, exercise_3, exercise_3_placement, superset_1_1, superset_1_2,
                               superset_1_placement, superset_2_1, superset_2_2, superset_2_placement, exercise_4, exercise_4_placement)
-            VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3, 'Core Machine', 4);
+            VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3, 'Cable Crunches', 4);
         `);
 
         db.execSync(`
@@ -212,7 +213,7 @@ const addMockProgram = (db) => {
     }
 }
 
-const getProgram = (db) => {
+const getProgram = (db:  SQLite.SQLiteDatabase) => {
     const res: programType = {
         name: '',
         days: []

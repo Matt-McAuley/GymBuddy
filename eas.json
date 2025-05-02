@@ -19,7 +19,7 @@
     "production": {
       "autoIncrement": true,
       "distribution": "internal",
-        "environment": "production"
+       "environment": "production"
     }
   },
   "submit": {
