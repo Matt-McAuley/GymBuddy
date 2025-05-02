@@ -50,7 +50,6 @@ export default function Index() {
         const day = await AsyncStorage.getItem('currentDay');
         const exercise = await AsyncStorage.getItem('currentExercise');
         const scheme = await AsyncStorage.getItem('currentScheme');
-        console.log(day, exercise, scheme);
         exerciseScrollRef.current?.scrollTo({x: parseInt(exercise || '0') * width, y: 0, animated: false});
         setCurrentDay(parseInt(day || '0'));
         setCurrentExercise(parseInt(exercise || '0'));
@@ -81,54 +80,54 @@ export default function Index() {
         exerciseScrollRef.current?.scrollTo({x: 0, y: 0, animated: false});
     }, [timesReset]);
 
-  return (program == null) ? (
-      <View className={'flex justify-center items-center h-full'}>
-          <Text className={'text-3xl'}>No Program Selected</Text>
-      </View>
-      )
-      : (program.days.length == 0) ? (
+    return (program == null) ? (
             <View className={'flex justify-center items-center h-full'}>
-                <Text className={'text-3xl'}>No Days in Program</Text>
+                <Text className={'text-3xl'}>No Program Selected</Text>
             </View>
-        ) :
-      (
-          <>
-          <View className={'flex justify-center items-center'}>
-            <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:day?.color}}
-                  data={program.days.map((d, index) => ({label: d.name, value: {index, color: d.color}}))}
-                  labelField='label' valueField='value' value={{label: day?.name, value: {index: currentDay, color: day?.color}}}
-                  renderRightIcon={() => (
-                    <Text style={{...styles.icon, color: 'black'}}>{'▼'}</Text>
-                  )}
-                  renderItem={(item, selected) => (
-                  (selected) ? null :
-                  <View style={styles.item}>
-                    <Text style={{...styles.itemText, color: item.value.color}}>{item.label}</Text>
-                  </View>)}
-                  onChange={(item) => {setCurrentDay(item.value.index)}}/>
-          </View>
-              <View style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
-                     {(day?.exercises.length == 0) ?
-                         <View className={'flex-col h-full justify-center items-center'}>
-                             <Text className={'text-3xl'}>No Exercises in Day</Text>
-                         </View>
-                         :
-                         <>
-                             <Timer/>
-                             <Counter/>
-                             <ScrollView ref={(ref) => (exerciseScrollRef.current = ref)} horizontal snapToInterval={width}
-                                         decelerationRate={'fast'} pagingEnabled onScroll={handleExerciseScroll}>
-                                 {day?.exercises.map((exercise, exerciseIndex) => (
-                                     <View key={exerciseIndex} style={{width: width-20, marginRight: 20, padding: 3}}>
-                                         <ExerciseDisplay currentExercise={exerciseIndex} currentDay={currentDay}/>
-                                     </View>
-                                 ))}
-                             </ScrollView>
-                         </>
-                     }
-              </View>
-          </>
-  );
+        )
+        : (program.days.length == 0) ? (
+                <View className={'flex justify-center items-center h-full'}>
+                    <Text className={'text-3xl'}>No Days in Program</Text>
+                </View>
+            ) :
+            (
+                <>
+                    <View className={'flex justify-center items-center'}>
+                        <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:day?.color}}
+                                  data={program.days.map((d, index) => ({label: d.name, value: {index, color: d.color}}))}
+                                  labelField='label' valueField='value' value={{label: day?.name, value: {index: currentDay, color: day?.color}}}
+                                  renderRightIcon={() => (
+                                      <Text style={{...styles.icon, color: 'black'}}>{'▼'}</Text>
+                                  )}
+                                  renderItem={(item, selected) => (
+                                      (selected) ? null :
+                                          <View style={styles.item}>
+                                              <Text style={{...styles.itemText, color: item.value.color}}>{item.label}</Text>
+                                          </View>)}
+                                  onChange={(item) => {setCurrentDay(item.value.index)}}/>
+                    </View>
+                    <View style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
+                        {(day?.exercises.length == 0) ?
+                            <View className={'flex-col h-full justify-center items-center'}>
+                                <Text className={'text-3xl'}>No Exercises in Day</Text>
+                            </View>
+                            :
+                            <>
+                                <Timer/>
+                                <Counter/>
+                                <ScrollView ref={(ref) => (exerciseScrollRef.current = ref)} horizontal snapToInterval={width}
+                                            decelerationRate={'fast'} pagingEnabled onScroll={handleExerciseScroll}>
+                                    {day?.exercises.map((exercise, exerciseIndex) => (
+                                        <View key={exerciseIndex} style={{width: width-20, marginRight: 20, padding: 3}}>
+                                            <ExerciseDisplay currentExercise={exerciseIndex} currentDay={currentDay}/>
+                                        </View>
+                                    ))}
+                                </ScrollView>
+                            </>
+                        }
+                    </View>
+                </>
+            );
 }
 
 const styles = StyleSheet.create({
