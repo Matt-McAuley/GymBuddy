@@ -3,42 +3,60 @@ import WidgetKit
 import SwiftUI
 
 struct WidgetLiveActivity: Widget {
-    var body: some WidgetConfiguration {
-      ActivityConfiguration(for: MyLiveActivityAttributes.self) { context in
-            // Lock screen/banner UI goes here
-            VStack {
-              Text(context.attributes.customString)
-            }
-        } dynamicIsland: { context in
-            DynamicIsland {
-                // Expanded UI goes here.  Compose the expanded UI through
-                // various regions, like leading/trailing/center/bottom
-                DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
-                }
-                DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
-                }
-                DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom")
-                }
-            } compactLeading: {
-                Text("L")
-            } compactTrailing: {
-                Text("T")
-            } minimal: {
-                Text("M")
-            }
-        }
-    }
-}
+  var body: some WidgetConfiguration {
+    ActivityConfiguration(for: LiveActivityAttributes.self) { context in
+      // ─ Lock Screen / Banner UI ─
+      HStack {
+        VStack(alignment: .leading) {
+          Text(context.attributes.exerciseName)
+            .font(.headline)
 
-#Preview(
-  "Lockscreen View",
-  as: .content,
-  using: MyLiveActivityAttributes(customString: "Hello World", customNumber: 1)
-) {
-  WidgetLiveActivity()
-} contentStates: {
-  MyLiveActivityAttributes.MyLiveActivityState()
+          Text(context.state.remainingTime.formattedTimeString())
+            .font(.system(size: 48, weight: .bold))
+        }
+        Spacer()
+
+        // “X” dismiss & reset
+        Link(destination: URL(string: "myapp://timer/stop")!) {
+          Image(systemName: "xmark.circle.fill")
+            .font(.system(size: 36))
+            .foregroundColor(.red)
+        }
+      }
+      .padding()
+      .widgetURL(URL(string: "myapp://timer")) // tap anywhere → your app
+
+    } dynamicIsland: { context in
+      // ─ Dynamic Island UI ─
+      DynamicIsland {
+        DynamicIslandExpandedRegion(.leading) {
+          Text(context.attributes.exerciseName)
+        }
+        DynamicIslandExpandedRegion(.center) {
+          Text(context.state.remainingTime.formattedTimeString())
+            .font(.title2)
+        }
+        DynamicIslandExpandedRegion(.trailing) {
+          // pause / play
+          Link(destination: URL(string: "myapp://timer/toggle")!) {
+            Image(systemName: context.state.isPaused
+                    ? "play.fill" : "pause.fill")
+              .font(.title2)
+          }
+          // stop
+          Link(destination: URL(string: "myapp://timer/stop")!) {
+            Image(systemName: "xmark.circle.fill")
+              .font(.title2)
+          }
+        }
+      } compactLeading: {
+        Image(systemName: context.state.isPaused
+                ? "play.fill" : "pause.fill")
+      } compactTrailing: {
+        Text(context.state.remainingTime.formattedTimeString())
+      } minimal: {
+        Text("\(context.state.remainingTime)")
+      }
+    }
+  }
 }

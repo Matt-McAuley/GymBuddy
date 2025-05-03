@@ -1,12 +1,14 @@
 import { requireNativeModule } from "expo";
-
 import * as types from "./ActivityController.types";
 
 const nativeModule = requireNativeModule("ActivityController");
 
-export const startLiveActivity: types.StartLiveActivityFn = async (params) => {
-  const stringParams = JSON.stringify(params);
-  return nativeModule.startLiveActivity(stringParams);
+export const startLiveActivity: types.StartLiveActivityFn = async params => {
+  return nativeModule.startLiveActivity(JSON.stringify(params));
+};
+
+export const updateLiveActivity: types.UpdateLiveActivityFn = async params => {
+  return nativeModule.updateLiveActivity(JSON.stringify(params));
 };
 
 export const stopLiveActivity: types.StopLiveActivityFn = async () => {

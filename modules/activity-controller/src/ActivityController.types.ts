@@ -1,11 +1,20 @@
 export type LiveActivityParams = {
-  customString: string;
-  customNumber: number;
+  // must match your Swift StartActivityArgs
+  exerciseName: string;
 };
 
 export type StartLiveActivityFn = (
-    params: LiveActivityParams,
+    params: LiveActivityParams
 ) => Promise<{ activityId: string }>;
+
+export type UpdateLiveActivityParams = {
+  remainingTime: number;
+  isPaused: boolean;
+};
+
+export type UpdateLiveActivityFn = (
+    params: UpdateLiveActivityParams
+) => Promise<void>;
 
 export type StopLiveActivityFn = () => Promise<void>;
 
