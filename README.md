@@ -69,14 +69,38 @@ how the app turned out, and I'm glad I was able to use my skills to create somet
 
 ## Images
 
+#### Splash Screen
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/splash.png" alt="Image" style="width: 95%">
+
 #### Home Page
-<img src="https://matt-mcauley.github.io/assets/img/GymBuddy/home.PNG" alt="Home Page Image" style="height: 600px">
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/home_nav.png" alt="Image" style="width: 95%">
+
+#### Different Day
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/home.png" alt="Image" style="width: 95%">
 
 #### Programs Page
-<img src="https://matt-mcauley.github.io/assets/img/GymBuddy/programs.PNG" alt="Programs Page Image" style="height: 600px">
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/programs.png" alt="Image" style="width: 95%">
+
+#### Editing Program
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/edit_program.png" alt="Image" style="width: 95%">
+
+#### Days Page
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/days.png" alt="Image" style="width: 95%">
+
+#### Adding Day
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/add_day.png" alt="Image" style="width: 95%">
+
+#### Exercises Page
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/exercises.png" alt="Image" style="width: 95%">
+
+#### Adding Exercise
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/add_exercise.png" alt="Image" style="width: 95%">
 
 #### Music Page
-<img src="https://matt-mcauley.github.io/assets/img/GymBuddy/music.PNG" alt="Music Page Image" style="height: 600px">
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/music.png" alt="Image" style="width: 95%">
+
+#### Playlists
+<img src="https://mattmcauley.com/assets/projects/GymBuddy/playlists.png" alt="Image" style="width: 95%">
 
 ## Running locally (iOS - requires Macbook with Xcode and cocoapods)
 
