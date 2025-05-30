@@ -1,6 +1,5 @@
 import {Image, Text, TouchableOpacity, View, Vibration} from "react-native";
 import {useEffect, useState} from "react";
-import BackgroundTimer from 'react-native-background-timer';
 import { useStore } from "@/store";
 
 export default function Timer() {
@@ -45,7 +44,7 @@ export default function Timer() {
 
     useEffect(() => {
         if (!paused) {
-            const interval = BackgroundTimer.setInterval(() => {
+            const interval = setInterval(() => {
                 if (time === 0) {
                     timerEnd();
                     return;
@@ -53,7 +52,7 @@ export default function Timer() {
                 setTime(time - 1);
             }, 850);
 
-            return () => BackgroundTimer.clearInterval(interval);
+            return () => clearInterval(interval);
         }
     }, [paused, time]);
 
