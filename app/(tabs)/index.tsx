@@ -8,6 +8,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import registerNNPushToken from 'native-notify';
 
 export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset, paused,
@@ -18,11 +19,12 @@ export default function Index() {
     const [backgroundStart, setBackgroundStart] = useState<number | null>(null);
     const appState = useRef(AppState.currentState);
     useDrizzleStudio(db);
+    registerNNPushToken(30437, '7W4A9Or8CcpMusVIoFFmCx');
 
     useEffect(() => {
         const subscription = AppState.addEventListener('change', nextAppState => {
             if (appState.current.match(/inactive|background/) && nextAppState === 'active' && backgroundStart !== null && !paused) {
-                setTime(time - Math.floor((new Date().getTime() - backgroundStart) / 1000));
+                setTime(Math.max(0, time - Math.floor((new Date().getTime() - backgroundStart) / 1000)));
             }
             else if (appState.current.match(/active/) && nextAppState === 'background') {
                 setBackgroundStart(new Date().getTime());
@@ -38,7 +40,7 @@ export default function Index() {
         const initialTime = await AsyncStorage.getItem('initialTime');
         const startTime = await AsyncStorage.getItem('startTime');
         const newTime = (initialTime === null || startTime === null) ? (timer === null) ? null : parseInt(timer) :
-            Math.max(1, parseInt(startTime) - Math.floor((new Date().getTime() - parseInt(initialTime)) / 1000));
+            Math.max(0, parseInt(startTime) - Math.floor((new Date().getTime() - parseInt(initialTime)) / 1000));
         const paused = await AsyncStorage.getItem('paused');
         const set = await AsyncStorage.getItem('set');
         setRetrievedTime(newTime);
@@ -58,7 +60,7 @@ export default function Index() {
 
     useEffect(() => {
         // dbTeardown(db);
-        dbSetup(db);
+        // dbSetup(db);
         // addMockProgram(db);
         retrieveOverwrittenValues().then(() => {
             setProgram(getProgram(db));
@@ -76,9 +78,14 @@ export default function Index() {
         }
     }
 
+    const handleDayChange = (index: number) => {
+        exerciseScrollRef.current?.scrollTo({x: 0, y: 0, animated: false});
+        setCurrentDay(index);
+    }
+
     useEffect(() => {
         exerciseScrollRef.current?.scrollTo({x: 0, y: 0, animated: false});
-    }, [timesReset, currentDay]);
+    }, [timesReset]);
 
     return (program == null) ? (
             <View className={'flex justify-center items-center h-full'}>
@@ -104,7 +111,7 @@ export default function Index() {
                                           <View style={styles.item}>
                                               <Text style={{...styles.itemText, color: item.value.color}}>{item.label}</Text>
                                           </View>)}
-                                  onChange={(item) => {setCurrentDay(item.value.index)}}/>
+                                  onChange={(item) => {handleDayChange(item.value.index)}}/>
                     </View>
                     <View style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
                         {(day?.exercises.length == 0) ?

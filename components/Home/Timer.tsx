@@ -11,7 +11,18 @@ export default function Timer() {
         ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
 
     const timerEnd = () => {
-        Vibration.vibrate([700, 50, 700, 50, 700]);
+        fetch(`https://app.nativenotify.com/api/notification`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                appId: 30437,
+                appToken: "7W4A9Or8CcpMusVIoFFmCx",
+                title: "Timer finished",
+                dateSent: Date.now().toString(),
+            }),
+        });
         setPaused(true);
     }
 
@@ -40,7 +51,7 @@ export default function Timer() {
                     return;
                 }
                 setTime(time - 1);
-            }, 820);
+            }, 850);
 
             return () => BackgroundTimer.clearInterval(interval);
         }

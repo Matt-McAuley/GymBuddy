@@ -125,7 +125,7 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
 
         db.execSync(`
             INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Bench', 210, 205, 235, 260, 5, 3, 1);
+            VALUES ('Bench', 5, 205, 235, 260, 5, 3, 1);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
             VALUES ('DB OHP', 90, 45, 12, 3);
             INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
