@@ -78,7 +78,7 @@ export default function Index() {
 
     useEffect(() => {
         exerciseScrollRef.current?.scrollTo({x: 0, y: 0, animated: false});
-    }, [timesReset]);
+    }, [timesReset, currentDay]);
 
     return (program == null) ? (
             <View className={'flex justify-center items-center h-full'}>
