@@ -29,11 +29,6 @@ export default function TabLayout() {
             tabBarIcon: () => <Image className={"h-10 w-10"} source={require("@/assets/images/tabs/MusicIcon.png")} />,
         }}
         />
-        <Tabs.Screen name="timer" options={{
-            title: 'Timer',
-            tabBarIcon: () => <Image className={"h-10 w-10"} source={require("@/assets/images/tabs/MusicIcon.png")} />,
-        }}
-        />
     </Tabs>
   );
 }

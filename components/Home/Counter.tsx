@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 
 export default function Counter() {
-    const {isAccessoryExercise, isPrimaryExercise, currentScheme, set, setSet, retrievedSet, setRetrievedSet, retrievedYet, currentExercise, currentDay} = useStore();
+    const {isAccessoryExercise, isPrimaryExercise, currentScheme, set, setSet, retrievedSet, setRetrievedSet, retrievedYet} = useStore();
     const exercise = useStore((state) => state.exercise());
     const [maxSets, setMaxSets] = useState((isPrimaryExercise(exercise)) ? 5 : (isAccessoryExercise(exercise))
         ? exercise.sets : exercise.exercise1.sets);

@@ -16,7 +16,7 @@ const useTimer = () => {
 
   const value = `${minutes}:${secondTens}${secondUnits}`;
 
-  function play() {
+  function play(start: number) {
     if (intervalId.current) {
       return; // Already running
     }
@@ -99,7 +99,7 @@ function Timer(): React.JSX.Element {
           {isRunning ? (
             <Button title="Pause" onPress={pause} />
           ) : (
-            <Button title="Start" onPress={play} />
+            <Button title="Start" onPress={() => play(300)} />
           )}
         </View>
         <Button title="Reset" onPress={reset} />
