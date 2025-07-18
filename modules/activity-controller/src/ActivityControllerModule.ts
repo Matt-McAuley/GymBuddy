@@ -3,8 +3,8 @@ import * as types from './ActivityController.types';
 
 const nativeModule = requireNativeModule('ActivityController');
 
-export const startLiveActivity: types.startLiveActivityFn = async (startTime) => {
-  return nativeModule.startLiveActivity(startTime);
+export const startLiveActivity: types.startLiveActivityFn = async (startTime, timestamp) => {
+  return nativeModule.startLiveActivity(startTime, timestamp);
 }
 
 export const stopLiveActivity: types.stopLiveActivityFn = async () => {
