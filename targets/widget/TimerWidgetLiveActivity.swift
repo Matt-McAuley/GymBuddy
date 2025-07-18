@@ -9,7 +9,7 @@ import ActivityKit
 import WidgetKit
 import SwiftUI
 
-@available(iOSApplicationExtension 17.0, *)
+@available(iOSApplicationExtension 18.0, *)
 struct TimerWidgetLiveActivity: Widget {
   func rgb(_ red: Double, _ green: Double, _ blue: Double) -> Color {
     return Color(red: red/255.0, green: green/255.0, blue: blue/255.0)
@@ -217,7 +217,7 @@ extension TimerWidgetAttributes.ContentState {
   }
 }
 
-@available(iOS 17.0, *)
+@available(iOS 18.0, *)
 #Preview("Notification", as: .content, using: TimerWidgetAttributes.preview) {
   TimerWidgetLiveActivity()
 } contentStates: {

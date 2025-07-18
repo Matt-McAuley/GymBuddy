@@ -52,13 +52,13 @@ export default function Timer() {
                 <TouchableOpacity onPress={() => {
                     if (paused) {
                         if (value == restTime)
-                            startLiveActivity(restTime);
+                            startLiveActivity(restTime, Date.now());
                         else
                             resume();
                         setTimeOfDay(Date.now());
                     } else {
                         setPausedTime(value);
-                        pause(value);
+                        pause(Date.now());
                     }
                     setPaused(!paused);
                 }}>
