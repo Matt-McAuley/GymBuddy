@@ -1,4 +1,4 @@
-import {Image, Text, TouchableOpacity, View} from "react-native";
+import {Image, Text, TouchableOpacity, View, Linking} from "react-native";
 import {useEffect, useRef, useState} from "react";
 import { useStore } from "@/store";
 import { startLiveActivity, stopLiveActivity, pause, resume } from "@/modules/activity-controller";
@@ -29,15 +29,31 @@ export default function Timer() {
             }
             const elapsed = Math.floor((Date.now() - timeOfDay) / 1000);
             const newValue = Math.max(0, pausedTime - elapsed);
-            setValue(newValue);
-
             if (newValue <= 0) {
-                stopLiveActivity();
-                setPaused(true);
+                setValue(0);
+                return;
             }
+            setValue(newValue);
         }, 500);
         return () => clearInterval(interval);
     }, [paused, pausedTime, timeOfDay]);
+
+    useEffect(() => {
+        const handleURL = (event: {url: string}) => {
+          console.log("Received URL:", event);
+          const url = event.url;
+          if (url.includes('pause')) {
+            pause(Date.now() / 1000);
+          } else if (url.includes('resume')) {
+            resume();
+          } else if (url.includes('reset')) {
+            stopLiveActivity();
+          }
+        };
+      
+        const subscription = Linking.addEventListener('url', handleURL);
+        return () => subscription?.remove();
+      }, []);
 
     return (
         <View className={'flex-row justify-between items-center h-40 w-full bg-gray-500 rounded-2xl pl-3 pr-3 border-black border-4'}>

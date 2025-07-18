@@ -79,11 +79,10 @@ struct TimerWidgetLiveActivity: Widget {
             .frame(width: 85)
             .transition(.identity)
           } else {
+            let date = Date()
             Text(
-              Date(
-                timeIntervalSinceNow: context.state.getTimeIntervalSinceNow()
-              ),
-              style: .timer
+              timerInterval: date...date.addingTimeInterval(context.state.getTimeIntervalSinceNow()),
+              countsDown: true
             )
             .font(.system(size:36))
             .foregroundColor(.white)
@@ -157,11 +156,10 @@ struct TimerWidgetLiveActivity: Widget {
                 .frame(width: 85)
                 .transition(.identity)
               } else {
+                let date = Date()
                 Text(
-                  Date(
-                    timeIntervalSinceNow: context.state.getTimeIntervalSinceNow()
-                  ),
-                  style: .timer
+                  timerInterval: date...date.addingTimeInterval(context.state.getTimeIntervalSinceNow()),
+                  countsDown: true
                 )
                 .font(.system(size:40))
                 .foregroundColor(.white)
@@ -179,16 +177,15 @@ struct TimerWidgetLiveActivity: Widget {
           .imageScale(.medium)
           .foregroundColor(.white)
       } compactTrailing: {
-        if (context.state.pausedAt != nil) {
+        if (!context.state.isRunning()) {
           Text(context.state.getPausedTime())
             .foregroundColor(.white)
             .monospacedDigit()
         } else {
+          let date = Date()
           Text(
-            Date(
-              timeIntervalSinceNow: context.state.getTimeIntervalSinceNow()
-            ),
-            style: .timer
+            timerInterval: date...date.addingTimeInterval(context.state.getTimeIntervalSinceNow()),
+            countsDown: true
           )
           .foregroundColor(.white)
           .monospacedDigit()
@@ -213,7 +210,7 @@ extension TimerWidgetAttributes {
 
 extension TimerWidgetAttributes.ContentState {
   fileprivate static var initState: TimerWidgetAttributes.ContentState {
-    TimerWidgetAttributes.ContentState(startedAt: Date(), startTime: 300)
+    TimerWidgetAttributes.ContentState(startedAt: Date(), startTime: 10)
   }
 }
 

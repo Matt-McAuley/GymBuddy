@@ -15,19 +15,21 @@ struct TimerWidgetAttributes: ActivityAttributes {
     var pausedAt: Date?
     
     func getElapsedTimeInSeconds() -> Int {
-      let now = Date()
       guard let startedAt = self.startedAt else {
         return 0
       }
       guard let pausedAt = self.pausedAt else {
-        return Int(now.timeIntervalSince1970 - startedAt.timeIntervalSince1970)
+        return Int(Date().timeIntervalSince1970 - startedAt.timeIntervalSince1970)
       }
       return Int(pausedAt.timeIntervalSince1970 - startedAt.timeIntervalSince1970)
     }
     
     func getPausedTime() -> String {
       let elapsedTimeInSeconds = getElapsedTimeInSeconds()
-      let remaining = startTime ?? 0 - elapsedTimeInSeconds
+      guard let startTime = self.startTime else {
+        return "0:00"
+      }
+      let remaining = startTime - elapsedTimeInSeconds
       guard remaining > 0 else {
         return "0:00"
       }
@@ -43,7 +45,7 @@ struct TimerWidgetAttributes: ActivityAttributes {
       guard let startTime = self.startTime else {
         return 0
       }
-      return Double(startTime) + (startedAt.timeIntervalSince1970 - Date().timeIntervalSince1970)
+      return Double(startTime) - (Date().timeIntervalSince1970 - startedAt.timeIntervalSince1970)
     }
     
     func isRunning() -> Bool {

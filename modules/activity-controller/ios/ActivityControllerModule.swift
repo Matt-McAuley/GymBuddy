@@ -61,6 +61,7 @@ public class ActivityControllerModule: Module {
     guard #available(iOS 18.0, *) else { return }
     
     startedAt = Date(timeIntervalSince1970: timestamp)
+    self.startTime = startTime
     if (!areActivitiesEnabled()) {
       return
     }
@@ -87,6 +88,9 @@ public class ActivityControllerModule: Module {
     guard #available(iOS 18.0, *) else { return }
     
     pausedAt = Date(timeIntervalSince1970: timestamp)
+    print(startedAt)
+    print(pausedAt)
+    print(startTime)
     let contentState = TimerWidgetAttributes.ContentState(startedAt: startedAt, startTime: startTime, pausedAt: pausedAt)
     Task {
       if let activity = currentActivity as? Activity<TimerWidgetAttributes> {
