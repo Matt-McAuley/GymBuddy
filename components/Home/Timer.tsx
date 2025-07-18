@@ -32,9 +32,8 @@ export default function Timer() {
             setValue(newValue);
 
             if (newValue <= 0) {
-                stopLiveActivity().then(() => {
-                    setPaused(true);
-                });
+                stopLiveActivity();
+                setPaused(true);
             }
         }, 500);
         return () => clearInterval(interval);
@@ -59,7 +58,7 @@ export default function Timer() {
                         setTimeOfDay(Date.now());
                     } else {
                         setPausedTime(value);
-                        pause();
+                        pause(value);
                     }
                     setPaused(!paused);
                 }}>

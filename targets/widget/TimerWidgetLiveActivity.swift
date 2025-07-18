@@ -213,7 +213,7 @@ extension TimerWidgetAttributes {
 
 extension TimerWidgetAttributes.ContentState {
   fileprivate static var initState: TimerWidgetAttributes.ContentState {
-    TimerWidgetAttributes.ContentState(startedAt: Date())
+    TimerWidgetAttributes.ContentState(startedAt: Date(), startTime: 300)
   }
 }
 

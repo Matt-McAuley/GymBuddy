@@ -12,6 +12,7 @@ import ExpoModulesCore
 public class ActivityControllerModule: Module {
   private var currentActivity: Any?
   private var startedAt: Date?
+  private var startTime: Int?
   private var pausedAt: Date?
 
   public func definition() -> ModuleDefinition {

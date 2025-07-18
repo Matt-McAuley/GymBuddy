@@ -11,8 +11,8 @@ export const stopLiveActivity: types.stopLiveActivityFn = async () => {
   return nativeModule.stopLiveActivity();
 }
 
-export const pause: types.pauseFn = async () => {
-  return nativeModule.pause();
+export const pause: types.pauseFn = async (time) => {
+  return nativeModule.pause(time);
 }
 
 export const resume: types.resumeFn = async () => {
