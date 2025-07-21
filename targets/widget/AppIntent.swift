@@ -9,37 +9,73 @@ import Foundation
 import AppIntents
 
 @available(iOS 18.0, *)
-public struct PauseIntent: LiveActivityIntent {
-  public init() {}
-  public static var title: LocalizedStringResource = "Pause timer"
-  public func perform() async throws -> some IntentResult {
-    if let url = URL(string: "timer://pause") {
-      try await OpenURLIntent(url).perform()
+struct PauseIntent: AppIntent, LiveActivityIntent {
+    static var title: LocalizedStringResource = "Pause Timer"
+    static var description: IntentDescription = "Pauses the current timer."
+    
+    init() {}
+    
+    func perform() async throws -> some IntentResult {
+        NSLog("Sending Notification!!!!")
+        let userDefaults = UserDefaults(suiteName: "group.com.mattmcauley.GymBuddy.share")
+        userDefaults?.set("pause", forKey: "timerAction")
+        userDefaults?.synchronize()
+        
+        CFNotificationCenterPostNotification(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            CFNotificationName("com.gymbuddy.timer.action" as CFString),
+            nil,
+            nil,
+            true
+        )
+            return .result()
     }
-    return .result()
-  }
 }
 
 @available(iOS 18.0, *)
-public struct ResumeIntent: LiveActivityIntent {
-  public init() {}
-  public static var title: LocalizedStringResource = "Resume timer"
-  public func perform() async throws -> some IntentResult {
-    if let url = URL(string: "timer://resume") {
-      try await OpenURLIntent(url).perform()
+struct ResumeIntent: AppIntent, LiveActivityIntent {
+    static var title: LocalizedStringResource = "Resume Timer"
+    static var description: IntentDescription = "Resumes the current timer."
+    
+    init() {}
+    
+    func perform() async throws -> some IntentResult {
+        NSLog("Sending Notification!!!!")
+        let userDefaults = UserDefaults(suiteName: "group.com.mattmcauley.GymBuddy.share")
+        userDefaults?.set("resume", forKey: "timerAction")
+        userDefaults?.synchronize()
+        
+        CFNotificationCenterPostNotification(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            CFNotificationName("com.gymbuddy.timer.action" as CFString),
+            nil,
+            nil,
+            true
+        )
+        return .result()
     }
-    return .result()
-  }
 }
 
 @available(iOS 18.0, *)
-public struct ResetIntent: LiveActivityIntent {
-  public init() {}
-  public static var title: LocalizedStringResource = "Reset timer"
-  public func perform() async throws -> some IntentResult {
-    if let url = URL(string: "timer://reset") {
-      try await OpenURLIntent(url).perform()
+struct ResetIntent: AppIntent, LiveActivityIntent {
+    static var title: LocalizedStringResource = "Reset Timer"
+    static var description: IntentDescription = "Resets the current timer."
+    
+    init() {}
+    
+    func perform() async throws -> some IntentResult {
+        NSLog("Sending Notification!!!!")
+        let userDefaults = UserDefaults(suiteName: "group.com.mattmcauley.GymBuddy.share")
+        userDefaults?.set("reset", forKey: "timerAction")
+        userDefaults?.synchronize()
+        
+        CFNotificationCenterPostNotification(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            CFNotificationName("com.gymbuddy.timer.action" as CFString),
+            nil,
+            nil,
+            true
+        )
+        return .result()
     }
-    return .result()
-  }
 }

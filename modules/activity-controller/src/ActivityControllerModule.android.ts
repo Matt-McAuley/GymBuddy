@@ -1,18 +1,22 @@
 import { requireNativeModule } from 'expo';
 import * as types from './ActivityController.types';
 
-export const startLiveActivity : types.startLiveActivity = async (timestamp) => {
+export const startLiveActivity : types.startLiveActivityFn = async (timestamp) => {
     return;
 }
 
-export const stopLiveActivity : types.stopLiveActivity = async () => {
+export const stopLiveActivity : types.stopLiveActivityFn = async () => {
     return;
 }
 
-export const pause : types.pause = async (timestamp) => {
+export const pause : types.pauseFn = async (timestamp) => {
     return;
 }
 
-export const resume : types.resume = async () => {
+export const resume : types.resumeFn = async () => {
+    return;
+}
+
+export const createSubscription : types.createSubscriptionFn = async (eventName, callback) => {
     return;
 }

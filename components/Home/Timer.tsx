@@ -1,7 +1,7 @@
-import {Image, Text, TouchableOpacity, View, Linking} from "react-native";
-import {useEffect, useRef, useState} from "react";
+import {Image, Text, TouchableOpacity, View} from "react-native";
+import {useEffect, useCallback, useState} from "react";
 import { useStore } from "@/store";
-import { startLiveActivity, stopLiveActivity, pause, resume } from "@/modules/activity-controller";
+import { startLiveActivity, stopLiveActivity, pause, resume, createSubscription, startListening } from "@/modules/activity-controller";
 
 export default function Timer() {
     const {isAccessoryExercise, isPrimaryExercise} = useStore();
@@ -39,21 +39,8 @@ export default function Timer() {
     }, [paused, pausedTime, timeOfDay]);
 
     useEffect(() => {
-        const handleURL = (event: {url: string}) => {
-          console.log("Received URL:", event);
-          const url = event.url;
-          if (url.includes('pause')) {
-            pause(Date.now() / 1000);
-          } else if (url.includes('resume')) {
-            resume();
-          } else if (url.includes('reset')) {
-            stopLiveActivity();
-          }
-        };
-      
-        const subscription = Linking.addEventListener('url', handleURL);
-        return () => subscription?.remove();
-      }, []);
+        startListening();
+    }, []);
 
     return (
         <View className={'flex-row justify-between items-center h-40 w-full bg-gray-500 rounded-2xl pl-3 pr-3 border-black border-4'}>

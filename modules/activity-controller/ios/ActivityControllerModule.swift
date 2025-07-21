@@ -17,6 +17,10 @@ public class ActivityControllerModule: Module {
 
   public func definition() -> ModuleDefinition {
     Name("ActivityController")
+      
+    Function("startListening") {
+      self.startListening()
+    }
     
     Function("startLiveActivity") { (startTime: Int, timestamp: Double) in
       if #available(iOS 18.0, *) {
@@ -40,6 +44,30 @@ public class ActivityControllerModule: Module {
       if #available(iOS 18.0, *) {
         self.resume()
       }
+    }
+  }
+
+  private func startListening() {
+    CFNotificationCenterAddObserver(
+      CFNotificationCenterGetDarwinNotifyCenter(),
+      Unmanaged.passUnretained(self).toOpaque(),
+      { (center, observer, name, object, userInfo) in
+        guard let observer = observer else { return }
+        let moduleInstance = Unmanaged<ActivityControllerModule>.fromOpaque(observer).takeUnretainedValue()
+        moduleInstance.handleTimerAction()
+      },
+      "com.gymbuddy.timer.action" as CFString,
+      nil,
+      .deliverImmediately
+    )
+  }
+  
+  private func handleTimerAction() {
+    NSLog("Received notification from timer!!!!")
+    
+    let userDefaults = UserDefaults(suiteName: "group.com.mattmcauley.GymBuddy.share")
+    if let action = userDefaults?.object(forKey: "timerAction") as? String {
+      NSLog("Timer action: \(action)!!!!")
     }
   }
 
@@ -88,9 +116,6 @@ public class ActivityControllerModule: Module {
     guard #available(iOS 18.0, *) else { return }
     
     pausedAt = Date(timeIntervalSince1970: timestamp)
-    print(startedAt)
-    print(pausedAt)
-    print(startTime)
     let contentState = TimerWidgetAttributes.ContentState(startedAt: startedAt, startTime: startTime, pausedAt: pausedAt)
     Task {
       if let activity = currentActivity as? Activity<TimerWidgetAttributes> {
