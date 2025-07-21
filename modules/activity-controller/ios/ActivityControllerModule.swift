@@ -17,6 +17,8 @@ public class ActivityControllerModule: Module {
 
   public func definition() -> ModuleDefinition {
     Name("ActivityController")
+
+    Events("onTimerAction")
       
     Function("startListening") {
       self.startListening()
@@ -69,14 +71,24 @@ public class ActivityControllerModule: Module {
     if let action = userDefaults?.object(forKey: "timerAction") as? String {
       if let timestamp = userDefaults?.object(forKey: "timestamp") as? Double {
         if action == "pause" {
-          NSLog("Pausing live activity")
-          // Send pause action to React (include timestamp so everything is lined up)
+          NSLog("Pausing live activity!!!!")
+          sendEvent("onTimerAction", ["action": "pause", "timestamp": timestamp * 1000])
+          if #available(iOS 18.0, *) {
+            self.pause(timestamp)
+          }
         } else if action == "resume" {
-          NSLog("Resuming live activity")
-          // Send resume action to React
+          NSLog("Resuming live activity!!!!")
+          sendEvent("onTimerAction", ["action": "resume", "timestamp": timestamp * 1000])
+          if #available(iOS 18.0, *) {
+            self.resume(timestamp)
+          }
         } else if action == "reset" {
-          NSLog("Resetting live activity")
-          // Send reset action to React
+          NSLog("Resetting live activity!!!!")
+          sendEvent("onTimerAction", ["action": "reset", "timestamp": timestamp * 1000])
+          if #available(iOS 18.0, *) {
+            self.resetValues()
+            self.stopLiveActivity()
+          }
         }
       }
     }

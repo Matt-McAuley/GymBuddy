@@ -23,34 +23,6 @@ export const resume: types.resumeFn = async (timestamp) => {
   return nativeModule.resume(timestamp);
 }
 
-export const createSubscription: types.createSubscriptionFn = (callbacks: {
-  onPause?: () => void;
-  onResume?: () => void;
-  onReset?: () => void;
-}) => {
-  const pauseSubscription = nativeModule.addListener('onWidgetPause', () => {
-    console.log('Widget pause tapped - handle in React');
-    callbacks.onPause?.();
-  });
-  
-  const resumeSubscription = nativeModule.addListener('onWidgetResume', () => {
-    console.log('Widget resume tapped - handle in React');
-    callbacks.onResume?.();
-  });
-  
-  const resetSubscription = nativeModule.addListener('onWidgetReset', () => {
-    console.log('Widget reset tapped - handle in React');
-    callbacks.onReset?.();
-  });
-
-  return { 
-    pauseSubscription, 
-    resumeSubscription, 
-    resetSubscription,
-    removeAll: () => {
-      pauseSubscription?.remove();
-      resumeSubscription?.remove();
-      resetSubscription?.remove();
-    }
-  };
+export const addTimerListener: types.addTimerListenerFn = (listener) => {
+  return nativeModule.addListener('onTimerAction', listener);
 }

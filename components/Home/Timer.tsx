@@ -1,7 +1,7 @@
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useCallback, useState} from "react";
 import { useStore } from "@/store";
-import { startLiveActivity, stopLiveActivity, pause, resume, createSubscription, startListening } from "@/modules/activity-controller";
+import { startLiveActivity, stopLiveActivity, pause, resume, addTimerListener, startListening } from "@/modules/activity-controller";
 
 export default function Timer() {
     const {isAccessoryExercise, isPrimaryExercise} = useStore();
@@ -23,6 +23,35 @@ export default function Timer() {
     }, [exercise]);
 
     useEffect(() => {
+        startListening();
+        const listener = (event: {action: string, timestamp: number}) => {
+            const {action, timestamp} = event;
+            console.log("Timer action received:", action, timestamp);
+            if (action === "pause") {
+                const elapsedTime = Math.floor((timestamp - timeOfDay) / 1000);
+                setPaused(true);
+                setPausedTime(value - elapsedTime);
+                setValue(value - elapsedTime);
+                setTimeOfDay(timestamp);
+            } else if (action === "resume") {
+                const elapsedTime = Math.floor((Date.now() - timestamp) / 1000);
+                setValue(value - elapsedTime);
+                setPaused(false);
+                setTimeOfDay(Date.now());
+            } else if (action === "reset") {
+                setPaused(true);
+                setValue(restTime);
+                setPausedTime(restTime);
+            }
+        };
+
+        const timerListener = addTimerListener(listener);
+
+        return () => {timerListener.remove();};
+    }, []);
+
+
+    useEffect(() => {
         const interval = setInterval(() => {
             if (paused) {
                 return;
@@ -37,10 +66,7 @@ export default function Timer() {
         }, 500);
         return () => clearInterval(interval);
     }, [paused, pausedTime, timeOfDay]);
-
-    useEffect(() => {
-        startListening();
-    }, []);
+    
 
     return (
         <View className={'flex-row justify-between items-center h-40 w-full bg-gray-500 rounded-2xl pl-3 pr-3 border-black border-4'}>
@@ -73,7 +99,6 @@ export default function Timer() {
                 <TouchableOpacity onPress={() => {
                     setValue(restTime);
                     setPausedTime(restTime);
-                    setTimeOfDay(Date.now());
                     setPaused(true);
                     stopLiveActivity();
                 }}>

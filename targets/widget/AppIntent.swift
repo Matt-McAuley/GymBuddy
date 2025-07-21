@@ -148,7 +148,6 @@ struct ResetIntent: AppIntent, LiveActivityIntent {
     }
     
     func perform() async throws -> some IntentResult {
-        NSLog("Sending Notification!!!!")
         let userDefaults = UserDefaults(suiteName: "group.com.mattmcauley.GymBuddy.share")
         userDefaults?.set("reset", forKey: "timerAction")
         userDefaults?.set(Date().timeIntervalSince1970, forKey: "timestamp")
@@ -166,7 +165,7 @@ struct ResetIntent: AppIntent, LiveActivityIntent {
         let activity = activities.first { $0.id == activityID }
 
         guard let activity = activity else {
-            return
+            return .result()
         }
 
         await activity.end(nil, dismissalPolicy: .immediate)
