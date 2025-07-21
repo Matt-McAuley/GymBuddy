@@ -6,7 +6,7 @@ export type stopLiveActivityFn = () => Promise<void>;
 
 export type pauseFn = (timestamp: number) => Promise<void>;
 
-export type resumeFn = () => Promise<void>;
+export type resumeFn = (timestamp: number) => Promise<void>;
 
 export type createSubscriptionFn = (callbacks: {
     onPause?: () => void;

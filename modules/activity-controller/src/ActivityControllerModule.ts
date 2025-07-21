@@ -19,8 +19,8 @@ export const pause: types.pauseFn = async (timestamp) => {
   return nativeModule.pause(timestamp);
 }
 
-export const resume: types.resumeFn = async () => {
-  return nativeModule.resume();
+export const resume: types.resumeFn = async (timestamp) => {
+  return nativeModule.resume(timestamp);
 }
 
 export const createSubscription: types.createSubscriptionFn = (callbacks: {

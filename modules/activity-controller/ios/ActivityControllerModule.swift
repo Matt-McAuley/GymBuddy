@@ -40,9 +40,9 @@ public class ActivityControllerModule: Module {
       }
     }
     
-    Function("resume") {
+    Function("resume") { (timestamp: Double) in
       if #available(iOS 18.0, *) {
-        self.resume()
+        self.resume(timestamp)
       }
     }
   }
@@ -67,7 +67,18 @@ public class ActivityControllerModule: Module {
     
     let userDefaults = UserDefaults(suiteName: "group.com.mattmcauley.GymBuddy.share")
     if let action = userDefaults?.object(forKey: "timerAction") as? String {
-      NSLog("Timer action: \(action)!!!!")
+      if let timestamp = userDefaults?.object(forKey: "timestamp") as? Double {
+        if action == "pause" {
+          NSLog("Pausing live activity")
+          // Send pause action to React (include timestamp so everything is lined up)
+        } else if action == "resume" {
+          NSLog("Resuming live activity")
+          // Send resume action to React
+        } else if action == "reset" {
+          NSLog("Resetting live activity")
+          // Send reset action to React
+        }
+      }
     }
   }
 
@@ -129,12 +140,12 @@ public class ActivityControllerModule: Module {
     }
   }
   
-  private func resume() -> Void {
+  private func resume(_ timestamp: Double) -> Void {
     guard #available(iOS 18.0, *) else { return }
     guard let startDate = self.startedAt else { return }
     guard let pauseDate = self.pausedAt else { return }
     
-    let elapsedSincePaused = Date().timeIntervalSince1970 - pauseDate.timeIntervalSince1970
+    let elapsedSincePaused = timestamp - pauseDate.timeIntervalSince1970
     startedAt = Date(timeIntervalSince1970: startDate.timeIntervalSince1970 + elapsedSincePaused)
     pausedAt = nil
     

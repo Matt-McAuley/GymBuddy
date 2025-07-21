@@ -57,7 +57,7 @@ export default function Timer() {
                         if (value == restTime)
                             startLiveActivity(restTime, Date.now() / 1000);
                         else
-                            resume();
+                            resume(Date.now() / 1000);
                         setTimeOfDay(Date.now());
                     } else {
                         setPausedTime(value);

@@ -17,6 +17,8 @@ struct TimerWidgetLiveActivity: Widget {
   
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: TimerWidgetAttributes.self) { context in
+      let activityID = context.activityID
+
       // Lock Screen Widget
       ZStack {
         RoundedRectangle(cornerRadius: 24)
@@ -26,7 +28,7 @@ struct TimerWidgetLiveActivity: Widget {
         HStack {
           HStack(spacing: 8.0, content: {
             if (context.state.isRunning()) {
-              Button(intent: PauseIntent()) {
+              Button(intent: PauseIntent(activityID)) {
                 ZStack {
                   Circle()
                     .fill(Color.white.opacity(0.2))
@@ -40,7 +42,7 @@ struct TimerWidgetLiveActivity: Widget {
               .contentShape(Rectangle())
               .padding(.horizontal, 5)
             } else {
-              Button(intent: ResumeIntent()) {
+              Button(intent: ResumeIntent(activityID)) {
                 ZStack {
                   Circle()
                     .fill(Color.white.opacity(0.2))
@@ -54,7 +56,7 @@ struct TimerWidgetLiveActivity: Widget {
               .contentShape(Rectangle())
               .padding(.horizontal, 5)
             }
-            Button(intent: ResetIntent()) {
+            Button(intent: ResetIntent(activityID)) {
               ZStack {
                 Circle()
                   .fill(Color.white.opacity(0.2))
@@ -96,7 +98,9 @@ struct TimerWidgetLiveActivity: Widget {
         .padding(.vertical, 20)
       }
     } dynamicIsland: { context in
-      DynamicIsland {
+      let activityID = context.activityID
+
+      return DynamicIsland {
         DynamicIslandExpandedRegion(.center) {
           ZStack {
             RoundedRectangle(cornerRadius: 24)
@@ -105,7 +109,7 @@ struct TimerWidgetLiveActivity: Widget {
             HStack {
               HStack(spacing: 8.0, content: {
                 if (context.state.isRunning()) {
-                  Button(intent: PauseIntent()) {
+                  Button(intent: PauseIntent(activityID)) {
                     ZStack {
                       Circle()
                         .fill(Color.white.opacity(0.2))
@@ -118,7 +122,7 @@ struct TimerWidgetLiveActivity: Widget {
                   .buttonStyle(PlainButtonStyle())
                   .contentShape(Rectangle())
                 } else {
-                  Button(intent: ResumeIntent()) {
+                  Button(intent: ResumeIntent(activityID)) {
                     ZStack {
                       Circle()
                         .fill(Color.white.opacity(0.2))
@@ -131,7 +135,7 @@ struct TimerWidgetLiveActivity: Widget {
                   .buttonStyle(PlainButtonStyle())
                   .contentShape(Rectangle())
                 }
-                Button(intent: ResetIntent()) {
+                Button(intent: ResetIntent(activityID)) {
                   ZStack {
                     Circle()
                       .fill(Color.white.opacity(0.2))
