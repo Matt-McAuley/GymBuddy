@@ -26,18 +26,12 @@ export default function Timer() {
         startListening();
         const listener = (event: {action: string, timestamp: number}) => {
             const {action, timestamp} = event;
-            console.log("Timer action received:", action, timestamp);
             if (action === "pause") {
-                const elapsedTime = Math.floor((timestamp - timeOfDay) / 1000);
                 setPaused(true);
-                setPausedTime(value - elapsedTime);
-                setValue(value - elapsedTime);
-                setTimeOfDay(timestamp);
+                setPausedTime(value);
             } else if (action === "resume") {
-                const elapsedTime = Math.floor((Date.now() - timestamp) / 1000);
-                setValue(value - elapsedTime);
                 setPaused(false);
-                setTimeOfDay(Date.now());
+                setTimeOfDay(timestamp);
             } else if (action === "reset") {
                 setPaused(true);
                 setValue(restTime);
@@ -48,8 +42,7 @@ export default function Timer() {
         const timerListener = addTimerListener(listener);
 
         return () => {timerListener.remove();};
-    }, []);
-
+    }, [value, restTime]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -80,12 +73,14 @@ export default function Timer() {
             <View className={"flex-col ml-2"}>
                 <TouchableOpacity onPress={() => {
                     if (paused) {
+                        // Resuming
                         if (value == restTime)
                             startLiveActivity(restTime, Date.now() / 1000);
                         else
                             resume(Date.now() / 1000);
                         setTimeOfDay(Date.now());
                     } else {
+                        // Pausing
                         setPausedTime(value);
                         pause(Date.now() / 1000);
                     }
