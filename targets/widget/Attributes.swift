@@ -45,7 +45,7 @@ struct TimerWidgetAttributes: ActivityAttributes {
       guard let startTime = self.startTime else {
         return 0
       }
-      return Double(startTime) - (Date().timeIntervalSince1970 - startedAt.timeIntervalSince1970)
+      return max(Double(startTime) - (Date().timeIntervalSince1970 - startedAt.timeIntervalSince1970), 0)
     }
     
     func isRunning() -> Bool {

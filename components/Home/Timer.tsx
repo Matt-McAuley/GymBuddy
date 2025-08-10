@@ -52,10 +52,12 @@ export default function Timer() {
             if (action === "pause") {
                 setPausedAt(new Date(timestamp));
             } else if (action === "resume") {
-                const elapsedSincePause = (timestamp - pausedAt!.getTime()) / 1000;
-                const newStartedAt = new Date(startedAt!.getTime() + elapsedSincePause * 1000);
-                setStartedAt(newStartedAt);
-                setPausedAt(null);
+                if (startedAt && pausedAt) {
+                    const elapsedSincePause = (timestamp - pausedAt.getTime()) / 1000;
+                    const newStartedAt = new Date(startedAt.getTime() + elapsedSincePause * 1000);
+                    setStartedAt(newStartedAt);
+                    setPausedAt(null);
+                }
             } else if (action === "reset") {
                 setStartedAt(null);
                 setPausedAt(null);

@@ -15,6 +15,8 @@ public class ActivityControllerModule: Module {
   private var startTime: Int?
   private var pausedAt: Date?
   private var name: String = "NA"
+  private var timerMonitor: Timer?
+  private var hasCompleted: Bool = false
 
   public func definition() -> ModuleDefinition {
     Name("ActivityController")
@@ -107,6 +109,45 @@ public class ActivityControllerModule: Module {
     startTime = nil
     pausedAt = nil
     currentActivity = nil
+    hasCompleted = false
+    stopTimerMonitoring()
+  }
+
+  private func startTimerMonitoring() {
+    stopTimerMonitoring()
+    hasCompleted = false
+    
+    timerMonitor = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+      self?.checkTimerCompletion()
+    }
+  }
+  
+  private func stopTimerMonitoring() {
+    timerMonitor?.invalidate()
+    timerMonitor = nil
+  }
+  
+  private func checkTimerCompletion() {
+    guard let startedAt = self.startedAt,
+          let startTime = self.startTime,
+          !hasCompleted else { return }
+    
+    let currentTime = Date()
+    var elapsedSeconds: Double
+    
+    if let pausedAt = self.pausedAt {
+      elapsedSeconds = pausedAt.timeIntervalSince1970 - startedAt.timeIntervalSince1970
+    } else {
+      elapsedSeconds = currentTime.timeIntervalSince1970 - startedAt.timeIntervalSince1970
+    }
+    
+    let remainingTime = Double(startTime) - elapsedSeconds
+    
+    if remainingTime <= 0 && !hasCompleted && pausedAt == nil {
+      hasCompleted = true
+      NSLog("Timer completed!!!!")
+      stopTimerMonitoring()
+    }
   }
 
   private func startLiveActivity(_ startTime: Int,_ timestamp: Double, _ name: String) -> Void {
@@ -115,6 +156,10 @@ public class ActivityControllerModule: Module {
     startedAt = Date(timeIntervalSince1970: timestamp)
     self.name = name
     self.startTime = startTime
+    hasCompleted = false
+
+    startTimerMonitoring()
+
     if (!areActivitiesEnabled()) {
       return
     }
@@ -130,6 +175,7 @@ public class ActivityControllerModule: Module {
     guard #available(iOS 18.0, *) else { return }
     
     startedAt = nil
+    resetValues()
     Task {
       for activity in Activity<TimerWidgetAttributes>.activities {
         await activity.end(nil, dismissalPolicy: .immediate)
@@ -162,6 +208,7 @@ public class ActivityControllerModule: Module {
     let elapsedSincePaused = timestamp - pauseDate.timeIntervalSince1970
     startedAt = Date(timeIntervalSince1970: startDate.timeIntervalSince1970 + elapsedSincePaused)
     pausedAt = nil
+    hasCompleted = false
     
     let contentState = TimerWidgetAttributes.ContentState(startedAt: startedAt, startTime: startTime, pausedAt: nil)
     Task {

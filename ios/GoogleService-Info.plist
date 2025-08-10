@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAWFI9Hsfcw8IwRDlDynhprrXh1GW0nje0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>245197096632</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mattmcauley.GymBuddy</string>
+	<key>PROJECT_ID</key>
+	<string>gymbuddy-3f0ee</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gymbuddy-3f0ee.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:245197096632:ios:5f5fb999ae819e45d0564d</string>
+</dict>
+</plist>
