@@ -25,77 +25,91 @@ struct TimerWidgetLiveActivity: Widget {
           .fill(Color.black)
           .border(.black, width: 10)
         
-        HStack {
-          HStack(spacing: 8.0, content: {
-            if (context.state.isRunning()) {
-              Button(intent: PauseIntent(activityID)) {
-                ZStack {
-                  Circle()
-                    .fill(Color.white.opacity(0.2))
-                    .frame(width: 53, height: 53)
-                  Image(systemName: "pause.fill")
-                    .imageScale(.large)
-                    .foregroundColor(.white)
-                }
-              }
-              .buttonStyle(PlainButtonStyle())
-              .contentShape(Rectangle())
-              .padding(.horizontal, 5)
-            } else {
-              Button(intent: ResumeIntent(activityID)) {
-                ZStack {
-                  Circle()
-                    .fill(Color.white.opacity(0.2))
-                    .frame(width: 53, height: 53)
-                  Image(systemName: "play.fill")
-                    .imageScale(.large)
-                    .foregroundColor(.white)
-                }
-              }
-              .buttonStyle(PlainButtonStyle())
-              .contentShape(Rectangle())
-              .padding(.horizontal, 5)
-            }
-            Button(intent: ResetIntent(activityID)) {
-              ZStack {
-                Circle()
-                  .fill(Color.white.opacity(0.2))
-                  .frame(width: 53, height: 53)
-                Image(systemName: "xmark")
-                  .imageScale(.medium)
-                  .foregroundColor(.white)
-              }
-            }
-            .buttonStyle(PlainButtonStyle())
-            .contentShape(Rectangle())
+        VStack() {
+          
+          HStack() {
+            Text(context.attributes.name)
+              .font(.system(size: 24, weight: .semibold))
+              .foregroundColor(.white)
+              .multilineTextAlignment(.leading)
+              .padding(.top, 15)
+              .padding(.leading, 5)
+            
             Spacer()
-          })
-          if (!context.state.isRunning()) {
-            Text(
-              context.state.getPausedTime()
-            )
-            .font(.system(size:36))
-            .foregroundColor(.white)
-            .fontWeight(.medium)
-            .monospacedDigit()
-            .frame(width: 85)
-            .transition(.identity)
-          } else {
-            let date = Date()
-            Text(
-              timerInterval: date...date.addingTimeInterval(context.state.getTimeIntervalSinceNow()),
-              countsDown: true
-            )
-            .font(.system(size:36))
-            .foregroundColor(.white)
-            .fontWeight(.medium)
-            .monospacedDigit()
-            .frame(width: 85)
-            .transition(.identity)
+          }
+          
+          HStack {
+            HStack(spacing: 8.0, content: {
+              if (context.state.isRunning()) {
+                Button(intent: PauseIntent(activityID)) {
+                  ZStack {
+                    Circle()
+                      .fill(Color.white.opacity(0.2))
+                      .frame(width: 53, height: 53)
+                    Image(systemName: "pause.fill")
+                      .imageScale(.large)
+                      .foregroundColor(.white)
+                  }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Rectangle())
+                .padding(.trailing, 5)
+              } else {
+                Button(intent: ResumeIntent(activityID)) {
+                  ZStack {
+                    Circle()
+                      .fill(Color.white.opacity(0.2))
+                      .frame(width: 53, height: 53)
+                    Image(systemName: "play.fill")
+                      .imageScale(.large)
+                      .foregroundColor(.white)
+                  }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Rectangle())
+                .padding(.trailing, 5)
+              }
+              Button(intent: ResetIntent(activityID)) {
+                ZStack {
+                  Circle()
+                    .fill(Color.white.opacity(0.2))
+                    .frame(width: 53, height: 53)
+                  Image(systemName: "xmark")
+                    .imageScale(.medium)
+                    .foregroundColor(.white)
+                }
+              }
+              .buttonStyle(PlainButtonStyle())
+              .contentShape(Rectangle())
+              Spacer()
+            })
+            if (!context.state.isRunning()) {
+              Text(
+                context.state.getPausedTime()
+              )
+              .font(.system(size:36))
+              .foregroundColor(.white)
+              .fontWeight(.medium)
+              .monospacedDigit()
+              .frame(width: 85)
+              .transition(.identity)
+            } else {
+              let date = Date()
+              Text(
+                timerInterval: date...date.addingTimeInterval(context.state.getTimeIntervalSinceNow()),
+                countsDown: true
+              )
+              .font(.system(size:36))
+              .foregroundColor(.white)
+              .fontWeight(.medium)
+              .monospacedDigit()
+              .frame(width: 85)
+              .transition(.identity)
+            }
           }
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 20)
+        .padding(.bottom, 20)
       }
     } dynamicIsland: { context in
       let activityID = context.activityID
@@ -105,76 +119,93 @@ struct TimerWidgetLiveActivity: Widget {
           ZStack {
             RoundedRectangle(cornerRadius: 24)
               .fill(Color.black)
-        
-            HStack {
-              HStack(spacing: 8.0, content: {
-                if (context.state.isRunning()) {
-                  Button(intent: PauseIntent(activityID)) {
-                    ZStack {
-                      Circle()
-                        .fill(Color.white.opacity(0.2))
-                        .frame(width: 50, height: 50)
-                      Image(systemName: "pause.fill")
-                        .imageScale(.large)
-                        .foregroundColor(.white)
-                    }
-                  }
-                  .buttonStyle(PlainButtonStyle())
-                  .contentShape(Rectangle())
-                } else {
-                  Button(intent: ResumeIntent(activityID)) {
-                    ZStack {
-                      Circle()
-                        .fill(Color.white.opacity(0.2))
-                        .frame(width: 50, height: 50)
-                      Image(systemName: "play.fill")
-                        .imageScale(.large)
-                        .foregroundColor(.white)
-                    }
-                  }
-                  .buttonStyle(PlainButtonStyle())
-                  .contentShape(Rectangle())
-                }
-                Button(intent: ResetIntent(activityID)) {
-                  ZStack {
-                    Circle()
-                      .fill(Color.white.opacity(0.2))
-                      .frame(width: 50, height: 50)
-                    Image(systemName: "xmark")
-                      .imageScale(.medium)
-                      .foregroundColor(.white)
-                  }
-                }
-                .buttonStyle(PlainButtonStyle())
-                .contentShape(Rectangle())
+              .border(.black, width: 10)
+            
+            VStack() {
+              
+              HStack() {
+                Text(context.attributes.name)
+                  .font(.system(size: 24, weight: .semibold))
+                  .foregroundColor(.white)
+                  .multilineTextAlignment(.leading)
+                  .padding(.leading, 5)
+                
                 Spacer()
-              })
-              if (!context.state.isRunning()) {
-                Text(
-                  context.state.getPausedTime()
-                )
-                .font(.system(size:40))
-                .foregroundColor(.white)
-                .fontWeight(.medium)
-                .monospacedDigit()
-                .frame(width: 85)
-                .transition(.identity)
-              } else {
-                let date = Date()
-                Text(
-                  timerInterval: date...date.addingTimeInterval(context.state.getTimeIntervalSinceNow()),
-                  countsDown: true
-                )
-                .font(.system(size:40))
-                .foregroundColor(.white)
-                .fontWeight(.medium)
-                .monospacedDigit()
-                .frame(width: 85)
-                .transition(.identity)
+              }
+              
+              HStack {
+                HStack(spacing: 8.0, content: {
+                  if (context.state.isRunning()) {
+                    Button(intent: PauseIntent(activityID)) {
+                      ZStack {
+                        Circle()
+                          .fill(Color.white.opacity(0.2))
+                          .frame(width: 53, height: 53)
+                        Image(systemName: "pause.fill")
+                          .imageScale(.large)
+                          .foregroundColor(.white)
+                      }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .contentShape(Rectangle())
+                    .padding(.trailing, 5)
+                  } else {
+                    Button(intent: ResumeIntent(activityID)) {
+                      ZStack {
+                        Circle()
+                          .fill(Color.white.opacity(0.2))
+                          .frame(width: 53, height: 53)
+                        Image(systemName: "play.fill")
+                          .imageScale(.large)
+                          .foregroundColor(.white)
+                      }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .contentShape(Rectangle())
+                    .padding(.trailing, 5)
+                  }
+                  Button(intent: ResetIntent(activityID)) {
+                    ZStack {
+                      Circle()
+                        .fill(Color.white.opacity(0.2))
+                        .frame(width: 53, height: 53)
+                      Image(systemName: "xmark")
+                        .imageScale(.medium)
+                        .foregroundColor(.white)
+                    }
+                  }
+                  .buttonStyle(PlainButtonStyle())
+                  .contentShape(Rectangle())
+                  Spacer()
+                })
+                if (!context.state.isRunning()) {
+                  Text(
+                    context.state.getPausedTime()
+                  )
+                  .font(.system(size:36))
+                  .foregroundColor(.white)
+                  .fontWeight(.medium)
+                  .monospacedDigit()
+                  .frame(width: 85)
+                  .transition(.identity)
+                } else {
+                  let date = Date()
+                  Text(
+                    timerInterval: date...date.addingTimeInterval(context.state.getTimeIntervalSinceNow()),
+                    countsDown: true
+                  )
+                  .font(.system(size:36))
+                  .foregroundColor(.white)
+                  .fontWeight(.medium)
+                  .monospacedDigit()
+                  .frame(width: 85)
+                  .transition(.identity)
+                }
               }
             }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
           }
-          .padding(.horizontal, 10)
         }
       } compactLeading: {
         Image(systemName: "timer")
@@ -208,7 +239,7 @@ struct TimerWidgetLiveActivity: Widget {
 
 extension TimerWidgetAttributes {
   fileprivate static var preview: TimerWidgetAttributes {
-    TimerWidgetAttributes()
+    TimerWidgetAttributes(name: "DB Bench")
   }
 }
 

@@ -14,6 +14,7 @@ public class ActivityControllerModule: Module {
   private var startedAt: Date?
   private var startTime: Int?
   private var pausedAt: Date?
+  private var name: String = "NA"
 
   public func definition() -> ModuleDefinition {
     Name("ActivityController")
@@ -24,9 +25,9 @@ public class ActivityControllerModule: Module {
       self.startListening()
     }
     
-    Function("startLiveActivity") { (startTime: Int, timestamp: Double) in
+    Function("startLiveActivity") { (startTime: Int, timestamp: Double, name: String) in
       if #available(iOS 18.0, *) {
-        self.startLiveActivity(startTime, timestamp)
+        self.startLiveActivity(startTime, timestamp, name)
       }
     }
     
@@ -108,15 +109,16 @@ public class ActivityControllerModule: Module {
     currentActivity = nil
   }
 
-  private func startLiveActivity(_ startTime: Int,_ timestamp: Double) -> Void {
+  private func startLiveActivity(_ startTime: Int,_ timestamp: Double, _ name: String) -> Void {
     guard #available(iOS 18.0, *) else { return }
     
     startedAt = Date(timeIntervalSince1970: timestamp)
+    self.name = name
     self.startTime = startTime
     if (!areActivitiesEnabled()) {
       return
     }
-    let activityAttributes = TimerWidgetAttributes()
+    let activityAttributes = TimerWidgetAttributes(name: name)
     let contentState = TimerWidgetAttributes.ContentState(startedAt: startedAt, startTime: startTime, pausedAt: nil)
     let activityContent = ActivityContent(state: contentState,  staleDate: nil)
     do {

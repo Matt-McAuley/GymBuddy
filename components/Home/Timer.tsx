@@ -6,6 +6,8 @@ import { startLiveActivity, stopLiveActivity, pause, resume, addTimerListener, s
 export default function Timer() {
     const {isAccessoryExercise, isPrimaryExercise} = useStore();
     const exercise = useStore((state) => state.exercise());
+    const exerciseName = isAccessoryExercise(exercise) ? exercise.name : (isPrimaryExercise(exercise))
+        ? exercise.name : exercise.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
     const [startedAt, setStartedAt] = useState<Date | null>(null);
     const [startTime, setStartTime] = useState(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
     ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
@@ -19,6 +21,7 @@ export default function Timer() {
         setStartedAt(null);
         setPausedAt(null);
         setDisplayTime(newStartTime);
+        stopLiveActivity();
     }, [exercise]);
 
     useEffect(() => {
@@ -78,9 +81,9 @@ export default function Timer() {
         
         if (!startedAt) {
             // First time starting
-            setStartedAt(now);
+            setStartedAt(now);  
             setPausedAt(null);
-            startLiveActivity(startTime, now.getTime() / 1000);
+            startLiveActivity(startTime, now.getTime() / 1000, exerciseName);
         } else if (pausedAt) {
             // Resuming from pause
             const elapsedSincePause = (now.getTime() - pausedAt.getTime()) / 1000;

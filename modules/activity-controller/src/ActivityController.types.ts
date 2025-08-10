@@ -2,7 +2,7 @@ import { EventSubscription } from 'expo-modules-core';
 
 export type startListeningFn = () => Promise<void>;
 
-export type startLiveActivityFn = (startTime: number, timestamp: number) => Promise<void>;
+export type startLiveActivityFn = (startTime: number, timestamp: number, name: string) => Promise<void>;
 
 export type stopLiveActivityFn = () => Promise<void>;
 

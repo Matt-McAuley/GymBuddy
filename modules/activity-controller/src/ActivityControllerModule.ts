@@ -7,8 +7,8 @@ export const startListening: types.startListeningFn = async () => {
   return nativeModule.startListening();
 }
 
-export const startLiveActivity: types.startLiveActivityFn = async (startTime, timestamp) => {
-  return nativeModule.startLiveActivity(startTime, timestamp);
+export const startLiveActivity: types.startLiveActivityFn = async (startTime, timestamp, name) => {
+  return nativeModule.startLiveActivity(startTime, timestamp, name);
 }
 
 export const stopLiveActivity: types.stopLiveActivityFn = async () => {
