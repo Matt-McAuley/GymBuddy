@@ -15,8 +15,10 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.mattmcauley.GymBuddy",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSSupportsLiveActivities": true
+      },
+      "appleTeamId": "4BK7D83B7S"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +32,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      "@bacons/apple-targets"
     ],
     "experiments": {
       "typedRoutes": true
