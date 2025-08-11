@@ -109,19 +109,30 @@ public class ActivityControllerModule: Module {
   }
 
   func scheduleNotification() {
-    let content = UNMutableNotificationContent()
-    content.title = "GymBuddy"
-    content.body = "Timer finished"
-    content.sound = UNNotificationSound.default
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+      if let error = error {
+        NSLog("Notification permission error: %@", error.localizedDescription)
+        return
+      }
+      
+      if granted {
+        let content = UNMutableNotificationContent()
+        content.title = "GymBuddy"
+        content.body = "Timer finished"
+        content.sound = UNNotificationSound.default
+        content.badge = 1
 
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
+        let request = UNNotificationRequest(identifier: "timerCompleted_\(UUID().uuidString)", content: content, trigger: trigger)
 
-    let request = UNNotificationRequest(identifier: "reminderNotification", content: content, trigger: trigger)
-
-    UNUserNotificationCenter.current().add(request) { error in
-        if let error = error {
-            NSLog("Error scheduling notification: %@", error.localizedDescription);
-        } else {}
+        UNUserNotificationCenter.current().add(request) { error in
+          if let error = error {
+            NSLog("Error scheduling notification!!!!: %@", error.localizedDescription)
+          } else {}
+        }
+      } else {
+        NSLog("Notification permission denied!!!!")
+      }
     }
   }
 
