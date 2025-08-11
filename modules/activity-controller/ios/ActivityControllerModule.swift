@@ -68,25 +68,20 @@ public class ActivityControllerModule: Module {
   }
   
   private func handleTimerAction() {
-    NSLog("Received notification from timer!!!!")
-    
     let userDefaults = UserDefaults(suiteName: "group.com.mattmcauley.GymBuddy.share")
     if let action = userDefaults?.object(forKey: "timerAction") as? String {
       if let timestamp = userDefaults?.object(forKey: "timestamp") as? Double {
         if action == "pause" {
-          NSLog("Pausing live activity!!!!")
           sendEvent("onTimerAction", ["action": "pause", "timestamp": timestamp * 1000])
           if #available(iOS 18.0, *) {
             self.pause(timestamp)
           }
         } else if action == "resume" {
-          NSLog("Resuming live activity!!!!")
           sendEvent("onTimerAction", ["action": "resume", "timestamp": timestamp * 1000])
           if #available(iOS 18.0, *) {
             self.resume(timestamp)
           }
         } else if action == "reset" {
-          NSLog("Resetting live activity!!!!")
           sendEvent("onTimerAction", ["action": "reset", "timestamp": timestamp * 1000])
           if #available(iOS 18.0, *) {
             self.resetValues()
@@ -111,6 +106,23 @@ public class ActivityControllerModule: Module {
     currentActivity = nil
     hasCompleted = false
     stopTimerMonitoring()
+  }
+
+  func scheduleNotification() {
+    let content = UNMutableNotificationContent()
+    content.title = "GymBuddy"
+    content.body = "Timer finished"
+    content.sound = UNNotificationSound.default
+
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
+
+    let request = UNNotificationRequest(identifier: "reminderNotification", content: content, trigger: trigger)
+
+    UNUserNotificationCenter.current().add(request) { error in
+        if let error = error {
+            NSLog("Error scheduling notification: %@", error.localizedDescription);
+        } else {}
+    }
   }
 
   private func startTimerMonitoring() {
@@ -145,7 +157,9 @@ public class ActivityControllerModule: Module {
     
     if remainingTime <= 0 && !hasCompleted && pausedAt == nil {
       hasCompleted = true
-      NSLog("Timer completed!!!!")
+      scheduleNotification()
+      self.stopLiveActivity()
+      sendEvent("onTimerAction", ["action": "reset", "timestamp": 0])
       stopTimerMonitoring()
     }
   }
