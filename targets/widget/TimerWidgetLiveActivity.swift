@@ -11,9 +11,6 @@ import SwiftUI
 
 @available(iOSApplicationExtension 18.0, *)
 struct TimerWidgetLiveActivity: Widget {
-  func rgb(_ red: Double, _ green: Double, _ blue: Double) -> Color {
-    return Color(red: red/255.0, green: green/255.0, blue: blue/255.0)
-  }
   
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: TimerWidgetAttributes.self) { context in
@@ -231,7 +228,6 @@ struct TimerWidgetLiveActivity: Widget {
           .imageScale(.medium)
           .foregroundColor(.white)
       }
-      .widgetURL(URL(string: "http://www.apple.com"))
       .keylineTint(Color.white)
     }
   }
