@@ -107,6 +107,7 @@ public class ActivityControllerModule: Module {
     currentActivity = nil
     hasCompleted = false
     stopTimerMonitoring()
+    cancelScheduledNotification()
   }
 
   private func scheduleCompletionNotification(_ timestamp: Double) {
@@ -123,7 +124,7 @@ public class ActivityControllerModule: Module {
       content.badge = 1
       content.categoryIdentifier = "TIMER_COMPLETE"
 
-      let completionTime = TimeInterval(startTime) - (timestamp - startedAt.timeIntervalSince1970) - 3
+      let completionTime = TimeInterval(startTime) - (timestamp - startedAt.timeIntervalSince1970) - 1
       let timeInterval = max(completionTime, 0.1)
 
       let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
