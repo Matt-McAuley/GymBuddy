@@ -17,6 +17,7 @@ public class ActivityControllerModule: Module {
   private var name: String = "NA"
   private var timerMonitor: Timer?
   private var hasCompleted: Bool = false
+  private var scheduledNotificationId: String?
 
   public func definition() -> ModuleDefinition {
     Name("ActivityController")
@@ -108,31 +109,43 @@ public class ActivityControllerModule: Module {
     stopTimerMonitoring()
   }
 
-  func scheduleNotification() {
+  private func scheduleCompletionNotification(_ timestamp: Double) {
+    guard let startedAt = self.startedAt,
+          let startTime = self.startTime else { return }
+    
     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-      if let error = error {
-        NSLog("Notification permission error: %@", error.localizedDescription)
-        return
-      }
+      guard granted, error == nil else { return }
+
+      let content = UNMutableNotificationContent()
+      content.title = "GymBuddy"
+      content.body = "Timer finished for \(self.name)"
+      content.sound = UNNotificationSound.default
+      content.badge = 1
+      content.categoryIdentifier = "TIMER_COMPLETE"
+
+      let completionTime = TimeInterval(startTime) - (timestamp - startedAt.timeIntervalSince1970) - 3
+      let timeInterval = max(completionTime, 0.1)
+
+      let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+      let notificationId = "timerCompleted_\(UUID().uuidString)"
+      let request = UNNotificationRequest(identifier: notificationId, content: content, trigger: trigger)
       
-      if granted {
-        let content = UNMutableNotificationContent()
-        content.title = "GymBuddy"
-        content.body = "Timer finished"
-        content.sound = UNNotificationSound.default
-        content.badge = 1
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
-        let request = UNNotificationRequest(identifier: "timerCompleted_\(UUID().uuidString)", content: content, trigger: trigger)
-
-        UNUserNotificationCenter.current().add(request) { error in
-          if let error = error {
-            NSLog("Error scheduling notification!!!!: %@", error.localizedDescription)
-          } else {}
+      self.scheduledNotificationId = notificationId
+      
+      UNUserNotificationCenter.current().add(request) { error in
+        if let error = error {
+          NSLog("Failed to schedule notification!!!!: \(error.localizedDescription)")
+        } else {
+          NSLog("Notification scheduled for %.1f seconds from now!!!!", timeInterval)
         }
-      } else {
-        NSLog("Notification permission denied!!!!")
       }
+    }
+  }
+
+  private func cancelScheduledNotification() {
+    if let notificationId = scheduledNotificationId {
+      UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notificationId])
+      scheduledNotificationId = nil
     }
   }
 
@@ -166,9 +179,9 @@ public class ActivityControllerModule: Module {
     
     let remainingTime = Double(startTime) - elapsedSeconds
     
+    
     if remainingTime <= 0 && !hasCompleted && pausedAt == nil {
       hasCompleted = true
-      scheduleNotification()
       self.stopLiveActivity()
       sendEvent("onTimerAction", ["action": "reset", "timestamp": 0])
       stopTimerMonitoring()
@@ -184,6 +197,7 @@ public class ActivityControllerModule: Module {
     hasCompleted = false
 
     startTimerMonitoring()
+    scheduleCompletionNotification(timestamp)
 
     if (!areActivitiesEnabled()) {
       return
@@ -212,6 +226,8 @@ public class ActivityControllerModule: Module {
     guard #available(iOS 18.0, *) else { return }
     
     pausedAt = Date(timeIntervalSince1970: timestamp)
+    cancelScheduledNotification()
+    
     let contentState = TimerWidgetAttributes.ContentState(startedAt: startedAt, startTime: startTime, pausedAt: pausedAt)
     Task {
       if let activity = currentActivity as? Activity<TimerWidgetAttributes> {
@@ -231,9 +247,11 @@ public class ActivityControllerModule: Module {
     guard let pauseDate = self.pausedAt else { return }
     
     let elapsedSincePaused = timestamp - pauseDate.timeIntervalSince1970
-    startedAt = Date(timeIntervalSince1970: startDate.timeIntervalSince1970 + elapsedSincePaused)
+    startedAt = startDate.addingTimeInterval(elapsedSincePaused)
+
     pausedAt = nil
     hasCompleted = false
+    scheduleCompletionNotification(timestamp)
     
     let contentState = TimerWidgetAttributes.ContentState(startedAt: startedAt, startTime: startTime, pausedAt: nil)
     Task {
