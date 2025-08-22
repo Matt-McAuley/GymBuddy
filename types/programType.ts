@@ -1,31 +1,23 @@
-type primaryExerciseType = {
-    name: string,
+type setType = {
     rest: number,
-    weight_1: number,
-    weight_2: number,
-    weight_3: number,
-    reps_1: number,
-    reps_2: number,
-    reps_3: number
+    weight: number,
+    reps: number,
 }
 
-type accessoryExerciseType = {
+type exerciseType = {
     name: string,
-    rest: number,
-    sets: number,
-    reps: number,
-    weight: number,
+    sets: setType[],
 }
 
 type superSetType = {
-    exercise1: accessoryExerciseType,
-    exercise2: accessoryExerciseType
+    exercise1: exerciseType,
+    exercise2: exerciseType
 }
 
 type dayType = {
     name: string,
     color: string,
-    exercises: (primaryExerciseType | accessoryExerciseType | superSetType)[],
+    exercises: (exerciseType | superSetType)[],
 }
 
 type programType = {
@@ -33,4 +25,4 @@ type programType = {
     days: dayType[]
 }
 
-export {programType, dayType, accessoryExerciseType, primaryExerciseType, superSetType};
+export {setType, exerciseType, superSetType, dayType, programType};

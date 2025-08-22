@@ -1,5 +1,5 @@
 import {Image, Text, TouchableOpacity, View} from "react-native";
-import {useEffect, useCallback, useState} from "react";
+import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 import { startLiveActivity, stopLiveActivity, pause, resume, addTimerListener, startListening } from "@/modules/activity-controller";
 
