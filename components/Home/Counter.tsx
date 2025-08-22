@@ -3,35 +3,22 @@ import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 
 export default function Counter() {
-    const {isAccessoryExercise, isPrimaryExercise, currentScheme, set, setSet, retrievedSet, setRetrievedSet, retrievedYet} = useStore();
+    const {isSuperSet, currentScheme, set, setSet, retrievedSet, setRetrievedSet, retrievedYet} = useStore();
     const exercise = useStore((state) => state.exercise());
-    const [maxSets, setMaxSets] = useState((isPrimaryExercise(exercise)) ? 5 : (isAccessoryExercise(exercise))
-        ? exercise.sets : exercise.exercise1.sets);
+    const [maxSets, setMaxSets] = useState((isSuperSet(exercise)) ? Math.max(
+        exercise.exercise1.sets.length, exercise.exercise2.sets.length) : exercise.sets.length);
 
     const getReps = () => {
-        if (isPrimaryExercise(exercise)) {
-            if (currentScheme === '5 x 5') {
-                return [exercise.reps_1, exercise.reps_1, exercise.reps_1, exercise.reps_1, exercise.reps_1];
-            }
-            else if (currentScheme === '5 x 3') {
-                return [exercise.reps_2, exercise.reps_2, exercise.reps_2, exercise.reps_2, exercise.reps_2];
-            }
-            else {
-                return [exercise.reps_1, exercise.reps_2, exercise.reps_3, exercise.reps_2, exercise.reps_1];
-            }
-        } else if (isAccessoryExercise(exercise)) {
-            return new Array(exercise.sets).fill(exercise.reps);
-        } else {
-            return new Array(Math.max(exercise.exercise1.sets, exercise.exercise2.sets)).fill([exercise.exercise1.reps, exercise.exercise2.reps]);
-        }
+        return (isSuperSet(exercise)) ? Math.max(exercise.exercise1.sets[set].reps,
+            exercise.exercise2.sets[set].reps) : exercise.sets[set].reps;
     }
     const [reps, setReps] = useState(getReps());
 
     useEffect(() => {
-        setMaxSets((isPrimaryExercise(exercise)) ? 5 : (isAccessoryExercise(exercise))
-            ? exercise.sets : exercise.exercise1.sets);
+        setMaxSets((isSuperSet(exercise)) ? Math.max(
+        exercise.exercise1.sets.length, exercise.exercise2.sets.length) : exercise.sets.length);
         setReps(getReps());
-        setSet(1);
+        setSet(0);
     }, [exercise]);
 
     useEffect(() => {
@@ -50,29 +37,29 @@ export default function Counter() {
             <View className={'border-r-4 flex-row justify-between items-center w-53 p-2 h-35'}>
                 <Text className={'text-4xl font-bold mr-3'}>Set:</Text>
                 <View className={'flex-col justify-center items-center'}>
-                    <Text className={'text-4xl font-bold m-0 p-0 border-b-4 w-9 text-center'}>{set}</Text>
+                    <Text className={'text-4xl font-bold m-0 p-0 border-b-4 w-9 text-center'}>{set+1}</Text>
                     <Text className={'text-4xl font-bold m-0 p-0'}>{maxSets}</Text>
                 </View>
                 <View className={''}>
                     <TouchableOpacity onPress={() => {setSet(Math.min(maxSets, set+1))}}>
                         <Image className={"h-15 w-15"} source={require("@/assets/images/counter/upArrow.png")}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {setSet(Math.max(1, set-1))}}>
+                    <TouchableOpacity onPress={() => {setSet(Math.max(0, set-1))}}>
                         <Image className={"h-15 w-15"} source={require("@/assets/images/counter/downArrow.png")}/>
                     </TouchableOpacity>
                 </View>
             </View>
-            {(isAccessoryExercise(exercise) || isPrimaryExercise(exercise)) ?
+            {(!isSuperSet(exercise)) ?
             <View className={'flex-row justify-between items-center w-42 p-3'}>
                 <Text className={'text-4xl font-bold'}>Reps:</Text>
-                <Text className={'text-4xl font-bold'}>{reps[set-1]}</Text>
+                <Text className={'text-4xl font-bold'}>{reps}</Text>
             </View>
                 :
             <View className={'flex-row justify-between items-center w-42 p-3'}>
                 <Text className={'text-4xl font-bold'}>Reps:</Text>
                 <View>
-                    <Text className={'text-4xl font-bold '}>{reps[set-1][0]}</Text>
-                    <Text className={'text-4xl font-bold'}>{reps[set-1][1]}</Text>
+                    <Text className={'text-4xl font-bold '}>{reps}</Text>
+                    <Text className={'text-4xl font-bold'}>{reps}</Text>
                 </View>
             </View>
             }

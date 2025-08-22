@@ -11,19 +11,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset,
-        setCurrentScheme, setSet, currentExercise, setRetrievedYet, setRetrievedSet} = useStore();
+        setCurrentScheme, currentExercise, setRetrievedYet, setRetrievedSet} = useStore();
     const day = program?.days[currentDay];
     const {width} = Dimensions.get('window');
     const exerciseScrollRef = useRef<ScrollView | null >(null);
     useDrizzleStudio(db);
 
     const retrieveOverwrittenValues = async () => {
-        const timer = await AsyncStorage.getItem('timer');
-        const initialTime = await AsyncStorage.getItem('initialTime');
-        const startTime = await AsyncStorage.getItem('startTime');
-        const newTime = (initialTime === null || startTime === null) ? (timer === null) ? null : parseInt(timer) :
-            Math.max(0, parseInt(startTime) - Math.floor((new Date().getTime() - parseInt(initialTime)) / 1000));
-        const paused = await AsyncStorage.getItem('paused');
         const set = await AsyncStorage.getItem('set');
         setRetrievedSet((set === null) ? null : parseInt(set));
     }

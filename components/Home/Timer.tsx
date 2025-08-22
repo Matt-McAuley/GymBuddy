@@ -4,19 +4,19 @@ import { useStore } from "@/store";
 import { startLiveActivity, stopLiveActivity, pause, resume, addTimerListener, startListening } from "@/modules/activity-controller";
 
 export default function Timer() {
-    const {isAccessoryExercise, isPrimaryExercise} = useStore();
+    const { isSuperSet, set } = useStore();
     const exercise = useStore((state) => state.exercise());
-    const exerciseName = isAccessoryExercise(exercise) ? exercise.name : (isPrimaryExercise(exercise))
-        ? exercise.name : exercise.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
+    const exerciseName = !isSuperSet(exercise) ? exercise.name : exercise.exercise1.name.split(' ').map(
+        (s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
     const [startedAt, setStartedAt] = useState<Date | null>(null);
-    const [startTime, setStartTime] = useState(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
-    ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
+    const [startTime, setStartTime] = useState(isSuperSet(exercise) ? Math.max(
+        exercise.exercise1.sets[set].rest, exercise.exercise2.sets[set].rest) : exercise.sets[set].rest);
     const [pausedAt, setPausedAt] = useState<Date | null>(null);
     const [displayTime, setDisplayTime] = useState(0);
 
     useEffect(() => {
-        const newStartTime = isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
-            ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest);
+        const newStartTime = isSuperSet(exercise) ? Math.max(
+            exercise.exercise1.sets[set].rest, exercise.exercise2.sets[set].rest) : exercise.sets[set].rest;
         setStartTime(newStartTime);
         setStartedAt(null);
         setPausedAt(null);

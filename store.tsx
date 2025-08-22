@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import {accessoryExerciseType, superSetType, primaryExerciseType, programType} from "@/types/programType";
+import {exerciseType, superSetType, programType} from "@/types/programType";
 import * as SQLite from "expo-sqlite";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const useStore = create<storeType>((set) => ({
-    set: 1,
+    set: 0,
     setSet: (newSet: number) => {
         AsyncStorage.setItem('set', newSet.toString());
         set({set: newSet});
@@ -29,7 +29,7 @@ const useStore = create<storeType>((set) => ({
     timesReset: 0,
     setTimesReset: (newTimesReset: number) => set({ timesReset: newTimesReset }),
     reset: () => {
-        set({ set: 1 });
+        set({ set: 0 });
         set({ currentExercise: 0 });
         set({ currentDay: 0 });
         set({ currentScheme: '5 x 5' });
@@ -39,25 +39,14 @@ const useStore = create<storeType>((set) => ({
     setRetrievedSet: (newRetrievedSet: number | null) => set({ retrievedSet: newRetrievedSet }),
     retrievedYet: false,
     setRetrievedYet: (newRetrievedYet: boolean) => set({ retrievedYet: newRetrievedYet }),
-
     program: null,
     setProgram: (newProgram) => {set({ program: newProgram });},
-
-    isPrimaryExercise : (exercise: primaryExerciseType | accessoryExerciseType | superSetType): exercise is primaryExerciseType => {
-        return (exercise as primaryExerciseType).weight_1 !== undefined;
-    },
-
-    isAccessoryExercise : (exercise: primaryExerciseType | accessoryExerciseType | superSetType): exercise is accessoryExerciseType => {
-        return (exercise as accessoryExerciseType).weight !== undefined;
-    },
-
-    isSuperSet : (exercise: primaryExerciseType | accessoryExerciseType | superSetType): exercise is superSetType => {
+    isSuperSet : (exercise: exerciseType | superSetType): exercise is superSetType => {
         return (exercise as superSetType).exercise1 !== undefined;
     },
-
-    exercise: (): primaryExerciseType | accessoryExerciseType | superSetType =>
-        useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise],
-
+    exercise: (): exerciseType | superSetType => {
+        return useStore.getState().program!.days[useStore.getState().currentDay].exercises[useStore.getState().currentExercise];
+    },
     db: SQLite.openDatabaseSync('programs.db'),
 }));
 
@@ -110,10 +99,8 @@ type storeType = {
     setRetrievedYet: (newRetrievedYet: boolean) => void,
     program: programType | null,
     setProgram: (newProgram: programType | null) => void,
-    isPrimaryExercise: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is primaryExerciseType,
-    isAccessoryExercise: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is accessoryExerciseType,
-    isSuperSet: (exercise: primaryExerciseType | accessoryExerciseType | superSetType) => exercise is superSetType,
-    exercise: () => primaryExerciseType | accessoryExerciseType | superSetType,
+    isSuperSet: (exercise: exerciseType | superSetType) => exercise is superSetType,
+    exercise: () => exerciseType | superSetType,
     db: SQLite.SQLiteDatabase,
 }
 
