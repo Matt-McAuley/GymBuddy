@@ -8,32 +8,14 @@ import { Dropdown } from "react-native-element-dropdown";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import registerNNPushToken from 'native-notify';
 
 export default function Index() {
-    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset, paused,
-        setCurrentScheme, setSet, setRetrievedTime, currentExercise, setRetrievedPaused, setRetrievedYet, setRetrievedSet, time, setTime} = useStore();
+    const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset,
+        setCurrentScheme, setSet, currentExercise, setRetrievedYet, setRetrievedSet} = useStore();
     const day = program?.days[currentDay];
     const {width} = Dimensions.get('window');
     const exerciseScrollRef = useRef<ScrollView | null >(null);
-    const [backgroundStart, setBackgroundStart] = useState<number | null>(null);
-    const appState = useRef(AppState.currentState);
     useDrizzleStudio(db);
-    registerNNPushToken(30437, '7W4A9Or8CcpMusVIoFFmCx');
-
-    useEffect(() => {
-        const subscription = AppState.addEventListener('change', nextAppState => {
-            if (appState.current.match(/inactive|background/) && nextAppState === 'active' && backgroundStart !== null && !paused) {
-                setTime(Math.max(0, time - Math.floor((new Date().getTime() - backgroundStart) / 1000)));
-            }
-            else if (appState.current.match(/active/) && nextAppState === 'background') {
-                setBackgroundStart(new Date().getTime());
-            }
-            appState.current = nextAppState;
-        });
-
-        return () => subscription.remove();
-    }, [backgroundStart]);
 
     const retrieveOverwrittenValues = async () => {
         const timer = await AsyncStorage.getItem('timer');
@@ -43,8 +25,6 @@ export default function Index() {
             Math.max(0, parseInt(startTime) - Math.floor((new Date().getTime() - parseInt(initialTime)) / 1000));
         const paused = await AsyncStorage.getItem('paused');
         const set = await AsyncStorage.getItem('set');
-        setRetrievedTime(newTime);
-        setRetrievedPaused((paused === null) ? null : (paused === 'true'));
         setRetrievedSet((set === null) ? null : parseInt(set));
     }
 

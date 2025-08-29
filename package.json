@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
+    "@bacons/apple-targets": "^0.1.6",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/slider": "4.5.5",
@@ -30,6 +31,7 @@
     "expo-constants": "~17.0.8",
     "expo-crypto": "~14.0.2",
     "expo-dev-client": "~5.0.20",
+    "expo-device": "~7.0.3",
     "expo-drizzle-studio-plugin": "^0.1.1",
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.1",
@@ -64,8 +66,7 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "tailwindcss": "^3.4.15",
-    "zustand": "^5.0.1",
-    "expo-device": "~7.0.3"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
