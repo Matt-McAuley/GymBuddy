@@ -1,6 +1,6 @@
 import {Text, ScrollView, TouchableOpacity, View} from "react-native";
 import {useProgramStore, useStore} from "@/store";
-import {getExerciseNamesType} from "@/db/programDBFunctions";
+import {getExerciseNames} from "@/db/programDBFunctions";
 import AddExercise from "@/components/Programs/Forms/AddExercise";
 import EditExercise from "@/components/Programs/Forms/EditExercise";
 import ExerciseDisplayCard from "@/components/Programs/ExerciseDisplayCard";
@@ -8,7 +8,7 @@ import ExerciseDisplayCard from "@/components/Programs/ExerciseDisplayCard";
 export default function Exercises() {
     const {db} = useStore();
     const {addExerciseForm, editExercise, setAddExerciseForm} = useProgramStore();
-    const exercises = getExerciseNamesType(db);
+    const exercises = getExerciseNames(db);
 
     return (
         (addExerciseForm) ?
@@ -23,8 +23,8 @@ export default function Exercises() {
                         <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Exercise</Text>
                     </TouchableOpacity>
                     {exercises.map((exercise) =>
-                        <View key={exercise.name}>
-                            <ExerciseDisplayCard exerciseName={exercise.name} isPrimary={exercise.isPrimary}/>
+                        <View key={exercise}>
+                            <ExerciseDisplayCard exerciseName={exercise} />
                         </View>
                     )}
                 </ScrollView>

@@ -5,24 +5,36 @@ import { startLiveActivity, stopLiveActivity, pause, resume, addTimerListener, s
 
 export default function Timer() {
     const { isSuperSet, set } = useStore();
+    
+    const getStartTime = () => {
+        if (isSuperSet(exercise)) {
+            if (set < exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) {
+                return Math.max(exercise.exercise1.sets[set].rest, exercise.exercise2.sets[set].rest);
+            }
+            return Math.max(exercise.exercise1.sets[0].rest, exercise.exercise2.sets[0].rest);
+        }
+        if (set < exercise.sets.length) {
+            return exercise.sets[set].rest;
+        }
+        return exercise.sets[0].rest;
+    }
+
     const exercise = useStore((state) => state.exercise());
     const exerciseName = !isSuperSet(exercise) ? exercise.name : exercise.exercise1.name.split(' ').map(
         (s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
     const [startedAt, setStartedAt] = useState<Date | null>(null);
-    const [startTime, setStartTime] = useState(isSuperSet(exercise) ? Math.max(
-        exercise.exercise1.sets[set].rest, exercise.exercise2.sets[set].rest) : exercise.sets[set].rest);
+    const [startTime, setStartTime] = useState(getStartTime());
     const [pausedAt, setPausedAt] = useState<Date | null>(null);
     const [displayTime, setDisplayTime] = useState(0);
 
     useEffect(() => {
-        const newStartTime = isSuperSet(exercise) ? Math.max(
-            exercise.exercise1.sets[set].rest, exercise.exercise2.sets[set].rest) : exercise.sets[set].rest;
+        const newStartTime = getStartTime();
         setStartTime(newStartTime);
         setStartedAt(null);
         setPausedAt(null);
         setDisplayTime(newStartTime);
         stopLiveActivity();
-    }, [exercise]);
+    }, [exercise, set]);
 
     useEffect(() => {
         const interval = setInterval(() => {

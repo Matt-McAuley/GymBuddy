@@ -3,7 +3,6 @@ import {useProgramStore, useStore} from "@/store";
 import {getProgramNames} from "@/db/programDBFunctions";
 import ProgramDisplayCard from "@/components/Programs/ProgramDisplayCard";
 import AddProgram from "@/components/Programs/Forms/AddProgram";
-import {useEffect} from "react";
 import EditProgram from "@/components/Programs/Forms/EditProgram";
 
 export default function Programs() {

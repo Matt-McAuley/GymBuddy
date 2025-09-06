@@ -89,8 +89,13 @@ export function createNewDay(db: SQLite.SQLiteDatabase, name: string | null, col
     if (exercises == null || exercises.length === 0) return 'Must have at least one exercise!';
     db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", name, color);
     exercises.forEach((exercise, index) => {
-        const column = (exercise.includes(',')) ? 'superset' : 'exercise';
-        db.runSync(`INSERT INTO day_details (name, exercise_index, ${column}) VALUES (?, ?, ?)`, name, index, exercise);
+        if (exercise.includes(',')) {
+            const [superset1, superset2] = exercise.split(',').map(s => s.trim());
+            db.runSync(`INSERT INTO day_details (name, exercise_index, superset_1, superset_2) VALUES (?, ?, ?, ?)`, name, index, superset1, superset2);
+        }
+        else {
+            db.runSync(`INSERT INTO day_details (name, exercise_index, exercise) VALUES (?, ?, ?)`, name, index, exercise);
+        }
     });
     return 'success';
 }
@@ -104,7 +109,8 @@ export function getDayByName(db: SQLite.SQLiteDatabase, dayName: string) {
         color: day.color,
         exercises: dayDetails.map((detail) => ({
             exercise: detail.exercise,
-            superset: detail.superset
+            superset_1: detail.superset_1,
+            superset_2: detail.superset_2
         }))
     };
 }
@@ -123,8 +129,13 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
     db.runSync('DELETE FROM days WHERE name = ?', originalName);
     db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", newName, color);
     exercises.forEach((exercise, index) => {
-        const column = (exercise.includes(',')) ? 'superset' : 'exercise';
-        db.runSync(`INSERT INTO day_details (name, exercise_index, ${column}) VALUES (?, ?, ?)`, newName, index, exercise);
+        if (exercise.includes(',')) {
+            const [superset1, superset2] = exercise.split(',').map(s => s.trim());
+            db.runSync(`INSERT INTO day_details (name, exercise_index, superset_1, superset_2) VALUES (?, ?, ?, ?)`, newName, index, superset1, superset2);
+        }
+        else {
+            db.runSync(`INSERT INTO day_details (name, exercise_index, exercise) VALUES (?, ?, ?)`, newName, index, exercise);
+        }
     });
     programsWithDay.forEach((program) => {
         ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].forEach((day) => {
@@ -149,7 +160,7 @@ export function createNewExercise(db: SQLite.SQLiteDatabase, name: string | null
 
 
 export function deleteExercise(db: SQLite.SQLiteDatabase, name: string) {
-    const detailsWithExercise = db.getAllSync('SELECT * FROM day_details WHERE exercise = ? OR superset LIKE ?', name, `%${name}%`) as any[];
+    const detailsWithExercise = db.getAllSync('SELECT * FROM day_details WHERE exercise = ? OR superset_1 = ? OR superset_2 = ?', name, name, name) as any[];
     detailsWithExercise.forEach((detail) => {
         db.runSync('DELETE FROM day_details WHERE name = ? AND exercise_index = ?', detail.name, detail.exercise_index);
     });
@@ -195,13 +206,11 @@ export function replaceExercise(db: SQLite.SQLiteDatabase, originalName: string,
         db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', superset.exercise_1, newName);
     });
     
-    const dayDetailsWithSuperset = db.getAllSync('SELECT * FROM day_details WHERE superset LIKE ?', `%${originalName}%`) as any[];
+    const dayDetailsWithSuperset = db.getAllSync('SELECT * FROM day_details WHERE superset_1 = ? OR superset_2 = ?', originalName, originalName) as any[];
     dayDetailsWithSuperset.forEach((day) => {
-        const supersetExercises = day.superset.split(', ');
-        const updatedSuperset = supersetExercises.map((exercise: string) => 
-            exercise === originalName ? newName : exercise
-        ).join(', ');
-        db.runSync('UPDATE day_details SET superset = ? WHERE name = ? AND exercise_index = ?', updatedSuperset, day.name, day.exercise_index);
+        const updatedSuperset1 = day.superset_1 === originalName ? newName : day.superset_1;
+        const updatedSuperset2 = day.superset_2 === originalName ? newName : day.superset_2;
+        db.runSync('UPDATE day_details SET superset_1 = ?, superset_2 = ? WHERE name = ? AND exercise_index = ?', updatedSuperset1, updatedSuperset2, day.name, day.exercise_index);
     });
     return 'success';
 }

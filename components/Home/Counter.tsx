@@ -5,18 +5,26 @@ import { useStore } from "@/store";
 export default function Counter() {
     const {isSuperSet, currentScheme, set, setSet, retrievedSet, setRetrievedSet, retrievedYet} = useStore();
     const exercise = useStore((state) => state.exercise());
-    const [maxSets, setMaxSets] = useState((isSuperSet(exercise)) ? Math.max(
-        exercise.exercise1.sets.length, exercise.exercise2.sets.length) : exercise.sets.length);
+    const [maxSets, setMaxSets] = useState((isSuperSet(exercise)) ? Math.min(
+        exercise.exercise1.sets.length-1, exercise.exercise2.sets.length-1) : exercise.sets.length-1);
 
     const getReps = () => {
-        return (isSuperSet(exercise)) ? Math.max(exercise.exercise1.sets[set].reps,
-            exercise.exercise2.sets[set].reps) : exercise.sets[set].reps;
+        if (isSuperSet(exercise)) {
+            if (set < exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) {
+                return Math.max(exercise.exercise1.sets[set].reps, exercise.exercise2.sets[set].reps);
+            }
+            return Math.max(exercise.exercise1.sets[0].reps, exercise.exercise2.sets[0].reps);
+        }
+        if (set < exercise.sets.length) {
+            return exercise.sets[set].reps;
+        }
+        return exercise.sets[0].reps;
     }
     const [reps, setReps] = useState(getReps());
 
     useEffect(() => {
-        setMaxSets((isSuperSet(exercise)) ? Math.max(
-        exercise.exercise1.sets.length, exercise.exercise2.sets.length) : exercise.sets.length);
+        setMaxSets((isSuperSet(exercise)) ? Math.min(
+        exercise.exercise1.sets.length-1, exercise.exercise2.sets.length-1) : exercise.sets.length-1);
         setReps(getReps());
         setSet(0);
     }, [exercise]);
@@ -38,7 +46,7 @@ export default function Counter() {
                 <Text className={'text-4xl font-bold mr-3'}>Set:</Text>
                 <View className={'flex-col justify-center items-center'}>
                     <Text className={'text-4xl font-bold m-0 p-0 border-b-4 w-9 text-center'}>{set+1}</Text>
-                    <Text className={'text-4xl font-bold m-0 p-0'}>{maxSets}</Text>
+                    <Text className={'text-4xl font-bold m-0 p-0'}>{maxSets+1}</Text>
                 </View>
                 <View className={''}>
                     <TouchableOpacity onPress={() => {setSet(Math.min(maxSets, set+1))}}>

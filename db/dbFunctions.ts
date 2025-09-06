@@ -34,7 +34,7 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
         db.execSync(`
             CREATE TABLE IF NOT EXISTS days (
                 name TEXT PRIMARY KEY NOT NULL,
-                color TEXT NOT NULL,
+                color TEXT NOT NULL
             );
         `);
 
@@ -43,11 +43,12 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
                 name TEXT NOT NULL,
                 exercise_index INTEGER NOT NULL,
                 exercise TEXT NULL,
-                superset TEXT NULL,
+                superset_1 TEXT NULL,
+                superset_2 TEXT NULL,
                 PRIMARY KEY (name, exercise_index),
                 FOREIGN KEY (name) REFERENCES days(name) ON DELETE CASCADE,
                 FOREIGN KEY (exercise) REFERENCES exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (superset) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL
+                FOREIGN KEY (superset_1, superset_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL
             );
         `);
 
@@ -135,6 +136,7 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 1, 210, 205, 5);
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 2, 210, 235, 3);
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 3, 210, 260, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 4, 230, 22, 15);
 
             -- Squat sets
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat', 1, 210, 225, 5);
@@ -253,36 +255,36 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
         `);
 
         // Insert day details for mock program
-        db.execSync(`
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Push', 1, 'Bench', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Push', 2, 'DB OHP', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Push', 3, 'Dips', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Push', 4, NULL, 'Lateral Raise, Tricep Extension');
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Push', 5, 'Leg Raises', NULL);
-        `);
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 1, 'Bench', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 2, 'DB OHP', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 3, 'Dips', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 4, NULL, 'Lateral Raise', 'Tricep Extension');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 5, 'Leg Raises', NULL, NULL);
+            `);
 
-        db.execSync(`
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Pull', 1, 'Deadlift', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Pull', 2, 'BB Curl', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Pull', 3, 'Lat Pull', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Pull', 4, NULL, 'Hammer Curl,Face Pull');
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Pull', 5, 'Cable Crunches', NULL);
-        `);
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 1, 'Deadlift', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 2, 'BB Curl', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 3, 'Lat Pull', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 4, NULL, 'Hammer Curl', 'Face Pull');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 5, 'Cable Crunches', NULL, NULL);
+            `);
 
-        db.execSync(`
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Upper', 1, 'OHP', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Upper', 2, 'BB Row', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Upper', 3, 'DB Bench', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Upper', 4, NULL, 'Lateral Raise, BTB Shrug');
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Upper', 5, 'Leg Raises', NULL);
-        `);
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 1, 'OHP', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 2, 'BB Row', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 3, 'DB Bench', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 4, NULL, 'Lateral Raise', 'BTB Shrug');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 5, 'Leg Raises', NULL, NULL);
+            `);
 
-        db.execSync(`
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Lower & Arms', 1, 'Squat', NULL);
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Lower & Arms', 2, NULL, 'Hamstring Curl, Dips');
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Lower & Arms', 3, NULL, 'Leg Extension, DB Curl');
-            INSERT INTO day_details (name, exercise_index, exercise, superset) VALUES ('Lower & Arms', 4, 'Cable Crunches', NULL);
-        `);
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 1, 'Squat', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 2, NULL, 'Hamstring Curl', 'Dips');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 3, NULL, 'Leg Extension', 'DB Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 4, 'Cable Crunches', NULL, NULL);
+            `);
 
         db.execSync(`
             INSERT INTO programs (name, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
@@ -348,8 +350,9 @@ const getProgram = (db:  SQLite.SQLiteDatabase) => {
                     })),
                 };
                 dayRes.exercises.push(exercise);
-            } else if (detail.superset != null) {
-                const [exercise1Name, exercise2Name] = detail.superset.split(',').map((name: string) => name.trim());
+            } else if (detail.superset_1 != null) {
+                const exercise1Name = detail.superset_1.trim();
+                const exercise2Name = detail.superset_2.trim();
 
                 const exercise1Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = '${exercise1Name}' ORDER BY set_index`) as any[];
                 const exercise2Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = '${exercise2Name}' ORDER BY set_index`) as any[];
