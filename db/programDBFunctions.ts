@@ -145,7 +145,7 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
     return 'success';
 }
 
-export function createNewExercise(db: SQLite.SQLiteDatabase, name: string | null, sets: setType[]) {
+export function createNewExercise(db: SQLite.SQLiteDatabase, name: string | null, sets: setType[] | null) {
     const exercise = db.getFirstSync('SELECT * FROM exercises WHERE name = ?', name);
     if (exercise != null) return 'Exercise with that name already exists!';
     if (name == null) return 'Must include an exercise name!';
