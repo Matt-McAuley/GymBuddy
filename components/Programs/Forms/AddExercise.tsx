@@ -6,165 +6,155 @@ import Toast from 'react-native-toast-message';
 import { setType } from "@/types/programType";
 import { MaterialIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
-import DraggableFlatList, { NestableScrollContainer, NestableDraggableFlatList } from "react-native-draggable-flatlist";
+import { NestableScrollContainer, ScaleDecorator, NestableDraggableFlatList } from "react-native-draggable-flatlist";
 
 export default function AddExercise() {
     const {setAddExerciseForm} = useProgramStore();
     const {db} = useStore();
-    const [exerciseData, setExerciseData] = useState<exerciseDataType>({name: null, sets: [{rest: '90', weight: '225', reps: '5'}, {rest: '90', weight: '225', reps: '3'}, {rest: '90', weight: '225', reps: '1'}]});
+    const [exerciseData, setExerciseData] = useState<exerciseDataType>({name: null, sets: [{id: Date.now(), rest: '90', weight: '225', reps: '5'}]});
 
     return (
-        // <ScrollView className={'p-4'}>
-        //     <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'}
-        //                       onPress={() => {setAddExerciseForm(false)}}>
-        //         <Text className={'text-center text-4xl color-white font-bold'}>X</Text>
-        //     </TouchableOpacity>
-        //         <>
-        //             <Text className="text-3xl font-bold text-start mb-2">Exercise Name</Text>
-        //             <TextInput
-        //                 className={'h-28 w-full text-center border-4 rounded-xl text-3xl font-bold mb-2 bg-white'}
-        //                 onChangeText={(text) => setExerciseData({...exerciseData, name: text})}
-        //                 placeholder={'Enter Exercise Name'}
-        //                 value={exerciseData.name?.toString()}
-        //                 placeholderTextColor={'gray'}>
-        //             </TextInput>
-        //             <View className="h-20 w-full text-center flex-row justify-around items-center">
-        //                 <View className="w-[10%]"></View>
-        //                 <Text className="text-3xl font-bold text-center w-[30%] border-r-2">Rest</Text>
-        //                 <Text className="text-3xl font-bold text-center w-[30%] border-r-2">Weight</Text>
-        //                 <Text className="text-3xl font-bold text-center w-[30%]">Reps</Text>
-        //             </View>
-        //                 {(exerciseData.sets != null) ?
-        //                     <>
-        //                         {exerciseData.sets.map((_, index) => (
-        //                             <View key={`set-${index}-${exerciseData.sets!.length}`} className="w-full mb-3 relative">
-        //                                 <Swipeable overshootFriction={6} friction={1.5} renderRightActions={() => (
-        //                                     <View className="w-25 h-22 bg-red-500 justify-center items-center mr-1 rounded-xl">
-        //                                         <TouchableOpacity
-        //                                             className="w-full h-full justify-center items-center hover:opacity-70"
-        //                                             onPress={() => {
-        //                                                 const updatedSets = exerciseData.sets!.filter((_, i) => i !== index);
-        //                                                 setExerciseData({ ...exerciseData, sets: updatedSets });
-        //                                             }}>
-        //                                             <MaterialIcons name="delete" size={30} color="white" />
-        //                                         </TouchableOpacity>
-        //                                     </View>
-        //                                 )}>
-        //                                     <View className="flex-row justify-around items-center w-full">
-        //                                         <TouchableOpacity className="">
-        //                                             <MaterialIcons name="drag-indicator" size={30} color="gray" />
-        //                                         </TouchableOpacity>
-        //                                         <View className="flex-row justify-around items-center w-[90%] bg-gray-100 rounded-xl self-end">
-        //                                             <TextInput
-        //                                                 key={`rest-${index}`}
-        //                                                 className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
-        //                                                 onChangeText={(text) => {
-        //                                                     setExerciseData({
-        //                                                         ...exerciseData,
-        //                                                         sets: exerciseData.sets!.map((set, i) => i === index ? { ...set, rest: text } : set),
-        //                                                     });
-        //                                                 }}
-        //                                                 value={exerciseData.sets![index].rest}
-        //                                                 keyboardType="numeric"/>
-        //                                             <TextInput
-        //                                                 key={`weight-${index}`}
-        //                                                 className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
-        //                                                 onChangeText={(text) => {
-        //                                                     setExerciseData({
-        //                                                         ...exerciseData,
-        //                                                         sets: exerciseData.sets!.map((set, i) => i === index ? { ...set, weight: text } : set),
-        //                                                     });
-        //                                                 }}
-        //                                                 value={exerciseData.sets![index].weight}
-        //                                                 keyboardType="numeric"/>
-        //                                             <TextInput
-        //                                                 key={`reps-${index}`}
-        //                                                 className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
-        //                                                 onChangeText={(text) => {
-        //                                                     setExerciseData({
-        //                                                         ...exerciseData,
-        //                                                         sets: exerciseData.sets!.map((set, i) => i === index ? { ...set, reps: text } : set),
-        //                                                     });
-        //                                                 }}
-        //                                                 value={exerciseData.sets![index].reps}
-        //                                                 keyboardType="numeric"/>
-        //                                         </View>
-        //                                     </View>
-        //                                 </Swipeable>
-        //                             </View>
-        //                         ))}
-        //                     </>
-        //             : null}
-        //             <TouchableOpacity onPress={() => setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {rest: '90', weight: '225', reps: '5'}]})}
-        //                 className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
-        //                 <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Set</Text>
-        //             </TouchableOpacity>
-        //         </>
-        //     <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
-        //                       onPress={() => {
-        //                             console.log(exerciseData);
-        //                             const exerciseDataSets : setType[] = [];
-        //                             if (exerciseData.sets != null) {
-        //                                 for (let i = 0; i < exerciseData.sets.length; i++) {
-        //                                     const set = exerciseData.sets[i];
-        //                                     const rest = parseInt(set.rest);
-        //                                     const weight = parseInt(set.weight);
-        //                                     const reps = parseInt(set.reps);
-        //                                     console.log(`Rest: ${rest}, Weight: ${weight}, Reps: ${reps}`);
-        //                                     if (!isNaN(rest) && !isNaN(weight) && !isNaN(reps)) {
-        //                                         exerciseDataSets.push({rest, weight, reps});
-        //                                     }
-        //                                     else {
-        //                                         console.log('Invalid number in sets');
-        //                                         Toast.show({
-        //                                             type: 'error',
-        //                                             text1: 'Error',
-        //                                             text2: 'Please enter valid numbers for each set.',
-        //                                         });
-        //                                         setAddExerciseForm(false);
-        //                                         return;
-        //                                     }
-        //                                 }
-        //                             }
-        //                             const result = createNewExercise(db, exerciseData.name, exerciseDataSets);
-        //                             if (result == 'success') {
-        //                                 Toast.show({
-        //                                     type: 'success',
-        //                                     text1: 'Success',
-        //                                     text2: 'Exercise Created',
-        //                                     text1Style: {fontSize: 30},
-        //                                     text2Style: {fontSize: 30},
-        //                                 });
-        //                             }
-        //                             else {
-        //                                 Toast.show({
-        //                                     type: 'error',
-        //                                     text1: 'Error',
-        //                                     text2: result,
-        //                                 });
-        //                             }
-        //                             setAddExerciseForm(false);
-        //                       }}>
-        //         <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
-        //     </TouchableOpacity>
-        // </ScrollView>
-        <View className={'p-4'}>
-            <DraggableFlatList data={exerciseData.sets!} keyExtractor={(item, index) => `draggable-item-${index}`}
-                // onDragEnd={({ data }) => setExerciseData({ ...exerciseData, sets: data })}
-                renderItem={({ item, getIndex, drag, isActive }) => (
-                    <>
-                        <TouchableOpacity key={`set-${getIndex()}`} className="w-full mb-3 relative"
-                            onLongPress={drag} disabled={isActive}>
-                            <Text className="text-3xl">{item.reps} reps @ {item.weight} lbs</Text>
-                        </TouchableOpacity>
-                    </>
-                )}
-            />
-        </View>
-        );
-    }
+        <NestableScrollContainer className={'p-4'}>
+            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'}
+                              onPress={() => {setAddExerciseForm(false)}}>
+                <Text className={'text-center text-4xl color-white font-bold'}>X</Text>
+            </TouchableOpacity>
+                <>
+                    <Text className="text-3xl font-bold text-start mb-2">Exercise Name</Text>
+                    <TextInput
+                        className={'h-28 w-full text-center border-4 rounded-xl text-3xl font-bold mb-2 bg-white'}
+                        onChangeText={(text) => setExerciseData({...exerciseData, name: text})}
+                        placeholder={'Enter Exercise Name'}
+                        value={exerciseData.name?.toString()}
+                        placeholderTextColor={'gray'}>
+                    </TextInput>
+                    <View className="h-20 w-full text-center flex-row justify-around items-center">
+                        <View className="w-[50px]"></View>
+                        <View className="flex-1 flex-row justify-around items-center">
+                            <Text className="text-3xl font-bold text-center flex-1 border-r-2">Rest</Text>
+                            <Text className="text-3xl font-bold text-center flex-1 border-r-2">Weight</Text>
+                            <Text className="text-3xl font-bold text-center flex-1">Reps</Text>
+                        </View>
+                    </View>
+                        {(exerciseData.sets != null) ?
+                        <NestableDraggableFlatList nestedScrollEnabled={false} data={exerciseData.sets} onDragEnd={({ data }) => setExerciseData({ ...exerciseData, sets: data })} renderItem={({getIndex, drag}) => (
+                            <View key={`set-${getIndex()}-${exerciseData.sets!.length}`} className="w-full mb-3 relative">
+                                <Swipeable overshootFriction={6} friction={1.5} renderRightActions={() => (
+                                    <View className="w-25 h-22 bg-red-500 justify-center items-center mr-1 rounded-xl">
+                                        <TouchableOpacity
+                                            className="w-full h-full justify-center items-center hover:opacity-70"
+                                            onPress={() => {
+                                                const updatedSets = exerciseData.sets!.filter((_, i) => i !== getIndex());
+                                                setExerciseData({ ...exerciseData, sets: updatedSets });
+                                            }}>
+                                            <MaterialIcons name="delete" size={40} color="white" />
+                                        </TouchableOpacity>
+                                    </View>
+                                )}>
+                                    <View className="flex-row justify-around items-center w-full">
+                                        <ScaleDecorator >
+                                            <TouchableOpacity onLongPress={drag} className="">
+                                                <MaterialIcons name="drag-indicator" size={50} color="gray" />
+                                            </TouchableOpacity>
+                                        </ScaleDecorator>
+                                        <View className="flex-row justify-around items-center flex-1 bg-gray-100 rounded-xl self-end">
+                                            <TextInput
+                                                key={`rest-${getIndex()}`}
+                                                className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                                onChangeText={(text) => {
+                                                    setExerciseData({
+                                                        ...exerciseData,
+                                                        sets: exerciseData.sets!.map((set, i) => i === getIndex() ? { ...set, rest: text } : set),
+                                                    });
+                                                }}
+                                                value={exerciseData.sets![getIndex()!].rest}
+                                                keyboardType="numeric"/>
+                                            <TextInput
+                                                key={`weight-${getIndex()}`}
+                                                className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                                onChangeText={(text) => {
+                                                    setExerciseData({
+                                                        ...exerciseData,
+                                                        sets: exerciseData.sets!.map((set, i) => i === getIndex() ? { ...set, weight: text } : set),
+                                                    });
+                                                }}
+                                                value={exerciseData.sets![getIndex()!].weight}
+                                                keyboardType="numeric"/>
+                                            <TextInput
+                                                key={`reps-${getIndex()}`}
+                                                className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                                onChangeText={(text) => {
+                                                    setExerciseData({
+                                                        ...exerciseData,
+                                                        sets: exerciseData.sets!.map((set, i) => i === getIndex() ? { ...set, reps: text } : set),
+                                                    });
+                                                }}
+                                                value={exerciseData.sets![getIndex()!].reps}
+                                                keyboardType="numeric"/>
+                                        </View>
+                                    </View>
+                                </Swipeable>
+                            </View>
+                        )} keyExtractor={(item) => `draggable-item-${item.id}`}/>
+                    : null}
+                    <TouchableOpacity onPress={() => setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: Date.now(), rest: '90', weight: '225', reps: '5'}]})}
+                        className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
+                        <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Set</Text>
+                    </TouchableOpacity>
+                </>
+            <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
+                              onPress={() => {
+                                    console.log(exerciseData);
+                                    const exerciseDataSets : setType[] = [];
+                                    if (exerciseData.sets != null) {
+                                        for (let i = 0; i < exerciseData.sets.length; i++) {
+                                            const set = exerciseData.sets[i];
+                                            const rest = parseInt(set.rest);
+                                            const weight = parseInt(set.weight);
+                                            const reps = parseInt(set.reps);
+                                            console.log(`Rest: ${rest}, Weight: ${weight}, Reps: ${reps}`);
+                                            if (!isNaN(rest) && !isNaN(weight) && !isNaN(reps)) {
+                                                exerciseDataSets.push({rest, weight, reps});
+                                            }
+                                            else {
+                                                console.log('Invalid number in sets');
+                                                Toast.show({
+                                                    type: 'error',
+                                                    text1: 'Error',
+                                                    text2: 'Please enter valid numbers for each set.',
+                                                });
+                                                setAddExerciseForm(false);
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    const result = createNewExercise(db, exerciseData.name, exerciseDataSets);
+                                    if (result == 'success') {
+                                        Toast.show({
+                                            type: 'success',
+                                            text1: 'Success',
+                                            text2: 'Exercise Created',
+                                            text1Style: {fontSize: 30},
+                                            text2Style: {fontSize: 30},
+                                        });
+                                    }
+                                    else {
+                                        Toast.show({
+                                            type: 'error',
+                                            text1: 'Error',
+                                            text2: result,
+                                        });
+                                    }
+                                    setAddExerciseForm(false);
+                              }}>
+                <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
+            </TouchableOpacity>
+        </NestableScrollContainer>
+    );
+}
 
 type setDataType = {
+    id: number,
     rest: string,
     weight: string,
     reps: string,
