@@ -5,9 +5,8 @@ import { createNewExercise } from "@/db/programDBFunctions";
 import Toast from 'react-native-toast-message';
 import { setType } from "@/types/programType";
 import { MaterialIcons } from '@expo/vector-icons';
-import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import DraggableFlatList, { ScaleDecorator, RenderItemParams } from 'react-native-draggable-flatlist';
-import Animated from "react-native-reanimated";
 
 export default function AddExercise() {
     const {setAddExerciseForm} = useProgramStore();
@@ -98,7 +97,7 @@ export default function AddExercise() {
     const renderItem = ({ item, drag, isActive, getIndex }: RenderItemParams<setDataType>) => {
         return (
             <ScaleDecorator>
-                <Animated.View key={`set-${item.id}`} className="w-full mb-3 relative px-4">
+                <View key={`set-${item.id}`} className="w-full mb-3 relative px-4">
                     <Swipeable overshootFriction={6} friction={1.5} renderRightActions={() => (
                         <View className="w-25 h-22 bg-red-500 justify-center items-center mr-1 rounded-xl">
                             <TouchableOpacity
@@ -165,7 +164,7 @@ export default function AddExercise() {
                             </View>
                         </View>
                     </Swipeable>
-                </Animated.View>
+                </View>
             </ScaleDecorator>
         );
     };
