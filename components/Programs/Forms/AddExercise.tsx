@@ -11,12 +11,12 @@ import DraggableFlatList, { ScaleDecorator, RenderItemParams } from 'react-nativ
 export default function AddExercise() {
     const {setAddExerciseForm} = useProgramStore();
     const {db} = useStore();
-    const [exerciseData, setExerciseData] = useState<exerciseDataType>({name: null, sets: [{id: Date.now(), rest: '90', weight: '225', reps: '5'}]});
+    const [index, setIndex] = useState(1);
+    const [exerciseData, setExerciseData] = useState<exerciseDataType>({name: "", sets: [{id: 0, rest: '90', weight: '225', reps: '5'}]});
 
     const HeaderComponent = () => (
         <View className={'p-4'}>
-            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'}
-                              onPress={() => {setAddExerciseForm(false)}}>
+            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'} onPress={() => {setAddExerciseForm(false)}}>
                 <Text className={'text-center text-4xl color-white font-bold'}>X</Text>
             </TouchableOpacity>
             <Text className="text-3xl font-bold text-start mb-2">Exercise Name</Text>
@@ -40,55 +40,52 @@ export default function AddExercise() {
 
     const FooterComponent = () => (
         <View className={'p-4'}>
-            <TouchableOpacity onPress={() => setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: Date.now(), rest: '90', weight: '225', reps: '5'}]})}
+            <TouchableOpacity onPress={() => {
+                setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: index, rest: '90', weight: '225', reps: '5'}]}); 
+                setIndex(index + 1);
+            }}
                 className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
                 <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Set</Text>
             </TouchableOpacity>
-            <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
-                              onPress={() => {
-                                    console.log(exerciseData);
-                                    const exerciseDataSets : setType[] = [];
-                                    if (exerciseData.sets != null) {
-                                        for (let i = 0; i < exerciseData.sets.length; i++) {
-                                            const set = exerciseData.sets[i];
-                                            const rest = parseInt(set.rest);
-                                            const weight = parseInt(set.weight);
-                                            const reps = parseInt(set.reps);
-                                            console.log(`Rest: ${rest}, Weight: ${weight}, Reps: ${reps}`);
-                                            if (!isNaN(rest) && !isNaN(weight) && !isNaN(reps)) {
-                                                exerciseDataSets.push({rest, weight, reps});
-                                            }
-                                            else {
-                                                console.log('Invalid number in sets');
-                                                Toast.show({
-                                                    type: 'error',
-                                                    text1: 'Error',
-                                                    text2: 'Please enter valid numbers for each set.',
-                                                });
-                                                setAddExerciseForm(false);
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    const result = createNewExercise(db, exerciseData.name, exerciseDataSets);
-                                    if (result == 'success') {
-                                        Toast.show({
-                                            type: 'success',
-                                            text1: 'Success',
-                                            text2: 'Exercise Created',
-                                            text1Style: {fontSize: 30},
-                                            text2Style: {fontSize: 30},
-                                        });
-                                    }
-                                    else {
-                                        Toast.show({
-                                            type: 'error',
-                                            text1: 'Error',
-                                            text2: result,
-                                        });
-                                    }
-                                    setAddExerciseForm(false);
-                              }}>
+            <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'} onPress={() => {
+                    const exerciseDataSets : setType[] = [];
+                    for (let i = 0; i < exerciseData.sets.length; i++) {
+                        const set = exerciseData.sets[i];
+                        const rest = parseInt(set.rest);
+                        const weight = parseInt(set.weight);
+                        const reps = parseInt(set.reps);
+                        if (!isNaN(rest) && !isNaN(weight) && !isNaN(reps)) {
+                            exerciseDataSets.push({rest, weight, reps});
+                        }
+                        else {
+                            Toast.show({
+                                type: 'error',
+                                text1: 'Error',
+                                text2: 'Please enter valid numbers for each set.',
+                            });
+                            setAddExerciseForm(false);
+                            return;
+                        }
+                    }
+                    const result = createNewExercise(db, exerciseData.name, exerciseDataSets);
+                    if (result == 'success') {
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Success',
+                            text2: 'Exercise Created',
+                            text1Style: {fontSize: 30},
+                            text2Style: {fontSize: 30},
+                        });
+                    }
+                    else {
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Error',
+                            text2: result,
+                        });
+                    }
+                    setAddExerciseForm(false);
+                }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
             </TouchableOpacity>
         </View>
@@ -114,16 +111,11 @@ export default function AddExercise() {
                         </View>
                     )}>
                         <View className="flex-row justify-around items-center w-full">
-                            <TouchableOpacity 
-                                onLongPress={drag} 
-                                disabled={isActive}
-                                className=""
-                            >
+                            <TouchableOpacity onLongPress={drag} disabled={isActive} className="">
                                 <MaterialIcons name="drag-indicator" size={50} color="gray" />
                             </TouchableOpacity>
                             <View className="flex-row justify-around items-center flex-1 bg-gray-100 rounded-xl self-end">
-                                <TextInput
-                                    className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                <TextInput className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
                                     onChangeText={(text) => {
                                         const index = getIndex();
                                         if (index !== undefined) {
@@ -135,8 +127,7 @@ export default function AddExercise() {
                                     }}
                                     value={item.rest}
                                     keyboardType="numeric"/>
-                                <TextInput
-                                    className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                <TextInput className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
                                     onChangeText={(text) => {
                                         const index = getIndex();
                                         if (index !== undefined) {
@@ -148,8 +139,7 @@ export default function AddExercise() {
                                     }}
                                     value={item.weight}
                                     keyboardType="numeric"/>
-                                <TextInput
-                                    className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                <TextInput className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
                                     onChangeText={(text) => {
                                         const index = getIndex();
                                         if (index !== undefined) {
@@ -190,8 +180,8 @@ type setDataType = {
 }
 
 type exerciseDataType = {
-    name: string | null,
-    sets: setDataType[] | null,
+    name: string,
+    sets: setDataType[],
 }
 
 const styles = StyleSheet.create({

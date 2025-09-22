@@ -171,7 +171,7 @@ export function deleteExercise(db: SQLite.SQLiteDatabase, name: string) {
 export function getExerciseByName(db: SQLite.SQLiteDatabase, exerciseName: string) {
     const exercise = db.getFirstSync("SELECT * FROM exercises WHERE name = ?", exerciseName) as any;
     const details = db.getAllSync("SELECT * FROM exercise_details WHERE name = ? ORDER BY set_index", exerciseName) as any[];
-    return (exercise == null) ? null : {
+    return {
         name: exercise.name,
         sets: details.map(detail => ({
             rest: detail.rest,
