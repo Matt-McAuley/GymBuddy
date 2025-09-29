@@ -1,10 +1,9 @@
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
 import {useState} from "react";
 import { deleteExercise, getExerciseByName, replaceExercise } from "@/db/programDBFunctions";
 import Toast from 'react-native-toast-message';
 import {getProgram} from "@/db/dbFunctions";
-import { setType } from "@/types/programType";
 import { MaterialIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import DraggableFlatList, { ScaleDecorator, RenderItemParams } from 'react-native-draggable-flatlist';
@@ -28,7 +27,7 @@ export default function EditExercise() {
                 className={'h-28 w-full text-center border-4 rounded-xl text-3xl font-bold mb-2 bg-white'}
                 onEndEditing={(e) => setExerciseData({...exerciseData, name: e.nativeEvent.text})}
                 placeholder={'Enter Exercise Name'}
-                defaultValue={exerciseData.name.toString()}
+                defaultValue={exerciseData.name}
                 placeholderTextColor={'gray'}>
             </TextInput>
             <View className="h-20 w-full text-center flex-row justify-around items-center">
@@ -53,7 +52,7 @@ export default function EditExercise() {
             </TouchableOpacity>
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
                 onPress={() => {
-                    const exerciseDataSets : setType[] = [];
+                    const exerciseDataSets = [];
                     for (let i = 0; i < exerciseData.sets.length; i++) {
                         const set = exerciseData.sets[i];
                         const rest = parseInt(set.rest);
@@ -181,13 +180,12 @@ export default function EditExercise() {
 
     return (
         <DraggableFlatList
-            data={exerciseData.sets || []}
+            data={exerciseData.sets}
             onDragEnd={({ data }) => setExerciseData({ ...exerciseData, sets: data })}
             keyExtractor={(item) => `draggable-item-${item.id}`}
             renderItem={renderItem}
             ListHeaderComponent={HeaderComponent}
             ListFooterComponent={FooterComponent}
-            contentContainerStyle={{ paddingHorizontal: 0 }}
         />
     );
 }

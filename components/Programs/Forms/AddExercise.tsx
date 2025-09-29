@@ -1,9 +1,8 @@
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
 import { useState } from "react";
 import { createNewExercise } from "@/db/programDBFunctions";
 import Toast from 'react-native-toast-message';
-import { setType } from "@/types/programType";
 import { MaterialIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import DraggableFlatList, { ScaleDecorator, RenderItemParams } from 'react-native-draggable-flatlist';
@@ -12,10 +11,10 @@ export default function AddExercise() {
     const {setAddExerciseForm} = useProgramStore();
     const {db} = useStore();
     const [index, setIndex] = useState(1);
-    const [exerciseData, setExerciseData] = useState<exerciseDataType>({name: "", sets: [{id: 0, rest: '90', weight: '225', reps: '5'}]});
+    const [exerciseData, setExerciseData] = useState<exerciseDataType>({name: "", sets: []});
 
     const HeaderComponent = () => (
-        <View className={'p-4'}>
+        <View className={'p-4 pb-0'}>
             <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'} onPress={() => {setAddExerciseForm(false)}}>
                 <Text className={'text-center text-4xl color-white font-bold'}>X</Text>
             </TouchableOpacity>
@@ -24,15 +23,15 @@ export default function AddExercise() {
                 className={'h-28 w-full text-center border-4 rounded-xl text-3xl font-bold mb-2 bg-white'}
                 onEndEditing={(e) => setExerciseData({...exerciseData, name: e.nativeEvent.text})}
                 placeholder={'Enter Exercise Name'}
-                defaultValue={exerciseData.name?.toString()}
+                defaultValue={exerciseData.name}
                 placeholderTextColor={'gray'}>
             </TextInput>
-            <View className="h-20 w-full text-center flex-row justify-around items-center">
+            <View className="h-15 w-full text-center flex-row justify-around items-center">
                 <View className="w-[50px]"></View>
                 <View className="flex-1 flex-row justify-around items-center">
-                    <Text className="text-3xl font-bold text-center flex-1 border-r-2">Rest</Text>
-                    <Text className="text-3xl font-bold text-center flex-1 border-r-2">Weight</Text>
-                    <Text className="text-3xl font-bold text-center flex-1">Reps</Text>
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">Rest (s)</Text>
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">Weight</Text>
+                    <Text className="text-2xl font-bold text-center flex-1">Reps</Text>
                 </View>
             </View>
         </View>
@@ -41,14 +40,14 @@ export default function AddExercise() {
     const FooterComponent = () => (
         <View className={'p-4'}>
             <TouchableOpacity onPress={() => {
-                setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: index, rest: '90', weight: '225', reps: '5'}]}); 
+                setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: index, rest: '', weight: '', reps: ''}]}); 
                 setIndex(index + 1);
             }}
                 className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
                 <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Set</Text>
             </TouchableOpacity>
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'} onPress={() => {
-                    const exerciseDataSets : setType[] = [];
+                    const exerciseDataSets = [];
                     for (let i = 0; i < exerciseData.sets.length; i++) {
                         const set = exerciseData.sets[i];
                         const rest = parseInt(set.rest);
@@ -63,11 +62,10 @@ export default function AddExercise() {
                                 text1: 'Error',
                                 text2: 'Please enter valid numbers for each set.',
                             });
-                            setAddExerciseForm(false);
                             return;
                         }
                     }
-                    const result = createNewExercise(db, exerciseData.name, exerciseDataSets);
+                    const result = createNewExercise(db, exerciseData.name.trim(), exerciseDataSets);
                     if (result == 'success') {
                         Toast.show({
                             type: 'success',
@@ -76,6 +74,7 @@ export default function AddExercise() {
                             text1Style: {fontSize: 30},
                             text2Style: {fontSize: 30},
                         });
+                        setAddExerciseForm(false);
                     }
                     else {
                         Toast.show({
@@ -84,7 +83,6 @@ export default function AddExercise() {
                             text2: result,
                         });
                     }
-                    setAddExerciseForm(false);
                 }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
             </TouchableOpacity>
@@ -161,13 +159,12 @@ export default function AddExercise() {
 
     return (
         <DraggableFlatList
-            data={exerciseData.sets || []}
+            data={exerciseData.sets}
             onDragEnd={({ data }) => setExerciseData({ ...exerciseData, sets: data })}
             keyExtractor={(item) => `draggable-item-${item.id}`}
             renderItem={renderItem}
             ListHeaderComponent={HeaderComponent}
             ListFooterComponent={FooterComponent}
-            contentContainerStyle={{ paddingHorizontal: 0 }}
         />
     );
 };

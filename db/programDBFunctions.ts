@@ -39,7 +39,7 @@ export function setNullIfCurrentProgram(db: SQLite.SQLiteDatabase, programName: 
 
 export function createNewProgram(db: SQLite.SQLiteDatabase, programName: string | null, Sunday: string | null, Monday: string | null, Tuesday: string | null, Wednesday: string | null, Thursday: string | null, Friday: string | null, Saturday: string | null) {
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', programName);
-    if (programName == null) return 'Must include a program name!';
+    if (programName == null || programName.trim() === '') return 'Must include a program name!';
     if (Sunday == null && Monday == null && Tuesday == null && Wednesday == null && Thursday == null && Friday == null && Saturday == null) return 'Must have at least one day!';
     if (program != null) return 'Program with that name already exists!';
     db.runSync("INSERT INTO programs (name, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday) VALUES " +
@@ -76,17 +76,23 @@ export function deleteProgram(db: SQLite.SQLiteDatabase, programName: string) {
     db.runSync('DELETE FROM programs WHERE name = ?', programName);
 }
 
-export function getExercises(db: SQLite.SQLiteDatabase) {
+export function getExercisesAndSets(db: SQLite.SQLiteDatabase) {
     const exercises = db.getAllSync("SELECT * FROM exercises ORDER BY name") as any[];
-    return (exercises == null) ? null : exercises.map((exercise) => (exercise.name));
+    const exerciseDetails = db.getAllSync("SELECT * FROM exercise_details ORDER BY name, set_index") as any[];
+    const nameAndSets = exercises.map((exercise) => ({
+        name: exercise.name,
+        numSets: exerciseDetails.filter((detail) => detail.name === exercise.name).length
+    }));
+    return nameAndSets;
 }
 
 export function createNewDay(db: SQLite.SQLiteDatabase, name: string | null, color: string | null, exercises: string[]) {
     const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', name);
-    if (name == null) return 'Must include a day name!';
-    if (color == null) return 'Must include a color!';
+    if (name == null || name.trim() === '') return 'Must include a day name!';
+    if (color == null || color.trim() === '') return 'Must include a color!';
     if (day != null) return 'Day with that name already exists!';
     if (exercises == null || exercises.length === 0) return 'Must have at least one exercise!';
+    if (exercises.some(exercise => exercise.trim() === '')) return 'Exercise names cannot be empty!';
     db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", name, color);
     exercises.forEach((exercise, index) => {
         if (exercise.includes(',')) {
@@ -148,7 +154,7 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
 export function createNewExercise(db: SQLite.SQLiteDatabase, name: string | null, sets: setType[] | null) {
     const exercise = db.getFirstSync('SELECT * FROM exercises WHERE name = ?', name);
     if (exercise != null) return 'Exercise with that name already exists!';
-    if (name == null) return 'Must include an exercise name!';
+    if (name == null || name.trim() === '') return 'Must include an exercise name!';
     if (sets == null || sets.length === 0) return 'Must have at least one set!';
     if (sets.some(set => set.rest < 0 ||  set.weight < 0 || set.reps < 0)) return 'Values must be positive!';
     db.runSync("INSERT INTO exercises (name) VALUES (?)", name);
