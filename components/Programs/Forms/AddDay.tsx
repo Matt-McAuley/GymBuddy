@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Button, TouchableOpacity, TextInput} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
 import {useRef, useState} from "react";
 import {createNewDay, getExerciseNames, getExercisesToNumSets} from "@/db/programDBFunctions";
@@ -83,15 +83,13 @@ export default function AddDay() {
             </TouchableOpacity>
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
                 onPress={() => {
-                    console.log(dayData);
-                    const exercisesNames = dayData.exercises.map((e) => {
+                    const exerciseNames = dayData.exercises.map((e) => {
                         if (isSuperSet(e)) {
                             return e.exercise1.name + ',' + e.exercise2.name;
                         }
                         return e.name;
                     });
-                    console.log(exercisesNames);
-                    const result = createNewDay(db, dayData.name.trim(), dayData.color.toLowerCase(), exercisesNames);
+                    const result = createNewDay(db, dayData.name.trim(), dayData.color.toLowerCase(), exerciseNames);
                     if (result == 'success') {
                         Toast.show({
                             type: 'success',

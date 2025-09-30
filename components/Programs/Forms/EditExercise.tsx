@@ -13,9 +13,9 @@ export default function EditExercise() {
     const {setEditExercise, editExercise} = useProgramStore();
     const exercise = getExerciseByName(db, editExercise!);
     const [exerciseData, setExerciseData] = useState<exerciseDataType>(
-        {name : exercise.name || null, sets: exercise.sets.map((set, index) => 
-            ({id: index, rest: set.rest.toString(), weight: set.weight.toString(), reps: set.reps.toString()})) || []});
-    const [index, setIndex] = useState(exerciseData.sets.length || 1);
+        {name : exercise.name, sets: exercise.sets.map((set, index) => 
+            ({id: index, rest: set.rest, weight: set.weight, reps: set.reps}))});
+    const [index, setIndex] = useState(exerciseData.sets.length);
 
         const HeaderComponent = () => (
         <View className={'p-4'}>
@@ -76,7 +76,7 @@ export default function EditExercise() {
                         Toast.show({
                             type: 'success',
                             text1: 'Success',
-                            text2: 'Accessory Exercise Edited',
+                            text2: 'Exercise Edited',
                             text1Style: {fontSize: 30},
                             text2Style: {fontSize: 30},
                         });
