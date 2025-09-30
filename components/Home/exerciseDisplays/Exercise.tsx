@@ -20,15 +20,15 @@ export default function Exercise(props: exercisePropsType) {
             <Text className={'font-bold text-4xl'}>{exercise.name} : {(set < exercise.sets.length) ? exercise.sets[set].weight : exercise.sets[0].weight}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center'}>
-                    <Text className={'text-2xl'}>{(prevExercise == null) ? ' ' : (isSuperSet(prevExercise)) ? 
+                    <Text className={'text-xl'}>{(prevExercise == null) ? ' ' : (isSuperSet(prevExercise)) ? 
                         superSetNameDisplay(prevExercise) : prevExercise.name}</Text>
-                    <Text className={'text-2xl'}>{(prevExercise == null) ? ' ' : (isSuperSet(prevExercise)) ? 
+                    <Text className={'text-xl'}>{(prevExercise == null) ? ' ' : (isSuperSet(prevExercise)) ? 
                         superSetWeightDisplay(prevExercise) : prevExercise.sets[0].weight}</Text>
                 </View>
                 <View className={'flex-col justify-center items-center'}>
-                    <Text className={'text-2xl'}>{(nextExercise == null) ? ' ' : (isSuperSet(nextExercise)) ? 
+                    <Text className={'text-xl'}>{(nextExercise == null) ? ' ' : (isSuperSet(nextExercise)) ? 
                         superSetNameDisplay(nextExercise) : nextExercise.name}</Text>
-                    <Text className={'text-2xl'}>{(nextExercise == null) ? ' ' : (isSuperSet(nextExercise)) ? 
+                    <Text className={'text-xl'}>{(nextExercise == null) ? ' ' : (isSuperSet(nextExercise)) ? 
                         superSetWeightDisplay(nextExercise) : nextExercise.sets[0].weight}</Text>
                 </View>
             </View>
