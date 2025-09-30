@@ -1,6 +1,6 @@
 import {Text, ScrollView, TouchableOpacity, View} from "react-native";
 import {useProgramStore, useStore} from "@/store";
-import {getDayNamesColors, getExercisesAndSets} from "@/db/programDBFunctions";
+import {getDayNamesColors, getExerciseNames} from "@/db/programDBFunctions";
 import DayDisplayCard from "@/components/Programs/DayDisplayCard";
 import AddDay from "@/components/Programs/Forms/AddDay";
 import EditDay from "@/components/Programs/Forms/EditDay";
@@ -10,7 +10,7 @@ export default function Days() {
     const {db} = useStore();
     const {addDayForm, editDay, setAddDayForm} = useProgramStore();
     const days = getDayNamesColors(db);
-    const exercises = getExercisesAndSets(db).map(e => e.name);
+    const exercises = getExerciseNames(db);
 
     return (
         (addDayForm) ?

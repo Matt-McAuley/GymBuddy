@@ -21,15 +21,15 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
             );
         `);
 
-        db.execSync(`
-            CREATE TABLE IF NOT EXISTS supersets (
-                exercise_1 TEXT NOT NULL,
-                exercise_2 TEXT NOT NULL,
-                PRIMARY KEY (exercise_1, exercise_2),
-                FOREIGN KEY (exercise_1) REFERENCES exercises(name) ON DELETE CASCADE,
-                FOREIGN KEY (exercise_2) REFERENCES exercises(name) ON DELETE CASCADE
-            );
-        `);
+        // db.execSync(`
+        //     CREATE TABLE IF NOT EXISTS supersets (
+        //         exercise_1 TEXT NOT NULL,
+        //         exercise_2 TEXT NOT NULL,
+        //         PRIMARY KEY (exercise_1, exercise_2),
+        //         FOREIGN KEY (exercise_1) REFERENCES exercises(name) ON DELETE CASCADE,
+        //         FOREIGN KEY (exercise_2) REFERENCES exercises(name) ON DELETE CASCADE
+        //     );
+        // `);
 
         db.execSync(`
             CREATE TABLE IF NOT EXISTS days (
@@ -47,8 +47,9 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
                 superset_2 TEXT NULL,
                 PRIMARY KEY (name, exercise_index),
                 FOREIGN KEY (name) REFERENCES days(name) ON DELETE CASCADE,
-                FOREIGN KEY (exercise) REFERENCES exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (superset_1, superset_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL
+                FOREIGN KEY (exercise) REFERENCES exercises(name) ON DELETE CASCADE,
+                FOREIGN KEY (superset_1) REFERENCES exercises(name) ON DELETE CASCADE,
+                FOREIGN KEY (superset_2) REFERENCES exercises(name) ON DELETE CASCADE
             );
         `);
 
@@ -237,14 +238,6 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 1, 90, 30, 12);
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 2, 90, 30, 12);
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 3, 90, 30, 12);
-        `);
-
-        db.execSync(`
-            INSERT INTO supersets (exercise_1, exercise_2) VALUES ('Lateral Raise', 'Tricep Extension');
-            INSERT INTO supersets (exercise_1, exercise_2) VALUES ('Hammer Curl', 'Face Pull');
-            INSERT INTO supersets (exercise_1, exercise_2) VALUES ('Lateral Raise', 'BTB Shrug');
-            INSERT INTO supersets (exercise_1, exercise_2) VALUES ('Hamstring Curl', 'Dips');
-            INSERT INTO supersets (exercise_1, exercise_2) VALUES ('Leg Extension', 'DB Curl');
         `);
 
         db.execSync(`

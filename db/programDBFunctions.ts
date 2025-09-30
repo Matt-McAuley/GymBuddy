@@ -43,7 +43,7 @@ export function createNewProgram(db: SQLite.SQLiteDatabase, programName: string 
     if (Sunday == null && Monday == null && Tuesday == null && Wednesday == null && Thursday == null && Friday == null && Saturday == null) return 'Must have at least one day!';
     if (program != null) return 'Program with that name already exists!';
     db.runSync("INSERT INTO programs (name, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?, ?)", programName, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday);
+        "(?, ?, ?, ?, ?, ?, ?, ?)", programName.trim(), Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday);
     return 'success';
 }
 
@@ -76,14 +76,14 @@ export function deleteProgram(db: SQLite.SQLiteDatabase, programName: string) {
     db.runSync('DELETE FROM programs WHERE name = ?', programName);
 }
 
-export function getExercisesAndSets(db: SQLite.SQLiteDatabase) {
+export function getExercisesToNumSets(db: SQLite.SQLiteDatabase) {
     const exercises = db.getAllSync("SELECT * FROM exercises ORDER BY name") as any[];
     const exerciseDetails = db.getAllSync("SELECT * FROM exercise_details ORDER BY name, set_index") as any[];
-    const nameAndSets = exercises.map((exercise) => ({
-        name: exercise.name,
-        numSets: exerciseDetails.filter((detail) => detail.name === exercise.name).length
-    }));
-    return nameAndSets;
+    const nameToNumSets = new Map<string, number>();
+    exercises.forEach((exercise) => {
+        nameToNumSets.set(exercise.name, exerciseDetails.filter((detail) => detail.name === exercise.name).length);
+    });
+    return nameToNumSets;
 }
 
 export function createNewDay(db: SQLite.SQLiteDatabase, name: string | null, color: string | null, exercises: string[]) {
@@ -92,15 +92,15 @@ export function createNewDay(db: SQLite.SQLiteDatabase, name: string | null, col
     if (color == null || color.trim() === '') return 'Must include a color!';
     if (day != null) return 'Day with that name already exists!';
     if (exercises == null || exercises.length === 0) return 'Must have at least one exercise!';
-    if (exercises.some(exercise => exercise.trim() === '')) return 'Exercise names cannot be empty!';
-    db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", name, color);
+    if (exercises.some(exercise => exercise.trim() === '') || exercises.some(exercise => exercise.trim().slice(-1) === ',') || exercises.some(exercise => exercise.trim().slice(0, 1) === ',')) return 'Exercise names cannot be empty!';
+    db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", name.trim(), color.trim());
     exercises.forEach((exercise, index) => {
         if (exercise.includes(',')) {
             const [superset1, superset2] = exercise.split(',').map(s => s.trim());
-            db.runSync(`INSERT INTO day_details (name, exercise_index, superset_1, superset_2) VALUES (?, ?, ?, ?)`, name, index, superset1, superset2);
+            db.runSync(`INSERT INTO day_details (name, exercise_index, superset_1, superset_2) VALUES (?, ?, ?, ?)`, name.trim(), index, superset1, superset2);
         }
         else {
-            db.runSync(`INSERT INTO day_details (name, exercise_index, exercise) VALUES (?, ?, ?)`, name, index, exercise);
+            db.runSync(`INSERT INTO day_details (name, exercise_index, exercise) VALUES (?, ?, ?)`, name.trim(), index, exercise.trim());
         }
     });
     return 'success';
@@ -159,7 +159,7 @@ export function createNewExercise(db: SQLite.SQLiteDatabase, name: string | null
     if (sets.some(set => set.rest < 0 ||  set.weight < 0 || set.reps < 0)) return 'Values must be positive!';
     db.runSync("INSERT INTO exercises (name) VALUES (?)", name);
     sets.forEach((set, index) => {
-        db.runSync("INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES (?, ?, ?, ?, ?)", name, index, set.rest, set.weight, set.reps);
+        db.runSync("INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES (?, ?, ?, ?, ?)", name.trim(), index, set.rest, set.weight, set.reps);
     });
     return 'success';
 }
