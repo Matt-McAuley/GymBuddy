@@ -14,7 +14,7 @@ export default function EditExercise() {
     const exercise = getExerciseByName(db, editExercise!);
     const [exerciseData, setExerciseData] = useState<exerciseDataType>(
         {name : exercise.name, sets: exercise.sets.map((set, index) => 
-            ({id: index, rest: set.rest, weight: set.weight, reps: set.reps}))});
+            ({id: index, rest: set.rest.toString(), weight: set.weight.toString(), reps: set.reps.toString()}))});
     const [index, setIndex] = useState(exerciseData.sets.length);
 
         const HeaderComponent = () => (
