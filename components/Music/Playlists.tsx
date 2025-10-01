@@ -50,11 +50,9 @@ export default function Playlists() {
 
     return (
         <View className={'flex-col justify-center items-center'}>
-            <View className={'flex-row w-full justify-center items-center'}>
-                <View className={'flex-1'}>
-                    <Text className={'text-5xl font-bold text-center'}>Playlists</Text>
-                </View>
-                <TouchableOpacity onPress={() => setInQueue(true)} className={'p-5'}>
+            <View className={'flex-row w-full justify-center items-center relative mb-3'}>
+                <Text className={'text-5xl font-bold text-center flex-1'}>Playlists</Text>
+                <TouchableOpacity onPress={() => setInQueue(true)} className={'p-5 absolute right-0'}>
                     <Image source={require('@/assets/images/music/queueIcon.png')} style={{height: 50, width: 50}}/>
                 </TouchableOpacity>
             </View>
