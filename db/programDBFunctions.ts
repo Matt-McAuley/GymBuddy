@@ -38,21 +38,20 @@ export function setNullIfCurrentProgram(db: SQLite.SQLiteDatabase, programName: 
 }
 
 export function createNewProgram(db: SQLite.SQLiteDatabase, programName: string | null, days: string[]) {
-    console.log(programName, days);
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', programName);
     if (programName == null || programName.trim() === '') return 'Must include a program name!';
     if (days.length === 0) return 'Must have at least one day!';
     if (program != null) return 'Program with that name already exists!';
     db.runSync("INSERT INTO programs (name) VALUES (?)", programName.trim());
-    days.forEach((day) => {
-        db.runSync("INSERT INTO program_details (name, day) VALUES (?, ?)", programName.trim(), day);
+    days.forEach((day, index) => {
+        db.runSync("INSERT INTO program_details (name, day, day_index) VALUES (?, ?, ?)", programName.trim(), day, index);
     });
     return 'success';
 }
 
 export function getProgramByName(db: SQLite.SQLiteDatabase, programName: string) {
     const program = db.getFirstSync("SELECT * FROM programs WHERE name = ?", programName) as any;
-    const programDetails = db.getAllSync("SELECT * FROM program_details WHERE name = ? ORDER BY day", programName) as any[];
+    const programDetails = db.getAllSync("SELECT * FROM program_details WHERE name = ? ORDER BY day_index", programName) as any[];
     return {
         name: program.name,
         days: programDetails.map((detail) => detail.day)
@@ -66,8 +65,8 @@ export function replaceProgram(db: SQLite.SQLiteDatabase, oldProgramName: string
     if (program != null && oldProgramName != newProgramName) return 'Program with that name already exists!';
     db.runSync('DELETE FROM programs WHERE name = ?', oldProgramName);
     db.runSync("INSERT INTO programs (name) VALUES (?)", newProgramName);
-    days.forEach((day) => {
-        db.runSync("INSERT INTO program_details (name, day) VALUES (?, ?)", newProgramName.trim(), day);
+    days.forEach((day, index) => {
+        db.runSync("INSERT INTO program_details (name, day, day_index) VALUES (?, ?, ?)", newProgramName.trim(), day, index);
     });
     return 'success';
 }

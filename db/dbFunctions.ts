@@ -21,16 +21,6 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
             );
         `);
 
-        // db.execSync(`
-        //     CREATE TABLE IF NOT EXISTS supersets (
-        //         exercise_1 TEXT NOT NULL,
-        //         exercise_2 TEXT NOT NULL,
-        //         PRIMARY KEY (exercise_1, exercise_2),
-        //         FOREIGN KEY (exercise_1) REFERENCES exercises(name) ON DELETE CASCADE,
-        //         FOREIGN KEY (exercise_2) REFERENCES exercises(name) ON DELETE CASCADE
-        //     );
-        // `);
-
         db.execSync(`
             CREATE TABLE IF NOT EXISTS days (
                 name TEXT PRIMARY KEY NOT NULL,
@@ -64,7 +54,8 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
             CREATE TABLE IF NOT EXISTS program_details (
                 name TEXT NOT NULL,
                 day TEXT NOT NULL,
-                PRIMARY KEY (name, day),
+                day_index INTEGER NOT NULL,
+                PRIMARY KEY (name, day_index),
                 FOREIGN KEY (name) REFERENCES programs(name) ON DELETE CASCADE,
                 FOREIGN KEY (day) REFERENCES days(name) ON DELETE CASCADE
             );
@@ -278,21 +269,21 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
                 INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 4, 'Cable Crunches', NULL, NULL);
             `);
 
-        db.execSync(`
-            INSERT INTO programs (name) VALUES ('PPUL');
-            `);
+            db.execSync(`
+                INSERT INTO programs (name) VALUES ('PPUL');
+                `);
 
-        db.execSync(`
-            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Push');
-            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Pull');
-            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Upper');
-            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Lower & Arms');
-            `);
+            db.execSync(`
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Push', 0);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Pull', 1);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Upper', 2);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Lower & Arms', 3);
+                `);
 
-        db.execSync(`
-            INSERT INTO current_program (program)
-            VALUES ('PPUL');
-        `);
+            db.execSync(`
+                INSERT INTO current_program (program)
+                VALUES ('PPUL');
+            `);
     }
     catch (err) {
         console.log('Error adding mock program');
@@ -319,7 +310,7 @@ const getProgram = (db:  SQLite.SQLiteDatabase) => {
     res.name = program.name;
 
     // Get the days for the program from program_details
-    const programDays = db.getAllSync(`SELECT day FROM program_details WHERE name = ? ORDER BY day`, [program.name]) as any[];
+    const programDays = db.getAllSync(`SELECT day FROM program_details WHERE name = ? ORDER BY day_index`, [program.name]) as any[];
     
     for (const programDay of programDays) {
         const dayName = programDay.day;
