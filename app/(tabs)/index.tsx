@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, Dimensions, AppState, StyleSheet} from "react-native";
+import {View, Text, ScrollView, Dimensions, AppState, StyleSheet, TouchableOpacity} from "react-native";
 import Timer from "@/components/Home/Timer";
 import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
@@ -8,6 +8,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset,
@@ -15,7 +16,18 @@ export default function Index() {
     const day = program?.days[currentDay];
     const {width} = Dimensions.get('window');
     const exerciseScrollRef = useRef<ScrollView | null >(null);
+    const dayBottomSheetRef = useRef<BottomSheet>(null);
+    const [sheetOpen, setSheetOpen] = useState(false);
     useDrizzleStudio(db);
+
+    const openSheet = (sheetRef: React.RefObject<BottomSheet>) => {
+        sheetRef.current?.snapToIndex(0);
+        setSheetOpen(true);
+    }
+    const closeSheet = (sheetRef: React.RefObject<BottomSheet>) => {
+        sheetRef.current?.close();
+        setSheetOpen(false);
+    }
 
     const retrieveOverwrittenValues = async () => {
         const set = await AsyncStorage.getItem('set');
@@ -74,18 +86,13 @@ export default function Index() {
             (
                 <>
                     <View className={'flex justify-center items-center'}>
-                        <Dropdown style={styles.dropdown} selectedTextStyle={{...styles.selected, color:day?.color}}
-                                  data={program.days.map((d, index) => ({label: d.name, value: {index, color: d.color}}))}
-                                  labelField='label' valueField='value' value={{label: day?.name, value: {index: currentDay, color: day?.color}}}
-                                  renderRightIcon={() => (
-                                      <Text style={{...styles.icon, color: 'black'}}>{'▼'}</Text>
-                                  )}
-                                  renderItem={(item, selected) => (
-                                      (selected) ? null :
-                                          <View style={styles.item}>
-                                              <Text style={{...styles.itemText, color: item.value.color}}>{item.label}</Text>
-                                          </View>)}
-                                  onChange={(item) => {handleDayChange(item.value.index)}}/>
+                        <TouchableOpacity 
+                            style={{...styles.dropdown, borderWidth: 3}}
+                            onPress={() => openSheet(dayBottomSheetRef)}>
+                            <Text style={{...styles.selected, color: day?.color}}>
+                                {day?.name}
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={{width}} className={'flex-1 flex-col justify-start items-center w-full gap-4 p-3'}>
                         {(day?.exercises.length == 0) ?
@@ -107,6 +114,38 @@ export default function Index() {
                             </>
                         }
                     </View>
+                    {(sheetOpen) && (
+                        <TouchableOpacity 
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: 'rgba(0,0,0,0.25)',
+                            }}
+                            activeOpacity={1}
+                            onPress={() => {
+                                closeSheet(dayBottomSheetRef);
+                            }}
+                        />
+                    )}
+                    <BottomSheet ref={dayBottomSheetRef} index={-1} snapPoints={["50%"]} enableDynamicSizing={false} enableOverDrag={true}>
+                        <BottomSheetFlatList 
+                            data={program.days} 
+                            renderItem={({item, index}) => (
+                                <TouchableOpacity onPress={() => {
+                                    handleDayChange(index);
+                                    closeSheet(dayBottomSheetRef);
+                                }}>
+                                    <Text style={{...styles.itemText, color: item.color.toLowerCase(), padding: 20, textAlign: 'center'}}>
+                                        {item.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            )} 
+                            keyExtractor={(_, index) => index.toString()}
+                        />
+                    </BottomSheet>
                 </>
             );
 }
@@ -121,7 +160,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         margin: 10,
         padding: 10,
-
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     selected: {
         textAlign: 'center',
