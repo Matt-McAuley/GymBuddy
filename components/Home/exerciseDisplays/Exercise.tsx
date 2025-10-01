@@ -2,7 +2,7 @@ import {View, Text} from "react-native";
 import {useStore} from "@/store";
 import {exerciseType, superSetType} from "@/types/programType";
 
-export default function ExerciseDisplay(props: superSetExercisePropsType) {
+export default function Exercise(props: exercisePropsType) {
     const { set, isSuperSet } = useStore();
     const { exercise, nextExercise, prevExercise } = props;
 
@@ -17,10 +17,7 @@ export default function ExerciseDisplay(props: superSetExercisePropsType) {
 
     return (
         <View className={'flex-col justify-between items-center h-60 w-full bg-amber-50 border-4 border-black p-7 rounded-2xl'}>
-            <View className={'flex-col justify-center items-center'}>
-                <Text className={'font-bold text-3xl'}>{exercise.exercise1.name} : {(set < exercise.exercise1.sets.length) ? exercise.exercise1.sets[set].weight : exercise.exercise1.sets[0].weight}</Text>
-                <Text className={'font-bold text-3xl'}>{exercise.exercise2.name} : {(set < exercise.exercise2.sets.length) ? exercise.exercise2.sets[set].weight : exercise.exercise2.sets[0].weight}</Text>
-            </View>
+            <Text className={'font-bold text-3xl'}>{exercise.name} : {(set < exercise.sets.length) ? exercise.sets[set].weight : exercise.sets[0].weight}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center'}>
                     <Text className={'text-xl'}>{(prevExercise == null) ? ' ' : (isSuperSet(prevExercise)) ? 
@@ -39,8 +36,8 @@ export default function ExerciseDisplay(props: superSetExercisePropsType) {
     );
 }
 
-type superSetExercisePropsType = {
-    exercise: superSetType;
+type exercisePropsType = {
+    exercise: exerciseType;
     nextExercise: exerciseType | superSetType | null;
     prevExercise: exerciseType | superSetType | null;
 }

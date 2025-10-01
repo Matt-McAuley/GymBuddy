@@ -1,91 +1,63 @@
-import {programType, dayType, primaryExerciseType, accessoryExerciseType, superSetType} from "@/types/programType";
+import {setType, exerciseType, superSetType, dayType, programType} from "@/types/programType";
 import * as SQLite from "expo-sqlite";
 
 const dbSetup = (db:  SQLite.SQLiteDatabase) => {
     try {
         db.execSync(`
-            CREATE TABLE IF NOT EXISTS accessory_exercises (
-                name TEXT PRIMARY KEY NOT NULL,
+            CREATE TABLE IF NOT EXISTS exercises (
+                name TEXT PRIMARY KEY NOT NULL
+            );
+        `);
+
+        db.execSync(`
+            CREATE TABLE IF NOT EXISTS exercise_details (
+                name TEXT NOT NULL,
+                set_index INTEGER NOT NULL,
                 rest INTEGER NOT NULL,
-                sets INTEGER NOT NULL,
                 weight INTEGER NOT NULL,
-                reps INTEGER NOT NULL
-            );
-        `);
-
-        db.execSync(`
-            CREATE TABLE IF NOT EXISTS primary_exercises (
-                name TEXT PRIMARY KEY NOT NULL,
-                rest INTEGER NOT NULL,
-                weight_1 INTEGER NOT NULL,
-                weight_2 INTEGER NOT NULL,
-                weight_3 INTEGER NOT NULL,
-                reps_1 INTEGER NOT NULL,
-                reps_2 INTEGER NOT NULL,
-                reps_3 INTEGER NOT NULL
-            );
-        `);
-
-        db.execSync(`
-            CREATE TABLE IF NOT EXISTS supersets (
-                exercise_1 TEXT NOT NULL,
-                exercise_2 TEXT NOT NULL,
-                PRIMARY KEY (exercise_1, exercise_2),
-                FOREIGN KEY (exercise_1) REFERENCES accessory_exercises(name) ON DELETE CASCADE,
-                FOREIGN KEY (exercise_2) REFERENCES accessory_exercises(name) ON DELETE CASCADE
+                reps INTEGER NOT NULL,
+                PRIMARY KEY (name, set_index),
+                FOREIGN KEY (name) REFERENCES exercises(name) ON DELETE CASCADE
             );
         `);
 
         db.execSync(`
             CREATE TABLE IF NOT EXISTS days (
                 name TEXT PRIMARY KEY NOT NULL,
-                color TEXT NOT NULL,
-                exercise_1 TEXT NULL,
-                exercise_1_placement INTEGER NULL,
-                exercise_2 TEXT NULL,
-                exercise_2_placement INTEGER NULL,
-                exercise_3 TEXT NULL,
-                exercise_3_placement INTEGER NULL,
-                exercise_4 TEXT NULL,
-                exercise_4_placement INTEGER NULL,
-                exercise_5 TEXT NULL,
-                exercise_5_placement INTEGER NULL,
-                exercise_6 TEXT NULL,
-                exercise_6_placement INTEGER NULL,
-                superset_1_1 TEXT NULL,
-                superset_1_2 TEXT NULL,
-                superset_1_placement INTEGER NULL,
-                superset_2_1 TEXT NULL,
-                superset_2_2 TEXT NULL,
-                superset_2_placement INTEGER NULL,
-                FOREIGN KEY (exercise_1) REFERENCES primary_exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (exercise_2) REFERENCES primary_exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (exercise_3) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (exercise_4) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (exercise_5) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (exercise_6) REFERENCES accessory_exercises(name) ON DELETE SET NULL,
-                FOREIGN KEY (superset_1_1, superset_1_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL,
-                FOREIGN KEY (superset_2_1, superset_2_2) REFERENCES supersets(exercise_1, exercise_2) ON DELETE SET NULL
+                color TEXT NOT NULL
             );
         `);
 
         db.execSync(`
+            CREATE TABLE IF NOT EXISTS day_details (
+                name TEXT NOT NULL,
+                exercise_index INTEGER NOT NULL,
+                exercise TEXT NULL,
+                superset_1 TEXT NULL,
+                superset_2 TEXT NULL,
+                PRIMARY KEY (name, exercise_index),
+                FOREIGN KEY (name) REFERENCES days(name) ON DELETE CASCADE,
+                FOREIGN KEY (exercise) REFERENCES exercises(name) ON DELETE CASCADE,
+                FOREIGN KEY (superset_1) REFERENCES exercises(name) ON DELETE CASCADE,
+                FOREIGN KEY (superset_2) REFERENCES exercises(name) ON DELETE CASCADE
+            );
+        `);
+
+
+        db.execSync(`
             CREATE TABLE IF NOT EXISTS programs (
-                name TEXT PRIMARY KEY NOT NULL,
-                Monday TEXT NULL,
-                Tuesday TEXT NULL,
-                Wednesday TEXT NULL,
-                Thursday TEXT NULL,
-                Friday TEXT NULL,
-                Saturday TEXT NULL,
-                Sunday TEXT NULL,
-                FOREIGN KEY (Monday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Tuesday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Wednesday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Thursday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Friday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Saturday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Sunday) REFERENCES days(name) ON DELETE SET NULL
+                name TEXT PRIMARY KEY NOT NULL
+            );
+        `);
+
+        db.execSync(`
+            CREATE TABLE IF NOT EXISTS program_details (
+                name TEXT NOT NULL,
+                day TEXT NOT NULL,
+                day_index INTEGER NOT NULL,
+                PRIMARY KEY (name, day_index),
+                FOREIGN KEY (name) REFERENCES programs(name) ON DELETE CASCADE,
+                FOREIGN KEY (day) REFERENCES days(name) ON DELETE CASCADE
             );
         `);
 
@@ -109,103 +81,209 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
 
 const dbTeardown = (db:  SQLite.SQLiteDatabase) => {
     db.execSync(`
-        DROP TABLE IF EXISTS primary_exercises;
-        DROP TABLE IF EXISTS accessory_exercises;
+        DROP TABLE IF EXISTS exercises;
+        DROP TABLE IF EXISTS exercise_details;
         DROP TABLE IF EXISTS supersets;
         DROP TABLE IF EXISTS days;
+        DROP TABLE IF EXISTS day_details;
         DROP TABLE IF EXISTS programs;
+        DROP TABLE IF EXISTS program_details;
         DROP TABLE IF EXISTS current_program;
     `);
 }
 
 const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
     try {
-        const result = db.getFirstSync(`SELECT * FROM primary_exercises`);
+        const result = db.getFirstSync(`SELECT * FROM exercises`);
         if (result != null) return;
 
         db.execSync(`
-            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Bench', 5, 205, 235, 260, 5, 3, 1);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('DB OHP', 90, 45, 12, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Dips', 90, 0, 15, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Lateral Raise', 90, 25, 15, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Tricep Extension', 90, 30, 15, 3);
-            INSERT INTO supersets (exercise_1, exercise_2)
-            VALUES ('Lateral Raise', 'Tricep Extension');
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Leg Raises', 90, 0, 15, 4);
-
-            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('Deadlift', 210, 325, 365, 425, 5, 3, 1);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('BB Curl', 90, 45, 21, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Lat Pull', 90, 143, 12, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Hammer Curl', 90, 30, 12, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Face Pull', 90, 20, 15, 3);
-            INSERT INTO supersets (exercise_1, exercise_2)
-            VALUES ('Hammer Curl', 'Face Pull');
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Cable Crunches', 90, 60, 15, 4);
-
-            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('OHP', 180, 115, 140, 150, 5, 3, 1);
-            INSERT INTO primary_exercises (name, rest, weight_1, weight_2, weight_3, reps_1, reps_2, reps_3)
-            VALUES ('BB Row', 180, 165, 185, 185, 5, 3, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('DB Bench', 120, 65, 12, 4);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('BTB Shrug', 90, 50, 12, 3);
-            INSERT INTO supersets (exercise_1, exercise_2)
-            VALUES ('Lateral Raise', 'BTB Shrug');
-
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Pause Squat', 180, 185, 5, 5);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Hamstring Curl', 90, 100, 12, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('Leg Extension', 90, 120, 12, 3);
-            INSERT INTO accessory_exercises (name, rest, weight, reps, sets)
-            VALUES ('DB Curl', 90, 30, 12, 3);
-            INSERT INTO supersets (exercise_1, exercise_2)
-            VALUES ('Hamstring Curl', 'Dips');
-            INSERT INTO supersets (exercise_1, exercise_2)
-            VALUES ('Leg Extension', 'DB Curl');
+            INSERT INTO exercises (name) VALUES ('Bench');
+            INSERT INTO exercises (name) VALUES ('Squat');
+            INSERT INTO exercises (name) VALUES ('DB OHP');
+            INSERT INTO exercises (name) VALUES ('Dips');
+            INSERT INTO exercises (name) VALUES ('Lateral Raise');
+            INSERT INTO exercises (name) VALUES ('Tricep Extension');
+            INSERT INTO exercises (name) VALUES ('Leg Raises');
+            INSERT INTO exercises (name) VALUES ('Deadlift');
+            INSERT INTO exercises (name) VALUES ('BB Curl');
+            INSERT INTO exercises (name) VALUES ('Lat Pull');
+            INSERT INTO exercises (name) VALUES ('Hammer Curl');
+            INSERT INTO exercises (name) VALUES ('Face Pull');
+            INSERT INTO exercises (name) VALUES ('Cable Crunches');
+            INSERT INTO exercises (name) VALUES ('OHP');
+            INSERT INTO exercises (name) VALUES ('BB Row');
+            INSERT INTO exercises (name) VALUES ('DB Bench');
+            INSERT INTO exercises (name) VALUES ('BTB Shrug');
+            INSERT INTO exercises (name) VALUES ('Hamstring Curl');
+            INSERT INTO exercises (name) VALUES ('Leg Extension');
+            INSERT INTO exercises (name) VALUES ('DB Curl');
         `);
 
         db.execSync(`
-            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_3, exercise_3_placement,
-                              exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Push', 'red', 'Bench', 1, 'DB OHP', 2, 'Dips', 3, 'Leg Raises', 5, 'Lateral Raise', 'Tricep Extension', 4);
+            -- Bench Press sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 1, 210, 205, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 2, 210, 235, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 3, 210, 260, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 4, 230, 22, 15);
 
-            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_3, exercise_3_placement,
-                              exercise_4, exercise_4_placement, exercise_5, exercise_5_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Pull', 'blue', 'Deadlift', 1, 'BB Curl', 2, 'Lat Pull', 3, 'Cable Crunches', 5,'Hammer Curl', 'Face Pull', 4);
-
-            INSERT INTO days (name, color, exercise_1, exercise_1_placement, exercise_2, exercise_2_placement,
-                              exercise_3, exercise_3_placement, exercise_4, exercise_4_placement, superset_1_1, superset_1_2, superset_1_placement)
-            VALUES ('Upper', 'purple', 'OHP', 1, 'BB Row', 2, 'DB Bench', 3, 'Leg Raises', 5, 'Lateral Raise', 'BTB Shrug', 4);
-
-            INSERT INTO days (name, color, exercise_3, exercise_3_placement, superset_1_1, superset_1_2,
-                              superset_1_placement, superset_2_1, superset_2_2, superset_2_placement, exercise_4, exercise_4_placement)
-            VALUES ('Lower & Arms', 'green', 'Pause Squat', 1, 'Hamstring Curl', 'Dips', 2, 'Leg Extension', 'DB Curl', 3, 'Cable Crunches', 4);
+            -- Squat sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat', 1, 210, 225, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat', 2, 210, 245, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat', 3, 210, 275, 1);
+            
+            -- Deadlift sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift', 1, 210, 325, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift', 2, 210, 365, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift', 3, 210, 425, 1);
+            
+            -- OHP sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP', 1, 180, 115, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP', 2, 180, 140, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP', 3, 180, 150, 1);
+            
+            -- BB Row sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row', 1, 180, 165, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row', 2, 180, 185, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row', 3, 180, 185, 3);
         `);
 
         db.execSync(`
-            INSERT INTO programs (name, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
-            VALUES ('PPUL', 'Pull', NULL, 'Upper', 'Lower & Arms', NULL, NULL, 'Push');
+            -- DB OHP sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB OHP', 1, 90, 45, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB OHP', 2, 90, 45, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB OHP', 3, 90, 45, 12);
+            
+            -- Dips sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips', 1, 90, 0, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips', 2, 90, 0, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips', 3, 90, 0, 15);
+            
+            -- Lateral Raise sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 1, 90, 25, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 2, 90, 25, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 3, 90, 25, 15);
+            
+            -- Tricep Extension sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 1, 90, 30, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 2, 90, 30, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 3, 90, 30, 15);
+            
+            -- Leg Raises sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 1, 90, 0, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 2, 90, 0, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 3, 90, 0, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 4, 90, 0, 15);
+            
+            -- BB Curl sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl', 1, 90, 45, 21);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl', 2, 90, 45, 21);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl', 3, 90, 45, 21);
+            
+            -- Lat Pull sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pull', 1, 90, 143, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pull', 2, 90, 143, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pull', 3, 90, 143, 12);
+            
+            -- Hammer Curl sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 1, 90, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 2, 90, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 3, 90, 30, 12);
+            
+            -- Face Pull sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 1, 90, 20, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 2, 90, 20, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 3, 90, 20, 15);
+            
+            -- Cable Crunches sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 1, 90, 60, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 2, 90, 60, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 3, 90, 60, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 4, 90, 60, 15);
+            
+            -- DB Bench sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 1, 120, 65, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 2, 120, 65, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 3, 120, 65, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 4, 120, 65, 12);
+            
+            -- BTB Shrug sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 1, 90, 50, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 2, 90, 50, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 3, 90, 50, 12);
+            
+            -- Hamstring Curl sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 1, 90, 100, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 2, 90, 100, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 3, 90, 100, 12);
+            
+            -- Leg Extension sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 1, 90, 120, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 2, 90, 120, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 3, 90, 120, 12);
+            
+            -- DB Curl sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 1, 90, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 2, 90, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 3, 90, 30, 12);
+        `);
+
+        db.execSync(`
+            INSERT INTO days (name, color) VALUES ('Push', 'red');
+            INSERT INTO days (name, color) VALUES ('Pull', 'blue');
+            INSERT INTO days (name, color) VALUES ('Upper', 'purple');
+            INSERT INTO days (name, color) VALUES ('Lower & Arms', 'green');
+            INSERT INTO days (name, color) VALUES ('Lower & A', 'pink');
+            INSERT INTO days (name, color) VALUES ('Lower & B', 'brown');
+        `);
+
+        // Insert day details for mock program
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 1, 'Bench', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 2, 'DB OHP', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 3, 'Dips', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 4, NULL, 'Lateral Raise', 'Tricep Extension');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 5, 'Leg Raises', NULL, NULL);
             `);
 
-        db.execSync(`
-            INSERT INTO current_program (program)
-            VALUES ('PPUL');
-        `);
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 1, 'Deadlift', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 2, 'BB Curl', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 3, 'Lat Pull', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 4, NULL, 'Hammer Curl', 'Face Pull');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 5, 'Cable Crunches', NULL, NULL);
+            `);
+
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 1, 'OHP', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 2, 'BB Row', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 3, 'DB Bench', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 4, NULL, 'Lateral Raise', 'BTB Shrug');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 5, 'Leg Raises', NULL, NULL);
+            `);
+
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 1, 'Squat', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 2, NULL, 'Hamstring Curl', 'Dips');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 3, NULL, 'Leg Extension', 'DB Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 4, 'Cable Crunches', NULL, NULL);
+            `);
+
+            db.execSync(`
+                INSERT INTO programs (name) VALUES ('PPUL');
+                `);
+
+            db.execSync(`
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Push', 0);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Pull', 1);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Upper', 2);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Lower & Arms', 3);
+                `);
+
+            db.execSync(`
+                INSERT INTO current_program (program)
+                VALUES ('PPUL');
+            `);
     }
     catch (err) {
         console.log('Error adding mock program');
@@ -224,99 +302,74 @@ const getProgram = (db:  SQLite.SQLiteDatabase) => {
     if (result == null) return null;
 
     // Get the current program
-    const currentProgram = db.getFirstSync(`SELECT program FROM current_program`);
-    if (currentProgram == null) return null;
+    const currentProgram = db.getFirstSync(`SELECT program FROM current_program`) as any;
+    if (currentProgram == null || currentProgram.program == null) return null;
 
-    const program = db.getFirstSync(`SELECT * FROM programs WHERE name = '${currentProgram.program}'`);
+    const program = db.getFirstSync(`SELECT * FROM programs WHERE name = ?`, [currentProgram.program]) as any;
     if (program == null) return null;
     res.name = program.name;
 
-    // Get the days for the program
-    for (const dayOfWeek of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']) {
-        const day = db.getFirstSync(`SELECT * FROM days WHERE name = '${program[dayOfWeek]}'`);
+    // Get the days for the program from program_details
+    const programDays = db.getAllSync(`SELECT day FROM program_details WHERE name = ? ORDER BY day_index`, [program.name]) as any[];
+    
+    for (const programDay of programDays) {
+        const dayName = programDay.day;
+        if (dayName == null) continue;
+        
+        const day = db.getFirstSync(`SELECT * FROM days WHERE name = ?`, [dayName]) as any;
         if (day == null) continue;
+        
         const dayRes: dayType = {
             name: day.name,
             color: day.color,
             exercises: [],
         }
-        const exerciseRes = Array(8).fill(null);
 
-        // Get the first primary exercise
-        const firstPrimaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = '${day.exercise_1}'`);
-        if (firstPrimaryExercise != null) {
-            const firstPrimaryExerciseRes: primaryExerciseType = {
-                name: firstPrimaryExercise.name,
-                rest: firstPrimaryExercise.rest,
-                weight_1: firstPrimaryExercise.weight_1,
-                weight_2: firstPrimaryExercise.weight_2,
-                weight_3: firstPrimaryExercise.weight_3,
-                reps_1: firstPrimaryExercise.reps_1,
-                reps_2: firstPrimaryExercise.reps_2,
-                reps_3: firstPrimaryExercise.reps_3
-            }
-            exerciseRes[day.exercise_1_placement - 1] = firstPrimaryExerciseRes;
-        }
+        // Get the details for the day
+        const details = db.getAllSync(`SELECT * FROM day_details WHERE name = ? ORDER BY exercise_index`, [dayName]) as any[];
 
-        // Get the second primary exercise
-        const secondPrimaryExercise = db.getFirstSync(`SELECT * FROM primary_exercises WHERE name = '${day.exercise_2}'`);
-        if (secondPrimaryExercise != null) {
-            const secondPrimaryExerciseRes: primaryExerciseType = {
-                name: secondPrimaryExercise.name,
-                rest: secondPrimaryExercise.rest,
-                weight_1: secondPrimaryExercise.weight_1,
-                weight_2: secondPrimaryExercise.weight_2,
-                weight_3: secondPrimaryExercise.weight_3,
-                reps_1: secondPrimaryExercise.reps_1,
-                reps_2: secondPrimaryExercise.reps_2,
-                reps_3: secondPrimaryExercise.reps_3
-            }
-            exerciseRes[day.exercise_2_placement - 1] = secondPrimaryExerciseRes;
-        }
+        for (const detail of details) {
+            if (detail.exercise != null) {
+                const exerciseSets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = ? ORDER BY set_index`, [detail.exercise]) as any[];
 
-        // Get the accessory exercises
-        for (let i = 3; i < 7; i++) {
-            if (day[`exercise_${i}`] != null) {
-                const accessoryExercise = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = '${day[`exercise_${i}`]}'`);
-                const accessoryExerciseRes : accessoryExerciseType = {
-                    name: accessoryExercise.name,
-                    rest: accessoryExercise.rest,
-                    sets: accessoryExercise.sets,
-                    reps: accessoryExercise.reps,
-                    weight: accessoryExercise.weight
+                const exercise: exerciseType = {
+                    name: detail.exercise,
+                    sets: exerciseSets.map((set: any) => ({
+                        rest: set.rest,
+                        reps: set.reps,
+                        weight: set.weight
+                    })),
                 };
-                const placementIndex = day[`exercise_${i}_placement`] - 1;
-                exerciseRes[placementIndex] = accessoryExerciseRes;
-            }
-        }
+                dayRes.exercises.push(exercise);
+            } else if (detail.superset_1 != null) {
+                const exercise1Name = detail.superset_1.trim();
+                const exercise2Name = detail.superset_2.trim();
 
-        // Get the superset exercises
-        for (let i = 1; i < 3; i++) {
-            if (day[`superset_${i}_1`] != null) {
-                const exercise1 = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = '${day[`superset_${i}_1`]}'`);
-                const exercise2 = db.getFirstSync(`SELECT * FROM accessory_exercises WHERE name = '${day[`superset_${i}_2`]}'`);
-                if (exercise1 == null) continue;
-                const superSetRes : superSetType = {
+                const exercise1Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = ? ORDER BY set_index`, [exercise1Name]) as any[];
+                const exercise2Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = ? ORDER BY set_index`, [exercise2Name]) as any[];
+
+                const superSet: superSetType = {
                     exercise1: {
-                        name: exercise1.name,
-                        rest: exercise1.rest,
-                        sets: exercise1.sets,
-                        reps: exercise1.reps,
-                        weight: exercise1.weight
+                        name: exercise1Name,
+                        sets: exercise1Sets.map((set: any) => ({
+                            rest: set.rest,
+                            reps: set.reps,
+                            weight: set.weight
+                        })),
                     },
                     exercise2: {
-                        name: exercise2.name,
-                        rest: exercise2.rest,
-                        sets: exercise2.sets,
-                        reps: exercise2.reps,
-                        weight: exercise2.weight
+                        name: exercise2Name,
+                        sets: exercise2Sets.map((set: any) => ({
+                            rest: set.rest,
+                            reps: set.reps,
+                            weight: set.weight
+                        })),
                     }
-                }
-                const placementIndex = day[`superset_${i}_placement`] - 1;
-                exerciseRes[placementIndex] = superSetRes;
+                };
+                dayRes.exercises.push(superSet);
             }
         }
-        dayRes.exercises = exerciseRes.filter((exercise) => exercise != null);
+
         res.days.push(dayRes);
     }
 

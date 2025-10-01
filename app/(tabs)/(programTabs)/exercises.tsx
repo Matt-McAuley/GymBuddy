@@ -1,6 +1,6 @@
-import {Text, ScrollView, TouchableOpacity, View} from "react-native";
+import {Text, FlatList, TouchableOpacity, View} from "react-native";
 import {useProgramStore, useStore} from "@/store";
-import {getExerciseNamesType} from "@/db/programDBFunctions";
+import {getExerciseNames} from "@/db/programDBFunctions";
 import AddExercise from "@/components/Programs/Forms/AddExercise";
 import EditExercise from "@/components/Programs/Forms/EditExercise";
 import ExerciseDisplayCard from "@/components/Programs/ExerciseDisplayCard";
@@ -8,7 +8,11 @@ import ExerciseDisplayCard from "@/components/Programs/ExerciseDisplayCard";
 export default function Exercises() {
     const {db} = useStore();
     const {addExerciseForm, editExercise, setAddExerciseForm} = useProgramStore();
-    const exercises = getExerciseNamesType(db);
+    const exercises = getExerciseNames(db);
+
+    const renderExercise = ({ item }: { item: string }) => (
+        <ExerciseDisplayCard exerciseName={item} />
+    );
 
     return (
         (addExerciseForm) ?
@@ -17,16 +21,18 @@ export default function Exercises() {
             (editExercise != null) ?
                 <EditExercise />
                 :
-                <ScrollView className={'p-4'}>
+                <View style={{ flex: 1, padding: 16 }}>
                     <TouchableOpacity onPress={() => setAddExerciseForm(true)}
                                       className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
                         <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Exercise</Text>
                     </TouchableOpacity>
-                    {exercises.map((exercise) =>
-                        <View key={exercise.name}>
-                            <ExerciseDisplayCard exerciseName={exercise.name} isPrimary={exercise.isPrimary}/>
-                        </View>
-                    )}
-                </ScrollView>
+                    
+                    <FlatList
+                        data={exercises}
+                        renderItem={renderExercise}
+                        keyExtractor={(item) => item}
+                        showsVerticalScrollIndicator={false}
+                    />
+                </View>
     );
 }

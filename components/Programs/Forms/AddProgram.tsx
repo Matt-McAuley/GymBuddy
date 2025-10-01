@@ -1,119 +1,201 @@
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput} from "react-native";
-import {Dropdown} from "react-native-element-dropdown";
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
-import {useState} from "react";
-import {createNewProgram, getDayNames} from "@/db/programDBFunctions";
+import {useRef, useState} from "react";
+import {createNewProgram, getDayNamesColors} from "@/db/programDBFunctions";
 import Toast from 'react-native-toast-message';
+import { MaterialIcons } from '@expo/vector-icons';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import DraggableFlatList, { ScaleDecorator, RenderItemParams } from 'react-native-draggable-flatlist';
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 export default function AddProgram() {
     const {setAddProgramForm} = useProgramStore();
     const {db} = useStore();
-    const [programData, setProgramData] = useState<programDataType>({
-        name: null, Sunday: null, Monday: null, Tuesday: null, Wednesday: null, Thursday: null, Friday: null, Saturday: null});
-    const dayNames = getDayNames(db);
+    const dayNamesColors = getDayNamesColors(db);
+    const [programData, setProgramData] = useState<programDataType>({name: "", days: []});
+    const [index, setIndex] = useState(0);
+    const dayBottomSheetRef = useRef<BottomSheet>(null);
+    const [sheetOpen, setSheetOpen] = useState(false);
+    const [currentlyEditingIndex, setCurrentlyEditingIndex] = useState<number>(-1);
+    
+    const openSheet = (sheetRef: React.RefObject<BottomSheet>) => {
+        sheetRef.current?.snapToIndex(0);
+        setSheetOpen(true);
+    }
+    const closeSheet = (sheetRef: React.RefObject<BottomSheet>) => {
+        sheetRef.current?.close();
+        setSheetOpen(false);
+    }
 
-    return (
-        <ScrollView className={'p-4'}>
-            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'}
-            onPress={() => {setAddProgramForm(false)}}>
+    const HeaderComponent = () => (
+        <View className={'p-4'}>
+            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'} onPress={() => {setAddProgramForm(false)}}>
                 <Text className={'text-center text-4xl color-white font-bold'}>X</Text>
             </TouchableOpacity>
+            <Text className="text-3xl font-bold text-start mb-2">Program Name</Text>
             <TextInput
-                className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                onChangeText={(text) => setProgramData({...programData, name: text})}
-                placeholder={'Enter Name'}
+                className={'h-28 w-full text-center border-4 rounded-xl text-3xl font-bold mb-4 bg-white'}
+                onEndEditing={(e) => setProgramData({...programData, name: e.nativeEvent.text})}
+                placeholder={'Enter Program Name'}
+                defaultValue={programData.name}
                 placeholderTextColor={'gray'}>
             </TextInput>
+        </View>
+    );
 
-            {
-                ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => {
-                return <Dropdown key={day} style={styles.dropdown} selectedTextStyle={styles.selected} placeholderStyle={styles.placeholder}
-                          label={day}
-                          data={dayNames.map((day) => ({label: day, value: day}))}
-                          labelField='label' valueField='value' placeholder={`Enter ${day}`}
-                          value={programData[day]} renderRightIcon={() => null}
-                          renderItem={(item) => (
-                              <View style={styles.item}>
-                                  <Text style={styles.itemText}>{item.label}</Text>
-                              </View>)}
-                          onChange={(item) => {setProgramData({...programData, [day]: item.value})}}/>
-                })
-            }
+    const FooterComponent = () => (
+        <View className={'p-4'}>
+            <TouchableOpacity onPress={() => {
+                if (dayNamesColors.length === 0) {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error',
+                        text2: 'You must add days before you can create a program!',
+                    });
+                    return;
+                }
+                setProgramData({...programData, days: [...(programData.days), {id: index, name: '', color: ''}]});
+                setIndex(index + 1);
+            }}
+                className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
+                <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Day</Text>
+            </TouchableOpacity>
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
-                              onPress={() => {
-                                  const result = createNewProgram(db, programData.name, programData.Sunday, programData.Monday,
-                                      programData.Tuesday, programData.Wednesday, programData.Thursday,
-                                      programData.Friday, programData.Saturday);
-                                  if (result == 'success') {
-                                      Toast.show({
-                                          type: 'success',
-                                          text1: 'Success',
-                                          text2: 'Program Created',
-                                          text1Style: {fontSize: 30},
-                                          text2Style: {fontSize: 30},
-                                      });
-                                  }
-                                  else {
-                                      Toast.show({
-                                          type: 'error',
-                                          text1: 'Error',
-                                          text2: result,
-                                      });
-                                  }
-                                  setAddProgramForm(false);
-                              }}>
+                onPress={() => {
+                    const dayNames = programData.days
+                        .filter(day => day.name.trim() !== '')
+                        .map(day => day.name.trim());
+                    
+                    const result = createNewProgram(db, programData.name.trim(), dayNames);
+                    if (result == 'success') {
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Success',
+                            text2: 'Program Created',
+                            text1Style: {fontSize: 30},
+                            text2Style: {fontSize: 30},
+                        });
+                        setAddProgramForm(false);
+                    }
+                    else {
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Error',
+                            text2: result,
+                        });
+                    }
+                }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
             </TouchableOpacity>
-        </ScrollView>
+        </View>
+    );
+
+    const renderItem = ({ item, drag, isActive, getIndex }: RenderItemParams<dayDataType>) => {
+        return (
+            <ScaleDecorator>
+                <View key={`day-${item.id}`} className="w-full mb-3 relative px-4">
+                    <Swipeable overshootFriction={6} friction={1.5} renderRightActions={() => (
+                        <View className="w-25 h-22 bg-red-500 justify-center items-center mr-1 rounded-2xl">
+                            <TouchableOpacity
+                                className="w-full h-full justify-center items-center hover:opacity-70"
+                                onPress={() => {
+                                    const index = getIndex() ?? -1;
+                                    const updatedProgram = programData.days.filter((_, i) => i !== index);
+                                    setProgramData({ ...programData, days: updatedProgram });
+                                }}>
+                                <MaterialIcons name="delete" size={40} color="white" />
+                            </TouchableOpacity>
+                        </View>
+                    )}>
+                        <View className="flex-row justify-around items-center mb-1">
+                            <TouchableOpacity onLongPress={drag} disabled={isActive} className="">
+                                <MaterialIcons name="drag-indicator" size={50} color="gray" />
+                            </TouchableOpacity>
+                            <View className="flex-row justify-around items-center flex-1 bg-gray-100 rounded-2xl self-end">
+                                <TouchableOpacity className={'border-4 rounded-2xl font-bold justify-center items-center bg-white p-5 h-22 w-[97%]'}
+                                    onPress={() => {
+                                        setCurrentlyEditingIndex(item.id);
+                                        openSheet(dayBottomSheetRef);
+                                    }}>
+                                    <Text className="text-3xl text-center font-bold" style={{color: item.color.toLowerCase()}}>{item.name}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Swipeable>
+                </View>
+            </ScaleDecorator>
+        );
+    };
+
+    return (
+        <View>
+            <DraggableFlatList
+                data={programData.days}
+                onDragEnd={({ data }) => setProgramData({ ...programData, days: data })}
+                keyExtractor={(item) => `draggable-item-${item.id}`}
+                renderItem={renderItem}
+                ListHeaderComponent={HeaderComponent}
+                ListFooterComponent={FooterComponent}
+            />
+            {(sheetOpen) && (
+                <TouchableOpacity 
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: 'rgba(0,0,0,0.25)',
+                    }}
+                    activeOpacity={1}
+                    onPress={() => {
+                        closeSheet(dayBottomSheetRef);
+                    }}
+                />
+            )}
+            <BottomSheet ref={dayBottomSheetRef} index={-1} snapPoints={["50%"]} enableDynamicSizing={false} enableOverDrag={true}>
+                <View className="p-4">
+                    <BottomSheetFlatList 
+                        data={dayNamesColors} 
+                        renderItem={({item}) => (
+                            <TouchableOpacity 
+                                className="p-4"
+                                onPress={() => {
+                                    setProgramData({...programData, days: [...programData.days.map((day) => 
+                                        day.id === currentlyEditingIndex 
+                                            ? {...day, name: item.name, color: item.color}
+                                            : day
+                                    )]});
+                                    closeSheet(dayBottomSheetRef);
+                                }}>
+                                <Text style={{...styles.itemText, color: item.color.toLowerCase(), textAlign: 'center'}}>
+                                    {item.name}
+                                </Text>
+                            </TouchableOpacity>
+                        )} 
+                        keyExtractor={(item) => item.name}
+                    />
+                </View>
+            </BottomSheet>
+        </View>
     );
 }
 
+type dayDataType = {
+    id: number,
+    name: string,
+    color: string,
+}
+
 type programDataType = {
-    name: string | null,
-    Sunday: string | null,
-    Monday: string | null,
-    Tuesday: string | null,
-    Wednesday: string | null,
-    Thursday: string | null,
-    Friday: string | null,
-    Saturday: string | null,
+    name: string,
+    days: dayDataType[],
 }
 
 const styles = StyleSheet.create({
-    dropdown: {
-        width: '100%',
-        height: 90,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 10,
-        borderColor: 'black',
-        borderWidth: 3,
-        marginBottom: 10,
-    },
-    selected: {
-        color: 'black',
-        textAlign: 'center',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    item: {
-        padding: 10,
-        height: 50,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     itemText: {
         fontSize: 25,
         color: 'black',
         fontWeight: 'bold',
     },
-    placeholder: {
-        color: 'gray',
-        textAlign: 'center',
-        fontSize: 30,
-        fontWeight: 'bold',
-    }
 });

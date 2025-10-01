@@ -1,28 +1,40 @@
 import {Image, Text, TouchableOpacity, View} from "react-native";
-import {useEffect, useCallback, useState} from "react";
+import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 import { startLiveActivity, stopLiveActivity, pause, resume, addTimerListener, startListening } from "@/modules/activity-controller";
 
 export default function Timer() {
-    const {isAccessoryExercise, isPrimaryExercise} = useStore();
+    const { isSuperSet, set } = useStore();
+    
+    const getStartTime = () => {
+        if (isSuperSet(exercise)) {
+            if (set < exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) {
+                return Math.max(exercise.exercise1.sets[set].rest, exercise.exercise2.sets[set].rest);
+            }
+            return Math.max(exercise.exercise1.sets[0].rest, exercise.exercise2.sets[0].rest);
+        }
+        if (set < exercise.sets.length) {
+            return exercise.sets[set].rest;
+        }
+        return exercise.sets[0].rest;
+    }
+
     const exercise = useStore((state) => state.exercise());
-    const exerciseName = isAccessoryExercise(exercise) ? exercise.name : (isPrimaryExercise(exercise))
-        ? exercise.name : exercise.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
+    const exerciseName = !isSuperSet(exercise) ? exercise.name : exercise.exercise1.name.split(' ').map(
+        (s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
     const [startedAt, setStartedAt] = useState<Date | null>(null);
-    const [startTime, setStartTime] = useState(isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
-    ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest));
+    const [startTime, setStartTime] = useState(getStartTime());
     const [pausedAt, setPausedAt] = useState<Date | null>(null);
     const [displayTime, setDisplayTime] = useState(0);
 
     useEffect(() => {
-        const newStartTime = isAccessoryExercise(exercise) ? exercise.rest : (isPrimaryExercise(exercise))
-            ? exercise.rest : Math.max(exercise.exercise1.rest, exercise.exercise2.rest);
+        const newStartTime = getStartTime();
         setStartTime(newStartTime);
         setStartedAt(null);
         setPausedAt(null);
         setDisplayTime(newStartTime);
         stopLiveActivity();
-    }, [exercise]);
+    }, [exercise, set]);
 
     useEffect(() => {
         const interval = setInterval(() => {

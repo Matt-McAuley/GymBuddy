@@ -1,224 +1,184 @@
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
-import {useEffect, useState} from "react";
-import {
-    createNewAccessoryExercise,
-    createNewPrimaryExercise,
-} from "@/db/programDBFunctions";
+import { useState } from "react";
+import { createNewExercise } from "@/db/programDBFunctions";
 import Toast from 'react-native-toast-message';
+import { MaterialIcons } from '@expo/vector-icons';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import DraggableFlatList, { ScaleDecorator, RenderItemParams } from 'react-native-draggable-flatlist';
 
 export default function AddExercise() {
     const {setAddExerciseForm} = useProgramStore();
     const {db} = useStore();
-    const [isPrimary, setIsPrimary] = useState<boolean>(true);
-    const [primaryExerciseData, setPrimaryExerciseData] = useState<primaryExerciseDataType>({
-        name: null, rest: null, weight_1: null, reps_1: null, weight_2: null, reps_2: null, weight_3: null, reps_3: null});
-    const [accessoryExerciseData, setAccessoryExerciseData] = useState<accessoryExerciseDataType>({
-        name: null, rest: null, sets: null, weight: null, reps: null});
+    const [index, setIndex] = useState(1);
+    const [exerciseData, setExerciseData] = useState<exerciseDataType>({name: "", sets: []});
 
-
-    useEffect(() => {
-        setPrimaryExerciseData({name: null, rest: null, weight_1: null, reps_1: null, weight_2: null, reps_2: null, weight_3: null, reps_3: null});
-        setAccessoryExerciseData({name: null, rest: null, sets: null, weight: null, reps: null});
-    }, [isPrimary]);
-
-    return (
-        <ScrollView className={'p-4'}>
-            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'}
-                              onPress={() => {setAddExerciseForm(false)}}>
+    const HeaderComponent = () => (
+        <View className={'p-4 pb-0'}>
+            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-20 self-end'} onPress={() => {setAddExerciseForm(false)}}>
                 <Text className={'text-center text-4xl color-white font-bold'}>X</Text>
             </TouchableOpacity>
-            <View className={'flex-row gap-2 mb-5'}>
-                <TouchableOpacity className={'border-black border-2 p-3 rounded-2xl'}
-                                  onPress={() => {setIsPrimary(true)}}
-                                  style={{backgroundColor: (isPrimary) ? 'lightblue': 'white'}}>
-                    <Text className={'text-xl font-bold text-center'}>Primary Exercise</Text>
-                </TouchableOpacity>
-                <TouchableOpacity className={'border-black border-2 p-3 flex-1 rounded-2xl'}
-                                  onPress={() => {setIsPrimary(false)}}
-                                  style={{backgroundColor: (!isPrimary) ? 'lightblue': 'white'}}>
-                <Text className={'text-xl font-bold text-center'}>Accessory Exercise</Text>
-                </TouchableOpacity>
+            <Text className="text-3xl font-bold text-start mb-2">Exercise Name</Text>
+            <TextInput
+                className={'h-28 w-full text-center border-4 rounded-xl text-3xl font-bold mb-2 bg-white'}
+                onEndEditing={(e) => setExerciseData({...exerciseData, name: e.nativeEvent.text})}
+                placeholder={'Enter Exercise Name'}
+                defaultValue={exerciseData.name}
+                placeholderTextColor={'gray'}>
+            </TextInput>
+            <View className="h-15 w-full text-center flex-row justify-around items-center">
+                <View className="w-[50px]"></View>
+                <View className="flex-1 flex-row justify-around items-center">
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">Rest (s)</Text>
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">Weight</Text>
+                    <Text className="text-2xl font-bold text-center flex-1">Reps</Text>
+                </View>
             </View>
-            {(isPrimary) ?
-                <>
-                    <TextInput
-                        className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                        onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, name: text})}
-                        placeholder={'Name'}
-                        value={primaryExerciseData.name}
-                        placeholderTextColor={'gray'}>
-                    </TextInput>
-                    <TextInput
-                        className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                        onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, rest: parseInt(text)})}
-                        placeholder={'Rest (s)'}
-                        keyboardType={'numeric'}
-                        placeholderTextColor={'gray'}>
-                    </TextInput>
-                    <Text className={'text-5xl font-bold text-center m-4'}>Weight:</Text>
-                    <View className={'flex-row gap-4'}>
-                        <TextInput
-                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, weight_1: parseInt(text)})}
-                            placeholder={'Set 1'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                        <TextInput
-                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, weight_2: parseInt(text)})}
-                            placeholder={'Set 2'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                        <TextInput
-                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, weight_3: parseInt(text)})}
-                            placeholder={'Set 3'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                    </View>
-                    <Text className={'text-5xl font-bold text-center m-4'}>Reps:</Text>
-                    <View className={'flex-row gap-4'}>
-                        <TextInput
-                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, reps_1: parseInt(text)})}
-                            placeholder={'Set 1'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                        <TextInput
-                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, reps_2: parseInt(text)})}
-                            placeholder={'Set 2'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                        <TextInput
-                            className={'h-28 w-32 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setPrimaryExerciseData({...primaryExerciseData, reps_3: parseInt(text)})}
-                            placeholder={'Set 3'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                    </View>
-                </>
-                :
-                <>
-                    <TextInput
-                        className={'h-28 w-full text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                        onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, name: text})}
-                        placeholder={'Name'}
-                        value={accessoryExerciseData.name}
-                        placeholderTextColor={'gray'}>
-                    </TextInput>
-                    <View className={'flex-row gap-4'}>
-                        <TextInput
-                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, rest: parseInt(text)})}
-                            placeholder={'Rest'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                        <TextInput
-                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, sets: parseInt(text)})}
-                            placeholder={'Sets'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                    </View>
-                    <View className={'flex-row gap-4'}>
-                        <TextInput
-                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, weight: parseInt(text)})}
-                            placeholder={'Weight'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                        <TextInput
-                            className={'h-28 w-50 text-center border-4 rounded-xl text-4xl font-bold mb-3 bg-white'}
-                            onChangeText={(text) => setAccessoryExerciseData({...accessoryExerciseData, reps: parseInt(text)})}
-                            placeholder={'Reps'}
-                            keyboardType={'numeric'}
-                            placeholderTextColor={'gray'}>
-                        </TextInput>
-                    </View>
-                </>
-            }
-            <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
-                              onPress={() => {
-                                    if (isPrimary) {
-                                        const result = createNewPrimaryExercise(db,
-                                                primaryExerciseData.name, primaryExerciseData.rest,
-                                                primaryExerciseData.weight_1, primaryExerciseData.reps_1,
-                                                primaryExerciseData.weight_2, primaryExerciseData.reps_2,
-                                                primaryExerciseData.weight_3, primaryExerciseData.reps_3);
-                                        if (result == 'success') {
-                                            Toast.show({
-                                                type: 'success',
-                                                text1: 'Success',
-                                                text2: 'Primary Exercise Created',
-                                                text1Style: {fontSize: 30},
-                                                text2Style: {fontSize: 30},
-                                            });
-                                        }
-                                        else {
-                                            Toast.show({
-                                                type: 'error',
-                                                text1: 'Error',
-                                                text2: result,
-                                            });
-                                        }
-                                    }
-                                    else {
-                                        const result = createNewAccessoryExercise(db, accessoryExerciseData.name,
-                                            accessoryExerciseData.rest, accessoryExerciseData.sets,
-                                            accessoryExerciseData.weight, accessoryExerciseData.reps);
-                                        if (result == 'success') {
-                                            Toast.show({
-                                                type: 'success',
-                                                text1: 'Success',
-                                                text2: 'Accessory Exercise Created',
-                                                text1Style: {fontSize: 30},
-                                                text2Style: {fontSize: 30},
-                                            });
-                                        }
-                                        else {
-                                            Toast.show({
-                                                type: 'error',
-                                                text1: 'Error',
-                                                text2: result,
-                                            });
-                                        }
-                                    }
-                                    setAddExerciseForm(false);
-                              }}>
+        </View>
+    );
+
+    const FooterComponent = () => (
+        <View className={'p-4'}>
+            <TouchableOpacity onPress={() => {
+                setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: index, rest: '', weight: '', reps: ''}]}); 
+                setIndex(index + 1);
+            }}
+                className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
+                <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Set</Text>
+            </TouchableOpacity>
+            <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'} onPress={() => {
+                    const exerciseDataSets = [];
+                    for (let i = 0; i < exerciseData.sets.length; i++) {
+                        const set = exerciseData.sets[i];
+                        const rest = parseInt(set.rest);
+                        const weight = parseInt(set.weight);
+                        const reps = parseInt(set.reps);
+                        if (!isNaN(rest) && !isNaN(weight) && !isNaN(reps)) {
+                            exerciseDataSets.push({rest, weight, reps});
+                        }
+                        else {
+                            Toast.show({
+                                type: 'error',
+                                text1: 'Error',
+                                text2: 'Please enter valid numbers for each set.',
+                            });
+                            return;
+                        }
+                    }
+                    const result = createNewExercise(db, exerciseData.name.trim(), exerciseDataSets);
+                    if (result == 'success') {
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Success',
+                            text2: 'Exercise Created',
+                            text1Style: {fontSize: 30},
+                            text2Style: {fontSize: 30},
+                        });
+                        setAddExerciseForm(false);
+                    }
+                    else {
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Error',
+                            text2: result,
+                        });
+                    }
+                }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
             </TouchableOpacity>
-        </ScrollView>
+        </View>
     );
+
+    const renderItem = ({ item, drag, isActive, getIndex }: RenderItemParams<setDataType>) => {
+        return (
+            <ScaleDecorator>
+                <View key={`set-${item.id}`} className="w-full mb-3 relative px-4">
+                    <Swipeable overshootFriction={6} friction={1.5} renderRightActions={() => (
+                        <View className="w-25 h-22 bg-red-500 justify-center items-center mr-1 rounded-xl">
+                            <TouchableOpacity
+                                className="w-full h-full justify-center items-center hover:opacity-70"
+                                onPress={() => {
+                                    const index = getIndex();
+                                    if (index !== undefined) {
+                                        const updatedSets = exerciseData.sets!.filter((_, i) => i !== index);
+                                        setExerciseData({ ...exerciseData, sets: updatedSets });
+                                    }
+                                }}>
+                                <MaterialIcons name="delete" size={40} color="white" />
+                            </TouchableOpacity>
+                        </View>
+                    )}>
+                        <View className="flex-row justify-around items-center w-full">
+                            <TouchableOpacity onLongPress={drag} disabled={isActive} className="">
+                                <MaterialIcons name="drag-indicator" size={50} color="gray" />
+                            </TouchableOpacity>
+                            <View className="flex-row justify-around items-center flex-1 bg-gray-100 rounded-xl self-end">
+                                <TextInput className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                    onChangeText={(text) => {
+                                        const index = getIndex();
+                                        if (index !== undefined) {
+                                            setExerciseData({
+                                                ...exerciseData,
+                                                sets: exerciseData.sets!.map((set, i) => i === index ? { ...set, rest: text } : set),
+                                            });
+                                        }
+                                    }}
+                                    value={item.rest}
+                                    keyboardType="numeric"/>
+                                <TextInput className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                    onChangeText={(text) => {
+                                        const index = getIndex();
+                                        if (index !== undefined) {
+                                            setExerciseData({
+                                                ...exerciseData,
+                                                sets: exerciseData.sets!.map((set, i) => i === index ? { ...set, weight: text } : set),
+                                            });
+                                        }
+                                    }}
+                                    value={item.weight}
+                                    keyboardType="numeric"/>
+                                <TextInput className={'h-22 w-[30%] text-center border-4 rounded-xl text-3xl font-bold bg-white'}
+                                    onChangeText={(text) => {
+                                        const index = getIndex();
+                                        if (index !== undefined) {
+                                            setExerciseData({
+                                                ...exerciseData,
+                                                sets: exerciseData.sets!.map((set, i) => i === index ? { ...set, reps: text } : set),
+                                            });
+                                        }
+                                    }}
+                                    value={item.reps}
+                                    keyboardType="numeric"/>
+                            </View>
+                        </View>
+                    </Swipeable>
+                </View>
+            </ScaleDecorator>
+        );
+    };
+
+    return (
+        <DraggableFlatList
+            data={exerciseData.sets}
+            onDragEnd={({ data }) => setExerciseData({ ...exerciseData, sets: data })}
+            keyExtractor={(item) => `draggable-item-${item.id}`}
+            renderItem={renderItem}
+            ListHeaderComponent={HeaderComponent}
+            ListFooterComponent={FooterComponent}
+        />
+    );
+};
+
+type setDataType = {
+    id: number,
+    rest: string,
+    weight: string,
+    reps: string,
 }
 
-type primaryExerciseDataType = {
-    name: string | null,
-    rest:number | null,
-    weight_1: number | null,
-    reps_1: number | null,
-    weight_2: number | null,
-    reps_2: number | null,
-    weight_3: number | null,
-    reps_3: number | null,
-}
-
-type accessoryExerciseDataType = {
-    name: string | null,
-    rest: number | null,
-    sets: number | null,
-    weight: number | null,
-    reps: number | null,
+type exerciseDataType = {
+    name: string,
+    sets: setDataType[],
 }
 
 const styles = StyleSheet.create({

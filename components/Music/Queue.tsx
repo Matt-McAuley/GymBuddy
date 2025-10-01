@@ -52,15 +52,15 @@ export default function Queue() {
         <TouchableOpacity onPress={() => setInQueue(false)} className={'self-end'}>
             <Text className={'p-3 text-center text-4xl font-bold bg-red-500 color-white'}>X</Text>
         </TouchableOpacity>
-        <Text className={'text-center text-5xl font-bold'}>Queue</Text>
+        <Text className={'text-center text-5xl font-bold mb-2'}>Queue</Text>
         {
             queue.map((queueItem, index) => {
                 return (
                     <TouchableOpacity key={index} className={'flex-col gap-5 border-4 p-5 rounded-2xl w-full justify-center items-center'}
                     onPress={() => skipForward(index + 1)}>
                         <View>
-                            <Text className={'text-3xl'}>{queueItem.name.split('(')[0]}</Text>
-                            <Text className={'text-1xl'}>[{queueItem.artist}]</Text>
+                            <Text className={'text-3xl text-center'}>{queueItem.name.split('(')[0]}</Text>
+                            <Text className={'text-1xl text-center'}>[{queueItem.artist}]</Text>
                         </View>
                     </TouchableOpacity>
                 )
