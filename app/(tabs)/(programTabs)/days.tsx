@@ -1,4 +1,4 @@
-import {Text, ScrollView, TouchableOpacity, View} from "react-native";
+import {Text, FlatList, TouchableOpacity, View} from "react-native";
 import {useProgramStore, useStore} from "@/store";
 import {getDayNamesColors, getExerciseNames} from "@/db/programDBFunctions";
 import DayDisplayCard from "@/components/Programs/DayDisplayCard";
@@ -12,6 +12,10 @@ export default function Days() {
     const days = getDayNamesColors(db);
     const exercises = getExerciseNames(db);
 
+    const renderDay = ({ item }: { item: { name: string; color: string } }) => (
+        <DayDisplayCard dayName={item.name} dayColor={item.color}/>
+    );
+
     return (
         (addDayForm) ?
             <AddDay/>
@@ -19,7 +23,7 @@ export default function Days() {
             (editDay != null) ?
                 <EditDay />
                 :
-                <ScrollView className={'p-4'}>
+                <View style={{ flex: 1, padding: 16 }}>
                     <TouchableOpacity onPress={() => {
                         if (exercises.length === 0) {
                             Toast.show({
@@ -31,14 +35,16 @@ export default function Days() {
                         }
                         setAddDayForm(true);
                     }}
-                                      className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
+                    className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
                         <Text className={'text-4xl text-center font-bold color-gray-500'}>Add New Day</Text>
                     </TouchableOpacity>
-                    {days.map((day) =>
-                        <View key={day.name}>
-                            <DayDisplayCard dayName={day.name} dayColor={day.color}/>
-                        </View>
-                    )}
-                </ScrollView>
+                    
+                    <FlatList
+                        data={days}
+                        renderItem={renderDay}
+                        keyExtractor={(item) => item.name}
+                        showsVerticalScrollIndicator={false}
+                    />
+                </View>
     );
 }
