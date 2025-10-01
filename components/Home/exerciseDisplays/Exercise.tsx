@@ -17,7 +17,7 @@ export default function Exercise(props: exercisePropsType) {
 
     return (
         <View className={'flex-col justify-between items-center h-60 w-full bg-amber-50 border-4 border-black p-7 rounded-2xl'}>
-            <Text className={'font-bold text-4xl'}>{exercise.name} : {(set < exercise.sets.length) ? exercise.sets[set].weight : exercise.sets[0].weight}</Text>
+            <Text className={'font-bold text-3xl'}>{exercise.name} : {(set < exercise.sets.length) ? exercise.sets[set].weight : exercise.sets[0].weight}</Text>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center'}>
                     <Text className={'text-xl'}>{(prevExercise == null) ? ' ' : (isSuperSet(prevExercise)) ? 

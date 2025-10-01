@@ -45,8 +45,8 @@ export default function Counter() {
             <View className={'border-r-4 flex-row justify-between items-center w-53 p-2 h-35'}>
                 <Text className={'text-4xl font-bold mr-3'}>Set:</Text>
                 <View className={'flex-col justify-center items-center'}>
-                    <Text className={'text-4xl font-bold m-0 p-0 border-b-4 w-9 text-center'}>{set+1}</Text>
-                    <Text className={'text-4xl font-bold m-0 p-0'}>{maxSets+1}</Text>
+                    <Text className={'text-3xl font-bold m-0 p-0 border-b-4 w-9 text-center'}>{set+1}</Text>
+                    <Text className={'text-3xl font-bold m-0 p-0'}>{maxSets+1}</Text>
                 </View>
                 <View className={''}>
                     <TouchableOpacity onPress={() => {setSet(Math.min(maxSets, set+1))}}>
@@ -60,14 +60,14 @@ export default function Counter() {
             {(!isSuperSet(exercise)) ?
             <View className={'flex-row justify-between items-center w-42 p-3'}>
                 <Text className={'text-4xl font-bold'}>Reps:</Text>
-                <Text className={'text-4xl font-bold'}>{reps}</Text>
+                <Text className={'text-3xl font-bold'}>{reps}</Text>
             </View>
                 :
             <View className={'flex-row justify-between items-center w-42 p-3'}>
                 <Text className={'text-4xl font-bold'}>Reps:</Text>
                 <View>
-                    <Text className={'text-4xl font-bold '}>{reps}</Text>
-                    <Text className={'text-4xl font-bold'}>{reps}</Text>
+                    <Text className={'text-3xl font-bold '}>{reps}</Text>
+                    <Text className={'text-3xl font-bold'}>{reps}</Text>
                 </View>
             </View>
             }
