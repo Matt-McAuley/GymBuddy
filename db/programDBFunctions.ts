@@ -38,6 +38,7 @@ export function setNullIfCurrentProgram(db: SQLite.SQLiteDatabase, programName: 
 }
 
 export function createNewProgram(db: SQLite.SQLiteDatabase, programName: string | null, days: string[]) {
+    console.log(programName, days);
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', programName);
     if (programName == null || programName.trim() === '') return 'Must include a program name!';
     if (days.length === 0) return 'Must have at least one day!';

@@ -56,14 +56,15 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
 
         db.execSync(`
             CREATE TABLE IF NOT EXISTS programs (
-                name TEXT PRIMARY KEY NOT NULL,
+                name TEXT PRIMARY KEY NOT NULL
             );
         `);
 
         db.execSync(`
             CREATE TABLE IF NOT EXISTS program_details (
-                name TEXT PRIMARY KEY NOT NULL,
-                day TEXT NULL,
+                name TEXT NOT NULL,
+                day TEXT NOT NULL,
+                PRIMARY KEY (name, day),
                 FOREIGN KEY (name) REFERENCES programs(name) ON DELETE CASCADE,
                 FOREIGN KEY (day) REFERENCES days(name) ON DELETE CASCADE
             );
@@ -311,18 +312,20 @@ const getProgram = (db:  SQLite.SQLiteDatabase) => {
 
     // Get the current program
     const currentProgram = db.getFirstSync(`SELECT program FROM current_program`) as any;
-    if (currentProgram == null) return null;
+    if (currentProgram == null || currentProgram.program == null) return null;
 
-    const program = db.getFirstSync(`SELECT * FROM programs WHERE name = '${currentProgram.program}'`) as any;
+    const program = db.getFirstSync(`SELECT * FROM programs WHERE name = ?`, [currentProgram.program]) as any;
     if (program == null) return null;
     res.name = program.name;
 
-    // Get the days for the program
-    for (const dayOfWeek of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']) {
-        const dayName = program[dayOfWeek];
+    // Get the days for the program from program_details
+    const programDays = db.getAllSync(`SELECT day FROM program_details WHERE name = ? ORDER BY day`, [program.name]) as any[];
+    
+    for (const programDay of programDays) {
+        const dayName = programDay.day;
         if (dayName == null) continue;
         
-        const day = db.getFirstSync(`SELECT * FROM days WHERE name = '${dayName}'`) as any;
+        const day = db.getFirstSync(`SELECT * FROM days WHERE name = ?`, [dayName]) as any;
         if (day == null) continue;
         
         const dayRes: dayType = {
@@ -332,11 +335,11 @@ const getProgram = (db:  SQLite.SQLiteDatabase) => {
         }
 
         // Get the details for the day
-        const details = db.getAllSync(`SELECT * FROM day_details WHERE name = '${dayName}' ORDER BY exercise_index`) as any[];
+        const details = db.getAllSync(`SELECT * FROM day_details WHERE name = ? ORDER BY exercise_index`, [dayName]) as any[];
 
         for (const detail of details) {
             if (detail.exercise != null) {
-                const exerciseSets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = '${detail.exercise}' ORDER BY set_index`) as any[];
+                const exerciseSets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = ? ORDER BY set_index`, [detail.exercise]) as any[];
 
                 const exercise: exerciseType = {
                     name: detail.exercise,
@@ -351,8 +354,8 @@ const getProgram = (db:  SQLite.SQLiteDatabase) => {
                 const exercise1Name = detail.superset_1.trim();
                 const exercise2Name = detail.superset_2.trim();
 
-                const exercise1Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = '${exercise1Name}' ORDER BY set_index`) as any[];
-                const exercise2Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = '${exercise2Name}' ORDER BY set_index`) as any[];
+                const exercise1Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = ? ORDER BY set_index`, [exercise1Name]) as any[];
+                const exercise2Sets = db.getAllSync(`SELECT * FROM exercise_details WHERE name = ? ORDER BY set_index`, [exercise2Name]) as any[];
 
                 const superSet: superSetType = {
                     exercise1: {

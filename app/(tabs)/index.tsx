@@ -19,7 +19,7 @@ export default function Index() {
 
     const retrieveOverwrittenValues = async () => {
         const set = await AsyncStorage.getItem('set');
-        setRetrievedSet(0);
+        setRetrievedSet(parseInt(set || '0'));
     }
 
     const retrieveOtherValues = async () => {
