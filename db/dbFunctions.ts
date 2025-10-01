@@ -57,20 +57,15 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
         db.execSync(`
             CREATE TABLE IF NOT EXISTS programs (
                 name TEXT PRIMARY KEY NOT NULL,
-                Monday TEXT NULL,
-                Tuesday TEXT NULL,
-                Wednesday TEXT NULL,
-                Thursday TEXT NULL,
-                Friday TEXT NULL,
-                Saturday TEXT NULL,
-                Sunday TEXT NULL,
-                FOREIGN KEY (Monday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Tuesday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Wednesday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Thursday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Friday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Saturday) REFERENCES days(name) ON DELETE SET NULL,
-                FOREIGN KEY (Sunday) REFERENCES days(name) ON DELETE SET NULL
+            );
+        `);
+
+        db.execSync(`
+            CREATE TABLE IF NOT EXISTS program_details (
+                name TEXT PRIMARY KEY NOT NULL,
+                day TEXT NULL,
+                FOREIGN KEY (name) REFERENCES programs(name) ON DELETE CASCADE,
+                FOREIGN KEY (day) REFERENCES days(name) ON DELETE CASCADE
             );
         `);
 
@@ -100,6 +95,7 @@ const dbTeardown = (db:  SQLite.SQLiteDatabase) => {
         DROP TABLE IF EXISTS days;
         DROP TABLE IF EXISTS day_details;
         DROP TABLE IF EXISTS programs;
+        DROP TABLE IF EXISTS program_details;
         DROP TABLE IF EXISTS current_program;
     `);
 }
@@ -245,6 +241,8 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
             INSERT INTO days (name, color) VALUES ('Pull', 'blue');
             INSERT INTO days (name, color) VALUES ('Upper', 'purple');
             INSERT INTO days (name, color) VALUES ('Lower & Arms', 'green');
+            INSERT INTO days (name, color) VALUES ('Lower & A', 'pink');
+            INSERT INTO days (name, color) VALUES ('Lower & B', 'brown');
         `);
 
         // Insert day details for mock program
@@ -280,8 +278,14 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
             `);
 
         db.execSync(`
-            INSERT INTO programs (name, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
-            VALUES ('PPUL', 'Pull', NULL, 'Upper', 'Lower & Arms', NULL, NULL, 'Push');
+            INSERT INTO programs (name) VALUES ('PPUL');
+            `);
+
+        db.execSync(`
+            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Push');
+            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Pull');
+            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Upper');
+            INSERT INTO program_details (name, day) VALUES ('PPUL', 'Lower & Arms');
             `);
 
         db.execSync(`

@@ -37,38 +37,37 @@ export function setNullIfCurrentProgram(db: SQLite.SQLiteDatabase, programName: 
     }
 }
 
-export function createNewProgram(db: SQLite.SQLiteDatabase, programName: string | null, Sunday: string | null, Monday: string | null, Tuesday: string | null, Wednesday: string | null, Thursday: string | null, Friday: string | null, Saturday: string | null) {
+export function createNewProgram(db: SQLite.SQLiteDatabase, programName: string | null, days: string[]) {
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', programName);
     if (programName == null || programName.trim() === '') return 'Must include a program name!';
-    if (Sunday == null && Monday == null && Tuesday == null && Wednesday == null && Thursday == null && Friday == null && Saturday == null) return 'Must have at least one day!';
+    if (days.length === 0) return 'Must have at least one day!';
     if (program != null) return 'Program with that name already exists!';
-    db.runSync("INSERT INTO programs (name, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?, ?)", programName.trim(), Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday);
+    db.runSync("INSERT INTO programs (name) VALUES (?)", programName.trim());
+    days.forEach((day) => {
+        db.runSync("INSERT INTO program_details (name, day) VALUES (?, ?)", programName.trim(), day);
+    });
     return 'success';
 }
 
 export function getProgramByName(db: SQLite.SQLiteDatabase, programName: string) {
     const program = db.getFirstSync("SELECT * FROM programs WHERE name = ?", programName) as any;
+    const programDetails = db.getAllSync("SELECT * FROM program_details WHERE name = ? ORDER BY day", programName) as any[];
     return {
         name: program.name,
-        Sunday: program.Sunday,
-        Monday: program.Monday,
-        Tuesday: program.Tuesday,
-        Wednesday: program.Wednesday,
-        Thursday: program.Thursday,
-        Friday: program.Friday,
-        Saturday: program.Saturday,
+        days: programDetails.map((detail) => detail.day)
     }
 }
 
-export function replaceProgram(db: SQLite.SQLiteDatabase, oldProgramName: string | null, newProgramName: string | null, Sunday: string | null, Monday: string | null, Tuesday: string | null, Wednesday: string | null, Thursday: string | null, Friday: string | null, Saturday: string | null) {
+export function replaceProgram(db: SQLite.SQLiteDatabase, oldProgramName: string | null, newProgramName: string | null, days: string[]) {
     if (newProgramName == null) return 'Must include a program name!';
-    if (Sunday == null && Monday == null && Tuesday == null && Wednesday == null && Thursday == null && Friday == null && Saturday == null) return 'Must have at least one day!';
+    if (days.length === 0) return 'Must have at least one day!';
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', newProgramName);
     if (program != null && oldProgramName != newProgramName) return 'Program with that name already exists!';
     db.runSync('DELETE FROM programs WHERE name = ?', oldProgramName);
-    db.runSync("INSERT INTO programs (name, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday) VALUES " +
-        "(?, ?, ?, ?, ?, ?, ?, ?)", newProgramName, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday);
+    db.runSync("INSERT INTO programs (name) VALUES (?)", newProgramName);
+    days.forEach((day) => {
+        db.runSync("INSERT INTO program_details (name, day) VALUES (?, ?)", newProgramName.trim(), day);
+    });
     return 'success';
 }
 
@@ -130,7 +129,7 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
     if (color == null) return 'Must include a color!';
     if (exercises === null ||exercises.length === 0) return 'Must have at least one exercise!';
     const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', newName);
-    const programsWithDay = db.getAllSync('SELECT * FROM programs WHERE Sunday = ? OR Monday = ? OR Tuesday = ? OR Wednesday = ? OR Thursday = ? OR Friday = ? OR Saturday = ?', originalName, originalName, originalName, originalName, originalName, originalName, originalName) as any[];
+    const programsWithDay = db.getAllSync('SELECT * FROM program_details WHERE day = ?', originalName) as any[];
     if (day != null && originalName != newName) return 'Day with that name already exists!';
     db.runSync('DELETE FROM days WHERE name = ?', originalName);
     db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", newName, color);
@@ -144,9 +143,7 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
         }
     });
     programsWithDay.forEach((program) => {
-        ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].forEach((day) => {
-            if (program[day] == originalName) db.runSync(`UPDATE programs SET ${day} = ? WHERE name = ?`, newName, program.name);
-        });
+        db.runSync(`UPDATE programs SET day = ? WHERE name = ?`, newName, program.name);
     });
     return 'success';
 }
