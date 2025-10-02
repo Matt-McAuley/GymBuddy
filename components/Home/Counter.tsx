@@ -30,6 +30,10 @@ export default function Counter() {
     }, [exercise]);
 
     useEffect(() => {
+        setReps(getReps());
+    }, [set]);
+
+    useEffect(() => {
         if (retrievedYet && retrievedSet) {
             setSet(retrievedSet);
             setRetrievedSet(null);
@@ -60,9 +64,7 @@ export default function Counter() {
             {(!isSuperSet(exercise)) ?
             <View className={'flex-row justify-between items-center w-42 p-3'}>
                 <Text className={'text-4xl font-bold mr-2'}>Reps:</Text>
-                <ScrollView horizontal>
-                    <Text className={'text-3xl font-bold'}>{reps}</Text>
-                </ScrollView>
+                <Text className={'text-3xl font-bold'}>{reps}</Text>
             </View>
                 :
             <View className={'flex-row justify-between items-center w-42 p-3'}>
