@@ -98,57 +98,145 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
         if (result != null) return;
 
         db.execSync(`
-            INSERT INTO exercises (name) VALUES ('Bench');
-            INSERT INTO exercises (name) VALUES ('Squat');
+            INSERT INTO exercises (name) VALUES ('Bench - 5x5');
+            INSERT INTO exercises (name) VALUES ('Bench - 3x5');
+            INSERT INTO exercises (name) VALUES ('Bench - 531');
             INSERT INTO exercises (name) VALUES ('DB OHP');
             INSERT INTO exercises (name) VALUES ('Dips');
+            INSERT INTO exercises (name) VALUES ('Dips - SS');
             INSERT INTO exercises (name) VALUES ('Lateral Raise');
             INSERT INTO exercises (name) VALUES ('Tricep Extension');
-            INSERT INTO exercises (name) VALUES ('Leg Raises');
-            INSERT INTO exercises (name) VALUES ('Deadlift');
-            INSERT INTO exercises (name) VALUES ('BB Curl');
-            INSERT INTO exercises (name) VALUES ('Lat Pull');
+            INSERT INTO exercises (name) VALUES ('Hanging Leg Raise');
+            INSERT INTO exercises (name) VALUES ('Sissy Squat');
+            INSERT INTO exercises (name) VALUES ('Deadlift - 5x5');
+            INSERT INTO exercises (name) VALUES ('Deadlift - 3x5');
+            INSERT INTO exercises (name) VALUES ('Deadlift - 531');
+            INSERT INTO exercises (name) VALUES ('BB Curl 7s');
+            INSERT INTO exercises (name) VALUES ('Lat Pulldown');
+            INSERT INTO exercises (name) VALUES ('Reverse Wrist Curl');
             INSERT INTO exercises (name) VALUES ('Hammer Curl');
             INSERT INTO exercises (name) VALUES ('Face Pull');
-            INSERT INTO exercises (name) VALUES ('Cable Crunches');
-            INSERT INTO exercises (name) VALUES ('OHP');
-            INSERT INTO exercises (name) VALUES ('BB Row');
+            INSERT INTO exercises (name) VALUES ('Cable Crunch');
+            INSERT INTO exercises (name) VALUES ('OHP - 5x5');
+            INSERT INTO exercises (name) VALUES ('OHP - 3x5');
+            INSERT INTO exercises (name) VALUES ('OHP - 531');
+            INSERT INTO exercises (name) VALUES ('BB Row - 5x5');
+            INSERT INTO exercises (name) VALUES ('BB Row - 3x5');
+            INSERT INTO exercises (name) VALUES ('BB Row - 531');
             INSERT INTO exercises (name) VALUES ('DB Bench');
+            INSERT INTO exercises (name) VALUES ('Wrist Curl');
             INSERT INTO exercises (name) VALUES ('BTB Shrug');
+            INSERT INTO exercises (name) VALUES ('Squat - 5x5');
+            INSERT INTO exercises (name) VALUES ('Squat - 3x5');
+            INSERT INTO exercises (name) VALUES ('Squat - 531');
             INSERT INTO exercises (name) VALUES ('Hamstring Curl');
             INSERT INTO exercises (name) VALUES ('Leg Extension');
             INSERT INTO exercises (name) VALUES ('DB Curl');
+            INSERT INTO exercises (name) VALUES ('Calf Raise');
         `);
 
         db.execSync(`
+            -- Compound Lifts
+
             -- Bench Press sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 1, 210, 205, 5);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 2, 210, 235, 3);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 3, 210, 260, 1);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench', 4, 230, 22, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 5x5', 1, 210, 215, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 5x5', 2, 210, 215, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 5x5', 3, 210, 215, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 5x5', 4, 210, 215, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 5x5', 5, 210, 215, 5);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 3x5', 1, 210, 235, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 3x5', 2, 210, 235, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 3x5', 3, 210, 235, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 3x5', 4, 210, 235, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 3x5', 5, 210, 235, 3);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 531', 1, 210, 215, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 531', 2, 210, 235, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 531', 3, 210, 260, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 531', 4, 210, 235, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Bench - 531', 5, 210, 215, 5);
 
             -- Squat sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat', 1, 210, 225, 5);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat', 2, 210, 245, 3);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat', 3, 210, 275, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 5x5', 1, 210, 235, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 5x5', 2, 210, 235, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 5x5', 3, 210, 235, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 5x5', 4, 210, 235, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 5x5', 5, 210, 235, 5);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 3x5', 1, 210, 255, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 3x5', 2, 210, 255, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 3x5', 3, 210, 255, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 3x5', 4, 210, 255, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 3x5', 5, 210, 255, 3);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 531', 1, 210, 235, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 531', 2, 210, 255, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 531', 3, 210, 295, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 531', 4, 210, 255, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Squat - 531', 5, 210, 235, 5);
             
             -- Deadlift sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift', 1, 210, 325, 5);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift', 2, 210, 365, 3);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift', 3, 210, 425, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 5x5', 1, 210, 345, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 5x5', 2, 210, 345, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 5x5', 3, 210, 345, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 5x5', 4, 210, 345, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 5x5', 5, 210, 345, 5);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 3x5', 1, 210, 365, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 3x5', 2, 210, 365, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 3x5', 3, 210, 365, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 3x5', 4, 210, 365, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 3x5', 5, 210, 365, 3);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 531', 1, 210, 345, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 531', 2, 210, 365, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 531', 3, 210, 425, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 531', 4, 210, 365, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Deadlift - 531', 5, 210, 345, 5);
             
             -- OHP sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP', 1, 180, 115, 5);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP', 2, 180, 140, 3);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP', 3, 180, 150, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 5x5', 1, 180, 120, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 5x5', 2, 180, 120, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 5x5', 3, 180, 120, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 5x5', 4, 180, 120, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 5x5', 5, 180, 120, 5);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 3x5', 1, 180, 140, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 3x5', 2, 180, 140, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 3x5', 3, 180, 140, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 3x5', 4, 180, 140, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 3x5', 5, 180, 140, 3);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 531', 1, 180, 120, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 531', 2, 180, 140, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 531', 3, 180, 150, 1);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 531', 4, 180, 140, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('OHP - 531', 5, 180, 120, 5);
             
             -- BB Row sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row', 1, 180, 165, 5);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row', 2, 180, 185, 3);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row', 3, 180, 185, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 5x5', 1, 180, 175, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 5x5', 2, 180, 175, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 5x5', 3, 180, 175, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 5x5', 4, 180, 175, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 5x5', 5, 180, 175, 5);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 3x5', 1, 180, 195, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 3x5', 2, 180, 195, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 3x5', 3, 180, 195, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 3x5', 4, 180, 195, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 3x5', 5, 180, 195, 3);
+
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 531', 1, 180, 175, 5);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 531', 2, 180, 195, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 531', 3, 180, 195, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 531', 4, 180, 195, 3);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Row - 531', 5, 180, 175, 5);
         `);
 
         db.execSync(`
+            -- Accessory Lifts
+
             -- DB OHP sets
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB OHP', 1, 90, 45, 12);
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB OHP', 2, 90, 45, 12);
@@ -158,131 +246,234 @@ const addMockProgram = (db:  SQLite.SQLiteDatabase) => {
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips', 1, 90, 0, 15);
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips', 2, 90, 0, 15);
             INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips', 3, 90, 0, 15);
+
+            -- Dips SS sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips - SS', 1, 60, 0, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips - SS', 2, 60, 0, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Dips - SS', 3, 60, 0, 15);
             
             -- Lateral Raise sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 1, 90, 25, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 2, 90, 25, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 3, 90, 25, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 1, 60, 20, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 2, 60, 20, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lateral Raise', 3, 60, 20, 12);
             
             -- Tricep Extension sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 1, 90, 30, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 2, 90, 30, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 3, 90, 30, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 1, 60, 33, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 2, 60, 33, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Tricep Extension', 3, 60, 33, 12);
             
-            -- Leg Raises sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 1, 90, 0, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 2, 90, 0, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 3, 90, 0, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Raises', 4, 90, 0, 15);
+            -- Hanging Leg Raise sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hanging Leg Raise', 1, 60, 0, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hanging Leg Raise', 2, 60, 0, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hanging Leg Raise', 3, 60, 0, 12);
             
-            -- BB Curl sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl', 1, 90, 45, 21);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl', 2, 90, 45, 21);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl', 3, 90, 45, 21);
+            -- BB Curl 7s sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl 7s', 1, 90, 45, 21);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl 7s', 2, 90, 45, 21);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BB Curl 7s', 3, 90, 45, 21);
             
-            -- Lat Pull sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pull', 1, 90, 143, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pull', 2, 90, 143, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pull', 3, 90, 143, 12);
+            -- Lat Pulldown sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pulldown', 1, 60, 143, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pulldown', 2, 60, 143, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Lat Pulldown', 3, 60, 143, 12);
             
             -- Hammer Curl sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 1, 90, 30, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 2, 90, 30, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 3, 90, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 1, 60, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 2, 60, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hammer Curl', 3, 60, 30, 12);
             
             -- Face Pull sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 1, 90, 20, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 2, 90, 20, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 3, 90, 20, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 1, 60, 15, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 2, 60, 15, 15);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Face Pull', 3, 60, 15, 15);
             
-            -- Cable Crunches sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 1, 90, 60, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 2, 90, 60, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 3, 90, 60, 15);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunches', 4, 90, 60, 15);
+            -- Cable Crunch sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunch', 1, 60, 60, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunch', 2, 60, 60, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Cable Crunch', 3, 60, 60, 12);
             
             -- DB Bench sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 1, 120, 65, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 2, 120, 65, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 3, 120, 65, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 4, 120, 65, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 1, 90, 65, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 2, 90, 65, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 3, 90, 65, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Bench', 4, 90, 65, 12);
             
             -- BTB Shrug sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 1, 90, 50, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 2, 90, 50, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 3, 90, 50, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 1, 60, 50, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 2, 60, 50, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('BTB Shrug', 3, 60, 50, 12);
             
             -- Hamstring Curl sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 1, 90, 100, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 2, 90, 100, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 3, 90, 100, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 1, 60, 45, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 2, 60, 45, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Hamstring Curl', 3, 60, 45, 12);
             
             -- Leg Extension sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 1, 90, 120, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 2, 90, 120, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 3, 90, 120, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 1, 60, 120, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 2, 60, 120, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Leg Extension', 3, 60, 120, 12);
             
             -- DB Curl sets
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 1, 90, 30, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 2, 90, 30, 12);
-            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 3, 90, 30, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 1, 60, 35, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 2, 60, 35, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('DB Curl', 3, 60, 35, 12);
+            
+            -- Wrist Curl sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Wrist Curl', 1, 90, 10, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Wrist Curl', 2, 90, 10, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Wrist Curl', 3, 90, 10, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Wrist Curl', 4, 90, 10, 12);
+            
+            -- Reverse Wrist Curl sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Reverse Wrist Curl', 1, 60, 10, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Reverse Wrist Curl', 2, 60, 10, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Reverse Wrist Curl', 3, 60, 10, 12);
+            
+            -- Sissy Squat sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Sissy Squat', 1, 60, 0, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Sissy Squat', 2, 60, 0, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Sissy Squat', 3, 60, 0, 12);
+            
+            -- Calf Raise sets
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Calf Raise', 1, 60, 80, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Calf Raise', 2, 60, 80, 12);
+            INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES ('Calf Raise', 3, 60, 80, 12);
         `);
 
         db.execSync(`
-            INSERT INTO days (name, color) VALUES ('Push', 'red');
-            INSERT INTO days (name, color) VALUES ('Pull', 'blue');
-            INSERT INTO days (name, color) VALUES ('Upper', 'purple');
-            INSERT INTO days (name, color) VALUES ('Lower & Arms', 'green');
-            INSERT INTO days (name, color) VALUES ('Lower & A', 'pink');
-            INSERT INTO days (name, color) VALUES ('Lower & B', 'brown');
+            INSERT INTO days (name, color) VALUES ('Push - 5x5', 'red');
+            INSERT INTO days (name, color) VALUES ('Push - 3x5', 'red');
+            INSERT INTO days (name, color) VALUES ('Push - 531', 'red');
+            INSERT INTO days (name, color) VALUES ('Pull - 5x5', 'blue');
+            INSERT INTO days (name, color) VALUES ('Pull - 3x5', 'blue');
+            INSERT INTO days (name, color) VALUES ('Pull - 531', 'blue');
+            INSERT INTO days (name, color) VALUES ('Upper - 5x5', 'purple');
+            INSERT INTO days (name, color) VALUES ('Upper - 3x5', 'purple');
+            INSERT INTO days (name, color) VALUES ('Upper - 531', 'purple');
+            INSERT INTO days (name, color) VALUES ('Lower & Arms - 5x5', 'green');
+            INSERT INTO days (name, color) VALUES ('Lower & Arms - 3x5', 'green');
+            INSERT INTO days (name, color) VALUES ('Lower & Arms - 531', 'green');
         `);
 
         // Insert day details for mock program
             db.execSync(`
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 1, 'Bench', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 2, 'DB OHP', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 3, 'Dips', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 4, NULL, 'Lateral Raise', 'Tricep Extension');
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push', 5, 'Leg Raises', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 5x5', 1, 'Bench - 5x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 5x5', 2, 'DB OHP', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 5x5', 3, 'Dips', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 5x5', 4, NULL, 'Lateral Raise', 'Tricep Extension');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 5x5', 5, NULL, 'Hanging Leg Raise', 'Sissy Squat');
+
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 3x5', 1, 'Bench - 3x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 3x5', 2, 'DB OHP', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 3x5', 3, 'Dips', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 3x5', 4, NULL, 'Lateral Raise', 'Tricep Extension');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 3x5', 5, NULL, 'Hanging Leg Raise', 'Sissy Squat');
+
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 531', 1, 'Bench - 531', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 531', 2, 'DB OHP', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 531', 3, 'Dips', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 531', 4, NULL, 'Lateral Raise', 'Tricep Extension');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Push - 531', 5, NULL, 'Hanging Leg Raise', 'Sissy Squat');
             `);
 
             db.execSync(`
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 1, 'Deadlift', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 2, 'BB Curl', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 3, 'Lat Pull', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 4, NULL, 'Hammer Curl', 'Face Pull');
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull', 5, 'Cable Crunches', NULL, NULL);
+                -- Pull Day Variants
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 5x5', 1, 'Deadlift - 5x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 5x5', 2, 'BB Curl 7s', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 5x5', 3, NULL, 'Lat Pulldown', 'Reverse Wrist Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 5x5', 4, NULL, 'Hammer Curl', 'Face Pull');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 5x5', 5, NULL, 'Cable Crunch', 'Sissy Squat');
             `);
 
             db.execSync(`
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 1, 'OHP', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 2, 'BB Row', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 3, 'DB Bench', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 4, NULL, 'Lateral Raise', 'BTB Shrug');
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper', 5, 'Leg Raises', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 3x5', 1, 'Deadlift - 3x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 3x5', 2, 'BB Curl 7s', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 3x5', 3, NULL, 'Lat Pulldown', 'Reverse Wrist Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 3x5', 4, NULL, 'Hammer Curl', 'Face Pull');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 3x5', 5, NULL, 'Cable Crunch', 'Sissy Squat');
             `);
 
             db.execSync(`
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 1, 'Squat', NULL, NULL);
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 2, NULL, 'Hamstring Curl', 'Dips');
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 3, NULL, 'Leg Extension', 'DB Curl');
-                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms', 4, 'Cable Crunches', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 531', 1, 'Deadlift - 531', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 531', 2, 'BB Curl 7s', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 531', 3, NULL, 'Lat Pulldown', 'Reverse Wrist Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 531', 4, NULL, 'Hammer Curl', 'Face Pull');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Pull - 531', 5, NULL, 'Cable Crunch', 'Sissy Squat');
             `);
 
             db.execSync(`
-                INSERT INTO programs (name) VALUES ('PPUL');
+                -- Upper Day Variants
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 5x5', 1, 'OHP - 5x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 5x5', 2, 'BB Row - 5x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 5x5', 3, NULL, 'DB Bench', 'Wrist Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 5x5', 4, NULL, 'Lateral Raise', 'BTB Shrug');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 5x5', 5, NULL, 'Cable Crunch', 'Sissy Squat');
+            `);
+
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 3x5', 1, 'OHP - 3x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 3x5', 2, 'BB Row - 3x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 3x5', 3, NULL, 'DB Bench', 'Wrist Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 3x5', 4, NULL, 'Lateral Raise', 'BTB Shrug');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 3x5', 5, NULL, 'Cable Crunch', 'Sissy Squat');
+            `);
+
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 531', 1, 'OHP - 531', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 531', 2, 'BB Row - 531', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 531', 3, NULL, 'DB Bench', 'Wrist Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 531', 4, NULL, 'Lateral Raise', 'BTB Shrug');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Upper - 531', 5, NULL, 'Cable Crunch', 'Sissy Squat');
+            `);
+
+            db.execSync(`
+                -- Lower & Arms Day Variants
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 5x5', 1, 'Squat - 5x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 5x5', 2, NULL, 'Hamstring Curl', 'Dips - SS');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 5x5', 3, NULL, 'Leg Extension', 'DB Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 5x5', 4, NULL, 'Hanging Leg Raise', 'Calf Raise');
+            `);
+
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 3x5', 1, 'Squat - 3x5', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 3x5', 2, NULL, 'Hamstring Curl', 'Dips - SS');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 3x5', 3, NULL, 'Leg Extension', 'DB Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 3x5', 4, NULL, 'Hanging Leg Raise', 'Calf Raise');
+            `);
+
+            db.execSync(`
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 531', 1, 'Squat - 531', NULL, NULL);
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 531', 2, NULL, 'Hamstring Curl', 'Dips - SS');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 531', 3, NULL, 'Leg Extension', 'DB Curl');
+                INSERT INTO day_details (name, exercise_index, exercise, superset_1, superset_2) VALUES ('Lower & Arms - 531', 4, NULL, 'Hanging Leg Raise', 'Calf Raise');
+            `);
+
+            db.execSync(`
+                INSERT INTO programs (name) VALUES ('PPUL - 5x5');
+                INSERT INTO programs (name) VALUES ('PPUL - 3x5');
+                INSERT INTO programs (name) VALUES ('PPUL - 531');
                 `);
 
             db.execSync(`
-                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Push', 0);
-                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Pull', 1);
-                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Upper', 2);
-                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL', 'Lower & Arms', 3);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 5x5', 'Push - 5x5', 0);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 5x5', 'Pull - 5x5', 1);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 5x5', 'Upper - 5x5', 2);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 5x5', 'Lower & Arms - 5x5', 3);
+
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 3x5', 'Push - 3x5', 0);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 3x5', 'Pull - 3x5', 1);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 3x5', 'Upper - 3x5', 2);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 3x5', 'Lower & Arms - 3x5', 3);
+
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 531', 'Push - 531', 0);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 531', 'Pull - 531', 1);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 531', 'Upper - 531', 2);
+                INSERT INTO program_details (name, day, day_index) VALUES ('PPUL - 531', 'Lower & Arms - 531', 3);
                 `);
 
             db.execSync(`
                 INSERT INTO current_program (program)
-                VALUES ('PPUL');
+                VALUES ('PPUL - 5x5');
             `);
     }
     catch (err) {
