@@ -37,9 +37,9 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
                 superset_2 TEXT NULL,
                 PRIMARY KEY (name, exercise_index),
                 FOREIGN KEY (name) REFERENCES days(name) ON DELETE CASCADE,
-                FOREIGN KEY (exercise) REFERENCES exercises(name) ON DELETE CASCADE,
-                FOREIGN KEY (superset_1) REFERENCES exercises(name) ON DELETE CASCADE,
-                FOREIGN KEY (superset_2) REFERENCES exercises(name) ON DELETE CASCADE
+                FOREIGN KEY (exercise) REFERENCES exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (superset_1) REFERENCES exercises(name) ON DELETE SET NULL,
+                FOREIGN KEY (superset_2) REFERENCES exercises(name) ON DELETE SET NULL
             );
         `);
 
@@ -53,11 +53,11 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
         db.execSync(`
             CREATE TABLE IF NOT EXISTS program_details (
                 name TEXT NOT NULL,
-                day TEXT NOT NULL,
                 day_index INTEGER NOT NULL,
+                day TEXT NULL,
                 PRIMARY KEY (name, day_index),
                 FOREIGN KEY (name) REFERENCES programs(name) ON DELETE CASCADE,
-                FOREIGN KEY (day) REFERENCES days(name) ON DELETE CASCADE
+                FOREIGN KEY (day) REFERENCES days(name) ON DELETE SET NULL
             );
         `);
 

@@ -129,7 +129,8 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
     if (color == null) return 'Must include a color!';
     if (exercises === null ||exercises.length === 0) return 'Must have at least one exercise!';
     const day = db.getFirstSync('SELECT * FROM days WHERE name = ?', newName);
-    const programsWithDay = db.getAllSync('SELECT * FROM program_details WHERE day = ?', originalName) as any[];
+    const programDetailsWithDay = db.getAllSync('SELECT * FROM program_details WHERE day = ?', originalName) as any[];
+    console.log(programDetailsWithDay);
     if (day != null && originalName != newName) return 'Day with that name already exists!';
     db.runSync('DELETE FROM days WHERE name = ?', originalName);
     db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", newName, color);
@@ -142,8 +143,9 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
             db.runSync(`INSERT INTO day_details (name, exercise_index, exercise) VALUES (?, ?, ?)`, newName, index, exercise);
         }
     });
-    programsWithDay.forEach((program) => {
-        db.runSync(`UPDATE programs SET day = ? WHERE name = ?`, newName, program.name);
+    console.log(newName);
+    programDetailsWithDay.forEach((program) => {
+        db.runSync(`UPDATE program_details SET day = ? WHERE name = ? AND day_index = ?`, newName, program.name, program.day_index);
     });
     return 'success';
 }
@@ -190,8 +192,6 @@ export function replaceExercise(db: SQLite.SQLiteDatabase, originalName: string,
     if (sets.some(set => set.rest < 0 ||  set.weight < 0 || set.reps < 0)) return 'Values must be positive!';
     const exercise = db.getFirstSync('SELECT * FROM exercises WHERE name = ?', newName);
     if (originalName != newName && exercise != null) return 'Exercise with that name already exists!';
-    const supersetsWithExerciseAsFirst = db.getAllSync('SELECT * FROM supersets WHERE exercise_1 = ?', originalName) as any[];
-    const supersetsWithExerciseAsSecond = db.getAllSync('SELECT * FROM supersets WHERE exercise_2 = ?', originalName) as any[];
     const dayDetailsWithExercise = db.getAllSync('SELECT * FROM day_details WHERE exercise = ?', originalName) as any[];
     db.runSync('DELETE FROM exercises WHERE name = ?', originalName);
     db.runSync('INSERT INTO exercises (name) VALUES (?)', newName);
@@ -202,13 +202,6 @@ export function replaceExercise(db: SQLite.SQLiteDatabase, originalName: string,
     dayDetailsWithExercise.forEach((day) => {
         db.runSync('UPDATE day_details SET exercise = ? WHERE name = ? AND exercise_index = ?', newName, day.name, day.exercise_index);
     });
-    supersetsWithExerciseAsFirst.forEach((superset) => {
-        db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', newName, superset.exercise_2);
-    });
-    supersetsWithExerciseAsSecond.forEach((superset) => {
-        db.runSync('INSERT INTO supersets (exercise_1, exercise_2) VALUES (?, ?)', superset.exercise_1, newName);
-    });
-    
     const dayDetailsWithSuperset = db.getAllSync('SELECT * FROM day_details WHERE superset_1 = ? OR superset_2 = ?', originalName, originalName) as any[];
     dayDetailsWithSuperset.forEach((day) => {
         const updatedSuperset1 = day.superset_1 === originalName ? newName : day.superset_1;
