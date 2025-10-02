@@ -1,7 +1,8 @@
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
 import {useRef, useState} from "react";
-import {createNewDay, getDayByName, getExerciseNames, getExercisesToNumSets, replaceDay} from "@/db/programDBFunctions";
+import {getDayByName, getExerciseNames, getExercisesToNumSets, replaceDay} from "@/db/programDBFunctions";
+import {getProgram} from "@/db/dbFunctions";
 import Toast from 'react-native-toast-message';
 import { MaterialIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -10,7 +11,7 @@ import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 export default function EditDay() {
     const {editDay, setEditDay} = useProgramStore();
-    const {db} = useStore();
+    const {db, reset, setProgram} = useStore();
     const exercisesToNumSets = getExercisesToNumSets(db);
     const exercises = getExerciseNames(db);
     const day = getDayByName(db, editDay!);
@@ -113,6 +114,8 @@ export default function EditDay() {
                             text2Style: {fontSize: 30},
                         });
                         setEditDay(null);
+                        reset();
+                        setProgram(getProgram(db));
                     }
                     else {
                         Toast.show({
