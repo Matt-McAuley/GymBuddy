@@ -83,7 +83,6 @@ const dbTeardown = (db:  SQLite.SQLiteDatabase) => {
     db.execSync(`
         DROP TABLE IF EXISTS exercises;
         DROP TABLE IF EXISTS exercise_details;
-        DROP TABLE IF EXISTS supersets;
         DROP TABLE IF EXISTS days;
         DROP TABLE IF EXISTS day_details;
         DROP TABLE IF EXISTS programs;

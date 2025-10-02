@@ -22,7 +22,7 @@ export default function ExerciseDisplay(props: superSetExercisePropsType) {
                 <Text className={'font-bold text-4xl mb-4'}>{exercise.exercise2.name}</Text>
                 <View className={'flex-row justify-center items-center mb-2'}>
                     <Text className={'text-3xl flex-1 text-center'}>{(set < exercise.exercise1.sets.length) ? exercise.exercise1.sets[set].weight : exercise.exercise1.sets[0].weight} lbs</Text>
-                    <Text className={'text-3xl'}> & </Text>
+                    <Text className={'text-3xl'}>  </Text>
                     <Text className={'text-3xl flex-1 text-center'}>{(set < exercise.exercise2.sets.length) ? exercise.exercise2.sets[set].weight : exercise.exercise2.sets[0].weight} lbs</Text>
                 </View>
             </View>

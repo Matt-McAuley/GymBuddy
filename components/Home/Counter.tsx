@@ -1,4 +1,4 @@
-import {Image, Text, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 
@@ -59,8 +59,10 @@ export default function Counter() {
             </View>
             {(!isSuperSet(exercise)) ?
             <View className={'flex-row justify-between items-center w-42 p-3'}>
-                <Text className={'text-4xl font-bold'}>Reps:</Text>
-                <Text className={'text-3xl font-bold'}>{reps}</Text>
+                <Text className={'text-4xl font-bold mr-2'}>Reps:</Text>
+                <ScrollView horizontal>
+                    <Text className={'text-3xl font-bold'}>{reps}</Text>
+                </ScrollView>
             </View>
                 :
             <View className={'flex-row justify-between items-center w-42 p-3'}>
