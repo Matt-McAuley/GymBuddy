@@ -30,12 +30,20 @@ export default function EditExercise() {
                 defaultValue={exerciseData.name}
                 placeholderTextColor={'gray'}>
             </TextInput>
-            <View className="h-20 w-full text-center flex-row justify-around items-center">
+            <View className="h-15 w-full text-center flex-row justify-around items-center -mb-8">
                 <View className="w-[50px]"></View>
                 <View className="flex-1 flex-row justify-around items-center">
-                    <Text className="text-3xl font-bold text-center flex-1 border-r-2">Rest</Text>
-                    <Text className="text-3xl font-bold text-center flex-1 border-r-2">Weight</Text>
-                    <Text className="text-3xl font-bold text-center flex-1">Reps</Text>
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">Rest</Text>
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">Weight</Text>
+                    <Text className="text-2xl font-bold text-center flex-1">Reps</Text>
+                </View>
+            </View>
+            <View className="h-15 w-full text-center flex-row justify-around items-center">
+                <View className="w-[50px]"></View>
+                <View className="flex-1 flex-row justify-around items-center">
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">(s)</Text>
+                    <Text className="text-2xl font-bold text-center flex-1 border-r-2">(lbs)</Text>
+                    <Text className="text-2xl font-bold text-center flex-1">(#)</Text>
                 </View>
             </View>
         </View>

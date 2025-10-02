@@ -16,10 +16,15 @@ export default function ExerciseDisplay(props: superSetExercisePropsType) {
     }
 
     return (
-        <View className={'flex-col justify-between items-center h-60 w-full bg-amber-50 border-4 border-black p-7 rounded-2xl'}>
+        <View className={'flex-col justify-between items-center h-68 w-full bg-amber-50 border-4 border-black p-5 rounded-2xl'}>
             <View className={'flex-col justify-center items-center'}>
-                <Text className={'font-bold text-3xl'}>{exercise.exercise1.name} : {(set < exercise.exercise1.sets.length) ? exercise.exercise1.sets[set].weight : exercise.exercise1.sets[0].weight}</Text>
-                <Text className={'font-bold text-3xl'}>{exercise.exercise2.name} : {(set < exercise.exercise2.sets.length) ? exercise.exercise2.sets[set].weight : exercise.exercise2.sets[0].weight}</Text>
+                <Text className={'font-bold text-4xl -mt-2'}>{exercise.exercise1.name}</Text>
+                <Text className={'font-bold text-4xl mb-4'}>{exercise.exercise2.name}</Text>
+                <View className={'flex-row justify-center items-center mb-2'}>
+                    <Text className={'text-3xl flex-1 text-center'}>{(set < exercise.exercise1.sets.length) ? exercise.exercise1.sets[set].weight : exercise.exercise1.sets[0].weight} lbs</Text>
+                    <Text className={'text-3xl'}> & </Text>
+                    <Text className={'text-3xl flex-1 text-center'}>{(set < exercise.exercise2.sets.length) ? exercise.exercise2.sets[set].weight : exercise.exercise2.sets[0].weight} lbs</Text>
+                </View>
             </View>
             <View className={'flex-row justify-between items-center w-full'}>
                 <View className={'flex-col justify-center items-center'}>
