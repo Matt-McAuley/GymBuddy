@@ -5,11 +5,24 @@ import { startLiveActivity, stopLiveActivity, pause, resume, addTimerListener, s
 
 export default function Timer() {
     const { isSuperSet, set } = useStore();
+
+    const superSetOneExericse = () => {
+        if (!isSuperSet(exercise)) return -1;
+        if (set < exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) return -1;
+        if (set < exercise.exercise1.sets.length && set > exercise.exercise2.sets.length) return 0;
+        if (set > exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) return 1;
+    }
     
     const getStartTime = () => {
         if (isSuperSet(exercise)) {
-            if (set < exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) {
+            if (superSetOneExericse() == -1) {
                 return Math.max(exercise.exercise1.sets[set].rest, exercise.exercise2.sets[set].rest);
+            }
+            if (superSetOneExericse() == 0) {
+                return exercise.exercise1.sets[set].rest;
+            }
+            if (superSetOneExericse() == 1) {
+                return exercise.exercise2.sets[set].rest;
             }
             return Math.max(exercise.exercise1.sets[0].rest, exercise.exercise2.sets[0].rest);
         }
@@ -19,9 +32,24 @@ export default function Timer() {
         return exercise.sets[0].rest;
     }
 
+    const getExerciseName = () => {
+        if (isSuperSet(exercise)) {
+            if (superSetOneExericse() == -1) {
+                return exercise.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
+            }
+            if (superSetOneExericse() == 0) {
+                return exercise.exercise1.name;
+            }
+            if (superSetOneExericse() == 1) {
+                return exercise.exercise2.name;
+            }
+            return exercise.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
+        }
+        return exercise.name;
+    }
+
     const exercise = useStore((state) => state.exercise());
-    const exerciseName = !isSuperSet(exercise) ? exercise.name : exercise.exercise1.name.split(' ').map(
-        (s) => s[0]).join('') + ' & ' + exercise.exercise2.name.split(' ').map((s) => s[0]).join('');
+    const [exerciseName, setExerciseName] = useState(getExerciseName());
     const [startedAt, setStartedAt] = useState<Date | null>(null);
     const [startTime, setStartTime] = useState(getStartTime());
     const [pausedAt, setPausedAt] = useState<Date | null>(null);
@@ -29,6 +57,7 @@ export default function Timer() {
 
     useEffect(() => {
         const newStartTime = getStartTime();
+        setExerciseName(getExerciseName());
         setStartTime(newStartTime);
         setStartedAt(null);
         setPausedAt(null);

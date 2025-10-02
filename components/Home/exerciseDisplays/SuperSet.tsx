@@ -1,10 +1,18 @@
 import {View, Text} from "react-native";
 import {useStore} from "@/store";
 import {exerciseType, superSetType} from "@/types/programType";
+import Exercise from "./Exercise";
 
 export default function ExerciseDisplay(props: superSetExercisePropsType) {
     const { set, isSuperSet } = useStore();
     const { exercise, nextExercise, prevExercise } = props;
+
+    const superSetOneExericse = () => {
+        if (!isSuperSet(exercise)) return -1;
+        if (set < exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) return -1;
+        if (set < exercise.exercise1.sets.length && set > exercise.exercise2.sets.length) return 0;
+        if (set > exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) return 1;
+    }
 
     const superSetNameDisplay = (superSet : superSetType) => {
         return superSet.exercise1.name.split(' ').map((s) => s[0]).join('') + ' & '
@@ -15,7 +23,7 @@ export default function ExerciseDisplay(props: superSetExercisePropsType) {
         return superSet.exercise1.sets[0].weight + ' | ' + superSet.exercise2.sets[0].weight;
     }
 
-    return (
+    return (set < exercise.exercise1.sets.length && set < exercise.exercise2.sets.length) ? (
         <View className={'flex-col justify-between items-center h-68 w-full bg-amber-50 border-4 border-black p-5 rounded-2xl'}>
             <View className={'flex-col justify-center items-center'}>
                 <Text className={'font-bold text-4xl -mt-2'}>{exercise.exercise1.name}</Text>
@@ -40,6 +48,11 @@ export default function ExerciseDisplay(props: superSetExercisePropsType) {
                         superSetWeightDisplay(nextExercise) : nextExercise.sets[0].weight}</Text>
                 </View>
             </View>
+        </View>
+    ) : (
+        <View>
+            <Exercise exercise={(superSetOneExericse() == 0) ? exercise.exercise1 : exercise.exercise2} 
+            nextExercise={nextExercise} prevExercise={prevExercise}/>
         </View>
     );
 }

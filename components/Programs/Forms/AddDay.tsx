@@ -254,14 +254,14 @@ export default function AddDay() {
                                             });
                                             return ex;
                                         }
-                                        if (ex.exercise2.numSets !== undefined && ex.exercise2.numSets !== itemNumSets) {
-                                            Toast.show({
-                                                type: 'error',
-                                                text1: 'Error',
-                                                text2: 'Exercises in supersets must have the same number of sets',
-                                            });
-                                            return ex;
-                                        }
+                                        // if (ex.exercise2.numSets !== undefined && ex.exercise2.numSets !== itemNumSets) {
+                                        //     Toast.show({
+                                        //         type: 'error',
+                                        //         text1: 'Error',
+                                        //         text2: 'Exercises in supersets must have the same number of sets',
+                                        //     });
+                                        //     return ex;
+                                        // }
                                     }
                                     return {exercise1: {id: ex.exercise1.id, name: item, numSets: itemNumSets}, exercise2: ex.exercise2};
                                 }
@@ -275,14 +275,14 @@ export default function AddDay() {
                                             });
                                             return ex;
                                         }
-                                        if (ex.exercise1.numSets !== undefined && ex.exercise1.numSets !== itemNumSets) {
-                                            Toast.show({
-                                                type: 'error',
-                                                text1: 'Error',
-                                                text2: 'Must have the same number of sets',
-                                            });
-                                            return ex;
-                                        }
+                                        // if (ex.exercise1.numSets !== undefined && ex.exercise1.numSets !== itemNumSets) {
+                                        //     Toast.show({
+                                        //         type: 'error',
+                                        //         text1: 'Error',
+                                        //         text2: 'Must have the same number of sets',
+                                        //     });
+                                        //     return ex;
+                                        // }
                                         return {exercise1: ex.exercise1, exercise2: {id: ex.exercise2.id, name: item, numSets: itemNumSets}};
                                     }
                                 }

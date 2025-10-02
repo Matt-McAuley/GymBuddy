@@ -4,7 +4,6 @@ import Counter from "@/components/Home/Counter";
 import ExerciseDisplay from "@/components/Home/ExerciseDisplay";
 import {useEffect, useRef, useState} from "react";
 import {addMockProgram, dbSetup, dbTeardown, getProgram} from "@/db/dbFunctions";
-import { Dropdown } from "react-native-element-dropdown";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import {useStore} from "@/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
