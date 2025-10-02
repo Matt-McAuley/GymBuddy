@@ -45,9 +45,9 @@ export default function Index() {
     }
 
     useEffect(() => {
-        dbTeardown(db);
-        dbSetup(db);
-        addMockProgram(db);
+        // dbTeardown(db);
+        // dbSetup(db);
+        // addMockProgram(db);
         retrieveOverwrittenValues().then(() => {
             setProgram(getProgram(db));
             retrieveOtherValues().then(() => {
