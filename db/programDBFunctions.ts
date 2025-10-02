@@ -59,7 +59,7 @@ export function getProgramByName(db: SQLite.SQLiteDatabase, programName: string)
 }
 
 export function replaceProgram(db: SQLite.SQLiteDatabase, oldProgramName: string | null, newProgramName: string | null, days: string[]) {
-    if (newProgramName == null) return 'Must include a program name!';
+    if (newProgramName == null || newProgramName.trim() === '') return 'Must include a program name!';
     if (days.length === 0) return 'Must have at least one day!';
     const program = db.getFirstSync('SELECT * FROM programs WHERE name = ?', newProgramName);
     if (program != null && oldProgramName != newProgramName) return 'Program with that name already exists!';

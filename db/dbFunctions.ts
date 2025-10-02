@@ -4,6 +4,10 @@ import * as SQLite from "expo-sqlite";
 const dbSetup = (db:  SQLite.SQLiteDatabase) => {
     try {
         db.execSync(`
+            PRAGMA foreign_keys=on;
+        `);
+
+        db.execSync(`
             CREATE TABLE IF NOT EXISTS exercises (
                 name TEXT PRIMARY KEY NOT NULL
             );
@@ -67,10 +71,6 @@ const dbSetup = (db:  SQLite.SQLiteDatabase) => {
                program NULL,
                FOREIGN KEY (program) REFERENCES programs(name) ON DELETE SET NULL
            );
-        `);
-
-        db.execSync(`
-            PRAGMA foreign_keys=on;
         `);
     }
     catch (err) {

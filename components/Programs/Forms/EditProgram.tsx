@@ -99,6 +99,7 @@ export default function EditProgram() {
                             setCurrentProgram(db, programData.name.trim());
                         reset();
                         setProgram(getProgram(db));
+                        setEditProgram(null);
                     }
                     else {
                         Toast.show({
@@ -106,10 +107,7 @@ export default function EditProgram() {
                             text1: 'Error',
                             text2: result,
                         });
-                        setNullIfCurrentProgram(db, originalName);
-                        setProgram(getProgram(db));
                     }
-                    setEditProgram(null);
                 }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
             </TouchableOpacity>
