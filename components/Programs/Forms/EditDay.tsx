@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useProgramStore, useStore} from "@/store";
 import {useRef, useState} from "react";
-import {getDayByName, getExerciseNames, getExercisesToNumSets, replaceDay} from "@/db/programDBFunctions";
+import {getDayByName, getExerciseNames, getExercisesToNumSets, replaceDay, deleteDay} from "@/db/programDBFunctions";
 import {getProgram} from "@/db/dbFunctions";
 import Toast from 'react-native-toast-message';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -29,7 +29,7 @@ export default function EditDay() {
         }
         return exercise;
     })});
-    const [index, setIndex] = useState(0);
+    const [index, setIndex] = useState(counter);
     const colorBottomSheetRef = useRef<BottomSheet>(null);
     const exerciseBottomSheetRef = useRef<BottomSheet>(null);
     const [sheetOpen, setSheetOpen] = useState(false);
@@ -126,6 +126,20 @@ export default function EditDay() {
                     }
                 }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity className={'h-15 bg-red-500 mb-4 p-3 w-full'}
+                onPress={() => {
+                    deleteDay(db, dayData.name);
+                    Toast.show({
+                        type: "success",
+                        text1: "Success",
+                        text2: "Day Deleted",
+                    });
+                    reset();
+                    setProgram(getProgram(db));
+                    setEditDay(null);
+                }}>
+                <Text className={'text-center text-4xl color-white font-bold'}>Delete</Text>
             </TouchableOpacity>
         </View>
     );

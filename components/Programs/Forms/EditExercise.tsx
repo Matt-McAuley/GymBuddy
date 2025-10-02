@@ -52,7 +52,7 @@ export default function EditExercise() {
     const FooterComponent = () => (
         <View className={'p-4'}>
             <TouchableOpacity onPress={() => {
-                setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: index, rest: '90', weight: '225', reps: '5'}]}); 
+                setExerciseData({...exerciseData, sets: [...(exerciseData.sets || []), {id: index, rest: '', weight: '', reps: ''}]}); 
                 setIndex(index + 1);
             }}
                 className={'w-full h-25 border-4 border-dashed border-gray-500 rounded-2xl mb-5 flex-row justify-around items-center'}>
@@ -75,11 +75,10 @@ export default function EditExercise() {
                                 text1: 'Error',
                                 text2: 'Please enter valid numbers for each set.',
                             });
-                            setEditExercise(null);
                             return;
                         }
                     }
-                    const result = replaceExercise(db, editExercise!, exerciseData.name, exerciseDataSets);
+                    const result = replaceExercise(db, exercise.name, exerciseData.name, exerciseDataSets);
                     if (result == 'success') {
                         Toast.show({
                             type: 'success',
@@ -90,6 +89,7 @@ export default function EditExercise() {
                         });
                         reset();
                         setProgram(getProgram(db));
+                        setEditExercise(null);
                     }
                     else {
                         Toast.show({
@@ -98,7 +98,6 @@ export default function EditExercise() {
                             text2: result,
                         });
                     }
-                    setEditExercise(null);
                 }}>
                 <Text className={'text-center text-4xl color-white font-bold'}>Submit</Text>
             </TouchableOpacity>

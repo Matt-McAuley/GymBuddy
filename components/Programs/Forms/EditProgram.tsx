@@ -82,10 +82,7 @@ export default function EditProgram() {
             <TouchableOpacity className={'h-15 bg-green-500 mb-4 p-3 w-full'}
                 onPress={() => {
                     const currentProgram = getProgram(db);
-                    const dayNames = programData.days
-                        .filter(day => day.name.trim() !== '')
-                        .map(day => day.name.trim());
-                    
+                    const dayNames = programData.days.map(day => day.name.trim());               
                     const result = replaceProgram(db, originalName, programData.name.trim(), dayNames);
                     if (result == 'success') {
                         Toast.show({
