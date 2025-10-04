@@ -139,6 +139,7 @@ export function replaceDay(db: SQLite.SQLiteDatabase, originalName: string, newN
     db.runSync('DELETE FROM days WHERE name = ?', originalName);
     db.runSync("INSERT INTO days (name, color) VALUES (?, ?)", newName.trim(), color.trim());
     db.runSync('DELETE FROM day_details WHERE name = ?', originalName);
+    db.runSync('DELETE FROM program_details WHERE day = ?', originalName);
     exercises.forEach((exercise, index) => {
         if (exercise.includes(',')) {
             const [superset1, superset2] = exercise.split(',').map(s => s.trim());
@@ -197,6 +198,8 @@ export function replaceExercise(db: SQLite.SQLiteDatabase, originalName: string,
     db.runSync('DELETE FROM exercises WHERE name = ?', originalName);
     db.runSync('INSERT INTO exercises (name) VALUES (?)', newName.trim());
     db.runSync('DELETE FROM exercise_details WHERE name = ?', originalName);
+    db.runSync('DELETE FROM day_details WHERE exercise = ?', originalName);
+    db.runSync('DELETE FROM day_details WHERE superset_1 = ? OR superset_2 = ?', originalName, originalName);
     sets.forEach((set, index) => {
         db.runSync("INSERT INTO exercise_details (name, set_index, rest, weight, reps) VALUES " +
             "(?, ?, ?, ?, ?)", newName.trim(), index, set.rest, set.weight, set.reps);
