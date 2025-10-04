@@ -43,10 +43,15 @@ export default function Index() {
         setCurrentScheme(scheme || '5 x 5');
     }
 
+    const resetApp = () => {
+        dbTeardown(db);
+        dbSetup(db);
+        addMockProgram(db);
+        AsyncStorage.clear();
+    }
+
     useEffect(() => {
-        // dbTeardown(db);
-        // dbSetup(db);
-        // addMockProgram(db);
+        // resetApp();
         retrieveOverwrittenValues().then(() => {
             setProgram(getProgram(db));
             retrieveOtherValues().then(() => {
