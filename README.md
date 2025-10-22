@@ -25,9 +25,6 @@ The app is not currently on the app store because there are many additional requ
 
 ### Home Screen
 
-#### Splash Screen
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/splash.png" alt="Image" style="width: 700px">
-
 #### Home Page
 <img src="https://mattmcauley.com/assets/projects/GymBuddy/Home_Screen.PNG" alt="Image" style="width: 700px">
 
