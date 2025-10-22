@@ -34,6 +34,7 @@ const useStore = create<storeType>((set) => ({
         set({ currentDay: 0 });
         set({ currentScheme: '5 x 5' });
         set({ timesReset: useStore.getState().timesReset + 1 });
+        AsyncStorage.multiRemove(['set', 'currentExercise', 'currentDay', 'currentScheme']);
     },
     retrievedSet: null,
     setRetrievedSet: (newRetrievedSet: number | null) => set({ retrievedSet: newRetrievedSet }),
