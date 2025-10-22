@@ -21,20 +21,14 @@ const useStore = create<storeType>((set) => ({
         set({currentDay: newDay});
         set({currentExercise: 0});
     },
-    currentScheme: '5 x 5',
-    setCurrentScheme: (newScheme: string) => {
-        AsyncStorage.setItem('currentScheme', newScheme);
-        set({currentScheme: newScheme});
-    },
     timesReset: 0,
     setTimesReset: (newTimesReset: number) => set({ timesReset: newTimesReset }),
     reset: () => {
         set({ set: 0 });
         set({ currentExercise: 0 });
         set({ currentDay: 0 });
-        set({ currentScheme: '5 x 5' });
         set({ timesReset: useStore.getState().timesReset + 1 });
-        AsyncStorage.multiRemove(['set', 'currentExercise', 'currentDay', 'currentScheme']);
+        AsyncStorage.multiRemove(['set', 'currentExercise', 'currentDay']);
     },
     retrievedSet: null,
     setRetrievedSet: (newRetrievedSet: number | null) => set({ retrievedSet: newRetrievedSet }),
@@ -89,8 +83,6 @@ type storeType = {
     setCurrentExercise: (newExercise: number) => void,
     currentDay: number,
     setCurrentDay: (newDay: number) => void,
-    currentScheme: string,
-    setCurrentScheme: (newScheme: string) => void,
     timesReset: number,
     setTimesReset: (newTimesReset: number) => void,
     reset: () => void,

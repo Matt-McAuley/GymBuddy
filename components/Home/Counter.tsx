@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import { useStore } from "@/store";
 
 export default function Counter() {
-    const {isSuperSet, currentScheme, set, setSet, retrievedSet, setRetrievedSet, retrievedYet} = useStore();
+    const {isSuperSet, set, setSet, retrievedSet, setRetrievedSet, retrievedYet} = useStore();
     const exercise = useStore((state) => state.exercise());
 
     const getMaxSets = () => {
@@ -49,10 +49,6 @@ export default function Counter() {
             setRetrievedSet(null);
         }
     }, [retrievedYet]);
-
-    useEffect(() => {
-        setReps(getReps());
-    }, [currentScheme]);
 
     return (
         <View className={'flex-row justify-center items-center h-35 w-full bg-amber-50 border-4 border-black p-2 rounded-2xl'}>

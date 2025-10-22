@@ -11,7 +11,7 @@ import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 export default function Index() {
     const {db, program, setProgram, currentDay, setCurrentDay, setCurrentExercise, timesReset,
-        setCurrentScheme, currentExercise, setRetrievedYet, setRetrievedSet} = useStore();
+        currentExercise, setRetrievedYet, setRetrievedSet} = useStore();
     const day = program?.days[currentDay];
     const {width} = Dimensions.get('window');
     const exerciseScrollRef = useRef<ScrollView | null >(null);
@@ -36,11 +36,9 @@ export default function Index() {
     const retrieveOtherValues = async () => {
         const day = await AsyncStorage.getItem('currentDay');
         const exercise = await AsyncStorage.getItem('currentExercise');
-        const scheme = await AsyncStorage.getItem('currentScheme');
         exerciseScrollRef.current?.scrollTo({x: parseInt(exercise || '0') * width, y: 0, animated: false});
         setCurrentDay(parseInt(day || '0'));
         setCurrentExercise(parseInt(exercise || '0'));
-        setCurrentScheme(scheme || '5 x 5');
     }
 
     const resetApp = () => {
