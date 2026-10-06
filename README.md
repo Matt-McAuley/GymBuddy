@@ -23,76 +23,148 @@ The app is not currently on the app store because there are many additional requ
 
 ## Images
 
-### Home Screen
+<details>
+  <summary><strong>📱 Home Screen Features (4 Screenshots)</strong></summary>
+  <br>
+  <table style="width: 100%; border-collapse: collapse; border: none;">
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Home_Screen.PNG" width="100%"><br>
+        <sub><b>Home Page</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Live_Activity.PNG" width="100%"><br>
+        <sub><b>Live Activity</b></sub>
+      </td>
+    </tr>
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Home_Superset.PNG" width="100%"><br>
+        <sub><b>Superset</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Home_Bottom_Sheet.PNG" width="100%"><br>
+        <sub><b>Day Selection Bottom Sheet</b></sub>
+      </td>
+    </tr>
+  </table>
+</details>
 
-#### Home Page
-<img src="./assets/images/readme/Home_Screen.PNG" alt="Image" style="width: 700px">
+<br>
 
-#### Live Activity
-<img src="./assets/images/readme/Live_Activity.PNG" alt="Image" style="width: 700px">
+<details>
+  <summary><strong>📋 Programs Page Features (4 Screenshots)</strong></summary>
+  <br>
+  <table style="width: 100%; border-collapse: collapse; border: none;">
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Programs.PNG" width="100%"><br>
+        <sub><b>Programs Display</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Edit_Program_Top.PNG" width="100%"><br>
+        <sub><b>Edit Program (Top)</b></sub>
+      </td>
+    </tr>
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Edit_Program_Bottom.PNG" width="100%"><br>
+        <sub><b>Edit Program (Bottom)</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Program_Bottom_Sheet.PNG" width="100%"><br>
+        <sub><b>Edit Program Bottom Sheet</b></sub>
+      </td>
+    </tr>
+  </table>
+</details>
 
-#### Superset
-<img src="./assets/images/readme/Home_Superset.PNG" alt="Image" style="width: 700px">
+<br>
 
-#### Day Selection Bottom Sheet
-<img src="./assets/images/readme/Home_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
+<details>
+  <summary><strong>📅 Days Page Features (4 Screenshots)</strong></summary>
+  <br>
+  <table style="width: 100%; border-collapse: collapse; border: none;">
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Days.PNG" width="100%"><br>
+        <sub><b>Days Display</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Edit_Day_Top.PNG" width="100%"><br>
+        <sub><b>Edit Day (Top)</b></sub>
+      </td>
+    </tr>
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Edit_Day_Bottom.PNG" width="100%"><br>
+        <sub><b>Edit Day (Bottom)</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Day_Bottom_Sheet.PNG" width="100%"><br>
+        <sub><b>Edit Day Bottom Sheet</b></sub>
+      </td>
+    </tr>
+  </table>
+</details>
 
-### Programs Page
+<br>
 
-#### Programs Display
-<img src="./assets/images/readme/Programs.PNG" alt="Image" style="width: 700px">
+<details>
+  <summary><strong>🏋️ Exercises Page Features (4 Screenshots)</strong></summary>
+  <br>
+  <table style="width: 100%; border-collapse: collapse; border: none;">
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Exercises.PNG" width="100%"><br>
+        <sub><b>Exercises Display</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Edit_Exercise_Top.PNG" width="100%"><br>
+        <sub><b>Edit Exercise (Top)</b></sub>
+      </td>
+    </tr>
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Edit_Exercise_Bottom.PNG" width="100%"><br>
+        <sub><b>Edit Exercise (Bottom)</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Exercise_Bottom_Sheet.PNG" width="100%"><br>
+        <sub><b>Edit Exercise Bottom Sheet</b></sub>
+      </td>
+    </tr>
+  </table>
+</details>
 
-#### Edit Program 1
-<img src="./assets/images/readme/Edit_Program_Top.PNG" alt="Image" style="width: 700px">
+<br>
 
-#### Edit Program 2
-<img src="./assets/images/readme/Edit_Program_Bottom.PNG" alt="Image" style="width: 700px">
-
-#### Edit Program Bottom Sheet
-<img src="./assets/images/readme/Program_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
-
-### Days Page
-
-#### Days Display
-<img src="./assets/images/readme/Days.PNG" alt="Image" style="width: 700px">
-
-#### Edit Day 1
-<img src="./assets/images/readme/Edit_Day_Top.PNG" alt="Image" style="width: 700px">
-
-#### Edit Day 2
-<img src="./assets/images/readme/Edit_Day_Bottom.PNG" alt="Image" style="width: 700px">
-
-#### Edit Day Bottom Sheet
-<img src="./assets/images/readme/Day_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
-
-### Exercises Page
-
-#### Exercises Display
-<img src="./assets/images/readme/Exercises.PNG" alt="Image" style="width: 700px">
-
-#### Edit Exercise 1
-<img src="./assets/images/readme/Edit_Exercise_Top.PNG" alt="Image" style="width: 700px">
-
-#### Edit Exercise 2
-<img src="./assets/images/readme/Edit_Exercise_Bottom.PNG" alt="Image" style="width: 700px">
-
-#### Edit Exercise Bottom Sheet
-<img src="./assets/images/readme/Exercise_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
-
-
-### Music Page
-
-#### Home Page
-<img src="./assets/images/readme/Music_Home.PNG" alt="Image" style="width: 700px">
-
-#### Pausing/Liking
-<img src="./assets/images/readme/Music_PausedLiked.PNG" alt="Image" style="width: 700px">
-
-#### Playlists
-<img src="./assets/images/readme/Playlists.PNG" alt="Image" style="width: 700px">
-
-#### Queue
-<img src="./assets/images/readme/Queue.PNG" alt="Image" style="width: 700px">
+<details>
+  <summary><strong>🎵 Music Page Features (4 Screenshots)</strong></summary>
+  <br>
+  <table style="width: 100%; border-collapse: collapse; border: none;">
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Music_Home.PNG" width="100%"><br>
+        <sub><b>Home Page</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Music_PausedLiked.PNG" width="100%"><br>
+        <sub><b>Pausing / Liking</b></sub>
+      </td>
+    </tr>
+    <tr style="border: none;">
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Playlists.PNG" width="100%"><br>
+        <sub><b>Playlists</b></sub>
+      </td>
+      <td align="center" width="50%" style="border: none;">
+        <img src="./assets/images/readme/Queue.PNG" width="100%"><br>
+        <sub><b>Queue</b></sub>
+      </td>
+    </tr>
+  </table>
+</details>
 
 ## Running locally (iOS - requires Macbook with Xcode and cocoapods)
 
