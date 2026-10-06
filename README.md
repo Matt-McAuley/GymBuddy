@@ -26,73 +26,73 @@ The app is not currently on the app store because there are many additional requ
 ### Home Screen
 
 #### Home Page
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Home_Screen.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Home_Screen.PNG" alt="Image" style="width: 700px">
 
 #### Live Activity
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Live_Activity.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Live_Activity.PNG" alt="Image" style="width: 700px">
 
 #### Superset
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Home_Superset.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Home_Superset.PNG" alt="Image" style="width: 700px">
 
 #### Day Selection Bottom Sheet
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Home_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Home_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
 
 ### Programs Page
 
 #### Programs Display
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Programs.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Programs.PNG" alt="Image" style="width: 700px">
 
 #### Edit Program 1
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Edit_Program_Top.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Edit_Program_Top.PNG" alt="Image" style="width: 700px">
 
 #### Edit Program 2
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Edit_Program_Bottom.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Edit_Program_Bottom.PNG" alt="Image" style="width: 700px">
 
 #### Edit Program Bottom Sheet
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Program_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Program_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
 
 ### Days Page
 
 #### Days Display
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Days.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Days.PNG" alt="Image" style="width: 700px">
 
 #### Edit Day 1
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Edit_Day_Top.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Edit_Day_Top.PNG" alt="Image" style="width: 700px">
 
 #### Edit Day 2
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Edit_Day_Bottom.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Edit_Day_Bottom.PNG" alt="Image" style="width: 700px">
 
 #### Edit Day Bottom Sheet
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Day_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Day_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
 
 ### Exercises Page
 
 #### Exercises Display
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Exercises.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Exercises.PNG" alt="Image" style="width: 700px">
 
 #### Edit Exercise 1
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Edit_Exercise_Top.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Edit_Exercise_Top.PNG" alt="Image" style="width: 700px">
 
 #### Edit Exercise 2
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Edit_Exercise_Bottom.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Edit_Exercise_Bottom.PNG" alt="Image" style="width: 700px">
 
 #### Edit Exercise Bottom Sheet
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Exercise_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Exercise_Bottom_Sheet.PNG" alt="Image" style="width: 700px">
 
 
 ### Music Page
 
 #### Home Page
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Music_Home.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Music_Home.PNG" alt="Image" style="width: 700px">
 
 #### Pausing/Liking
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Music_PausedLiked.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Music_PausedLiked.PNG" alt="Image" style="width: 700px">
 
 #### Playlists
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Playlists.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Playlists.PNG" alt="Image" style="width: 700px">
 
 #### Queue
-<img src="https://mattmcauley.com/assets/projects/GymBuddy/Queue.PNG" alt="Image" style="width: 700px">
+<img src="./assets/images/readme/Queue.PNG" alt="Image" style="width: 700px">
 
 ## Running locally (iOS - requires Macbook with Xcode and cocoapods)
 
