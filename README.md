@@ -28,23 +28,21 @@ The app is not currently on the app store because there are many additional requ
   <br>
   <table style="width: 100%; border-collapse: collapse; border: none;">
     <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Home_Screen.PNG" width="100%"><br>
         <sub><b>Home Page</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Live_Activity.PNG" width="100%"><br>
         <sub><b>Live Activity</b></sub>
       </td>
-    </tr>
-    <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Home_Superset.PNG" width="100%"><br>
         <sub><b>Superset</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Home_Bottom_Sheet.PNG" width="100%"><br>
-        <sub><b>Day Selection Bottom Sheet</b></sub>
+        <sub><b>Day Selection</b></sub>
       </td>
     </tr>
   </table>
@@ -57,23 +55,21 @@ The app is not currently on the app store because there are many additional requ
   <br>
   <table style="width: 100%; border-collapse: collapse; border: none;">
     <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Programs.PNG" width="100%"><br>
         <sub><b>Programs Display</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Edit_Program_Top.PNG" width="100%"><br>
         <sub><b>Edit Program (Top)</b></sub>
       </td>
-    </tr>
-    <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Edit_Program_Bottom.PNG" width="100%"><br>
         <sub><b>Edit Program (Bottom)</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Program_Bottom_Sheet.PNG" width="100%"><br>
-        <sub><b>Edit Program Bottom Sheet</b></sub>
+        <sub><b>Edit Program Sheet</b></sub>
       </td>
     </tr>
   </table>
@@ -86,23 +82,21 @@ The app is not currently on the app store because there are many additional requ
   <br>
   <table style="width: 100%; border-collapse: collapse; border: none;">
     <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Days.PNG" width="100%"><br>
         <sub><b>Days Display</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Edit_Day_Top.PNG" width="100%"><br>
         <sub><b>Edit Day (Top)</b></sub>
       </td>
-    </tr>
-    <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Edit_Day_Bottom.PNG" width="100%"><br>
         <sub><b>Edit Day (Bottom)</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Day_Bottom_Sheet.PNG" width="100%"><br>
-        <sub><b>Edit Day Bottom Sheet</b></sub>
+        <sub><b>Edit Day Sheet</b></sub>
       </td>
     </tr>
   </table>
@@ -115,23 +109,21 @@ The app is not currently on the app store because there are many additional requ
   <br>
   <table style="width: 100%; border-collapse: collapse; border: none;">
     <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Exercises.PNG" width="100%"><br>
         <sub><b>Exercises Display</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Edit_Exercise_Top.PNG" width="100%"><br>
         <sub><b>Edit Exercise (Top)</b></sub>
       </td>
-    </tr>
-    <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Edit_Exercise_Bottom.PNG" width="100%"><br>
         <sub><b>Edit Exercise (Bottom)</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Exercise_Bottom_Sheet.PNG" width="100%"><br>
-        <sub><b>Edit Exercise Bottom Sheet</b></sub>
+        <sub><b>Edit Exercise Sheet</b></sub>
       </td>
     </tr>
   </table>
@@ -144,21 +136,19 @@ The app is not currently on the app store because there are many additional requ
   <br>
   <table style="width: 100%; border-collapse: collapse; border: none;">
     <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Music_Home.PNG" width="100%"><br>
         <sub><b>Home Page</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Music_PausedLiked.PNG" width="100%"><br>
         <sub><b>Pausing / Liking</b></sub>
       </td>
-    </tr>
-    <tr style="border: none;">
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Playlists.PNG" width="100%"><br>
         <sub><b>Playlists</b></sub>
       </td>
-      <td align="center" width="50%" style="border: none;">
+      <td align="center" width="25%" style="border: none;">
         <img src="./assets/images/readme/Queue.PNG" width="100%"><br>
         <sub><b>Queue</b></sub>
       </td>
