@@ -180,13 +180,9 @@ Open the ios folder in Xcode to sign the app onto your mobile device.
 
 ### Matt McAuley
 
-<table align="center" style="border: none; border-collapse: collapse; margin: 0 auto; margin-top: -6px; margin-bottom: 14px; width: 440px;">
-  <tr style="border: none;">
-    <td align="right" style="border: none; padding: 0 10px 0 0; width: 50%; white-space: nowrap;">Software Engineer</td>
-    <td style="border: none; padding: 0; width: 1px; color: #888;">|</td>
-    <td align="left" style="border: none; padding: 0 0 0 10px; width: 50%; white-space: nowrap;">Cornell Computer Science</td>
-  </tr>
-</table>
+Software Engineer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; Cornell Computer Science
+
+<br>
 
 [![Website](https://img.shields.io/badge/Website-mattmcauley.com-0078D4?style=flat-square&logo=googlechrome&logoColor=white)](https://mattmcauley.com)&nbsp;&nbsp;
 [![Email](https://img.shields.io/badge/Email-mwm223@cornell.edu-b31b1b?style=flat-square&logo=gmail&logoColor=white)](mailto:mwm223@cornell.edu)&nbsp;&nbsp;
