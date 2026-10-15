@@ -180,7 +180,7 @@ Open the ios folder in Xcode to sign the app onto your mobile device.
 
 ### Matt McAuley
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Software Engineer &nbsp;|&nbsp; Cornell Computer Science
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Software Engineer &nbsp;|&nbsp; Cornell Computer Science
 
 <br>
 
