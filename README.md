@@ -182,8 +182,6 @@ Open the ios folder in Xcode to sign the app onto your mobile device.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Software Engineer &nbsp;|&nbsp; Cornell Computer Science
 
-<br>
-
 [![Website](https://img.shields.io/badge/Website-mattmcauley.com-0078D4?style=flat-square&logo=googlechrome&logoColor=white)](https://mattmcauley.com)&nbsp;&nbsp;
 [![Email](https://img.shields.io/badge/Email-mwm223@cornell.edu-b31b1b?style=flat-square&logo=gmail&logoColor=white)](mailto:mwm223@cornell.edu)&nbsp;&nbsp;
 [![GitHub](https://img.shields.io/badge/GitHub-matt--mcauley-6e5494?style=flat-square&logo=github)](https://github.com/matt-mcauley)
