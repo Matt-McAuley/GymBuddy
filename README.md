@@ -5,7 +5,7 @@
 - [Description](#description)
 - [Images](#images)
 - [Running Locally](#running-locally-ios---requires-macbook-with-xcode-and-cocoapods)
-- [Authors](#authors)
+- [Author](#author)
 
 ## Description
 
@@ -19,7 +19,6 @@ The programs tab displays all the user's custom workout information. It contains
 
 The music tab integrates the spotify Web API to allow for the user to log in to their account using OAuth2.0 and then control their music. Once music is playing, the user has buttons allowing for shuffling, liking songs, pausing/playing, skipping, accessing the queue, and changing the playlist. The user can also see the current song playing, the album cover, and the artist name. The access and refresh token are stored using local storage and expiration is checked whenever the app is opened to refresh the access token if necessary. The user can log out of their account at any time if they want to use a different account. I use an interval to poll the spotify API every second to update the pertinent information. This gave me some difficulties at first because the closure for the interval does not allow state to be updated, but I was able to find a workaround by using refs for values that changed. Spotify Web API also does not provide a way to effectively pause songs, because once the song is paused it disconnects your device. You have to enter the Spotify app to restart it which is not what I was looking for. I tried many workarounds but what I ended up doing was a pseudo-pause where the song is muted and the progress is repeatedly set to the same value to give the appearance of a pause. This was the best solution I could come up with, and it works well enough for my purposes. It seems like other developers also deal with this issue and there are a lot of flaws with the API that Spotify doesn't seem to respond to, but maybe it will be fixed in the future. 
 
-The app is not currently on the app store because there are many additional requirements for privacy and testing and I just created it for my personal use and as a learning experience. This project really reinforced my Typescript and React knowledge and introduced me to a lot of new mobile specific challenges which were very fun to tackle. I got experience with using Expo, Zustand, Swift, Live Activities, and new libraries like those that allow apps to run in the background which is not something you have to worry about for web development. I found React Native very easy to use and file based navigation was super simple and intuitive. I had previously never used SQL from Typescript because usually the API manages the DB so this was a new experience for me as well. The most challenging part was definitely the timer Live Activity due to the issues stated above. The Spotify web API was the most disappointing aspect of this project. There were some functionalities that weren't provided which I had to make workarounds for which is the difficulty of using an external API. Overall, I'm very happy with how the app turned out, and I'm glad I was able to use software to create something that I use in my daily life and solve a real problem.
 
 ## Images
 
@@ -175,13 +174,8 @@ Install dependencies by running `pod install` in the ios folder.
 #### Step 5: Sign app onto mobile device with Xcode
 Open the ios folder in Xcode to sign the app onto your mobile device.
 
-## Authors
+## Author
 
-<table style="border-collapse: collapse; border:none;">
-  <tr  style="border:none;">
-    <td style="border:none;"><strong>Matthew McAuley</strong></td>
-  </tr>
-  <tr style="border:none;">
-    <td style="border:none;">mwm223@cornell.edu</td>
-  </tr>
-</table>
+[Matt McAuley](https://mattmcauley.com) | Software Engineer | Cornell Computer Science  
+mwm223@cornell.edu
+
